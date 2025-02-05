@@ -2,26 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+.linearGradient{
+  /* background: linear-gradient(90deg, #E8DFF7 0%, #B292D9 100%); */
+  background-image: url('/Other-Icons/Group\ 152.svg'); /* Path to the SVG */
+  background-repeat: no-repeat; /* Prevents repeating */
+  background-position: center; /* Centers the SVG */
+  background-size: cover; /* Ensures it covers the entire container */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
+
+
+
+
+.clip-diamond {
+  clip-path: polygon(
+  12.89% 17.15%, 16.66% 7.12%, 23.50% 1%, 30.89% 1%, 
+  69.11% 1%, 76.50% 1%, 83.34% 7.12%, 87.11% 17.15%, 
+  99.22% 49.02%, 87.11% 81.06%, 83.34% 91.05%, 76.50% 97%, 
+  69.11% 97%, 30.89% 97%, 23.50% 97%, 16.66% 91.05%, 
+  12.89% 81.06%, 0.78% 49.02%
+);
+
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+
+
+
+.Linebg {
+  background-color: #F0FFF0; /* Light mint green base color */
+  background-image: 
+    linear-gradient(to right, #FFD1DC 1px, transparent 1px), /* Vertical pink lines */
+    linear-gradient(to bottom, #FFD1DC 1px, transparent 1px); /* Horizontal pink lines */
+  background-size: 40px 40px; /* Grid cell size */
+  height: 20rem; /* Full viewport height */
+  margin: 0;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+
+.circularbox{
+  background: linear-gradient(133deg, rgba(251, 220, 235, 0.5) 14.4%, rgba(228, 9, 127, 0.5) 86.41%);
 }
+
+

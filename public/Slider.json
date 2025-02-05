@@ -1,0 +1,44 @@
+[
+    {
+        "name": "Twitter",
+        "type": "X",
+        "href": "/",
+        "icon": "twitter_5968830.svg",
+        "Image": "Group 125 (1).png"
+    },
+    {
+        "name": "Home",
+        "type": "Instagram",
+        "href": "/",
+        "icon": "instagram_2111463.svg",
+        "Image": "Group 125 (1).png"
+    },
+    {
+        "name": "Home",
+        "type": "LinkedIn",
+        "href": "/fdd",
+        "icon": "image 1.svg",
+        "Image": "Group 125 (1).png"
+    },
+    {
+        "name": "Twitter",
+        "type": "X",
+        "href": "/",
+        "icon": "twitter_5968830.svg",
+        "Image": "Group 125 (1).png"
+    },
+    {
+        "name": "Home",
+        "type": "Instagram",
+        "href": "/",
+        "icon": "instagram_2111463.svg",
+        "Image": "Group 125 (1).png"
+    },
+    {
+        "name": "Home",
+        "type": "LinkedIn",
+        "href": "/fdd",
+        "icon": "image 1.svg",
+        "Image": "Group 125 (1).png"
+    }
+]
