@@ -22,8 +22,8 @@ export default function AdminLayout({ children }) {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/Users"
-                                className="block hover:text-blue-400">Users
+                            <Link href="/Admin/MenuBaar"
+                                className="block hover:text-blue-400">MenuBaar
                             </Link>
                         </li>
                         <li>
@@ -32,8 +32,8 @@ export default function AdminLayout({ children }) {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/Menu"
-                                className="block hover:text-blue-400">MenuBaar
+                            <Link href="/Admin/MainMenu"
+                                className="block hover:text-blue-400">MainMenu
                             </Link>
                         </li>
                     </ul>
