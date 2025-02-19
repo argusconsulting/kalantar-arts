@@ -1,7 +1,7 @@
 const DashBoard = () => {
     return (
         <div>
-            Enter
+         Welcome to Kalanatar Admin
         </div>
     );
 }

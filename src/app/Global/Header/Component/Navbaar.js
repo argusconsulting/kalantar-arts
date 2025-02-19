@@ -17,6 +17,7 @@ const Navbaar = ({data}) => {
 
 
   if (pathname.startsWith("/Admin")) return null;
+  if (pathname.startsWith("/Login")) return null;
 
   const toggleMenu = (menuId) => {
     setExpandedMenus((prev) => ({

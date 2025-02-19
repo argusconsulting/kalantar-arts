@@ -5,9 +5,11 @@ import { useEffect, useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
+import dynamic from "next/dynamic";
 import "slick-carousel/slick/slick-theme.css";
 import { MdArrowForwardIos } from "react-icons/md";
-
+import "react-quill/dist/quill.snow.css";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 const Page = () => {
   const [data, setData] = useState([]);
   const pathname = usePathname();
@@ -75,7 +77,7 @@ const Page = () => {
             <div className="relative">
               <div className="absolute inset-0 transform scale-105 clip-diamond bg-yellow-400"></div>
               <div className="clip-diamond bg-white w-[20rem] lg:w-[30.75rem] h-[12rem] lg:h-[18.75rem] flex items-center justify-center">
-                <Image src={`/Uploads/Petals/${item?.hero_img}`} width={1000} height={1000} alt={item.title} className="w-full h-full object-cover" />
+                <Image src={`${process.env.NEXT_PUBLIC_Files_URL}/${item?.hero_img}`} width={1000} height={1000} alt={item.title} className="w-full h-full object-cover" />
               </div>
             </div>
 
@@ -87,7 +89,8 @@ const Page = () => {
           </div>
 
           <div className="my-8 lg:my-14 text-lg lg:text-2xl font-normal px-4 lg:px-28">
-            <p className="text-left">{item.description}</p>
+            <div className="text-left" dangerouslySetInnerHTML={{ __html: item.description }}></div>
+            
           </div>
         </section>
       ))}
@@ -101,12 +104,12 @@ const Page = () => {
           ))}
         </div>
 
-        <div className="relative z-40">
+        <div className="relative z-40  ">
           <Slider {...sliderSettings}>
-            {Images.map((src, index) => (
-              <div key={index}>
-                <h3 className="text-center py-10 px-2 rounded-lg shadow-lg">
-                  <Image className="rounded-lg shadow-lg" src={`/Uploads/Petals/${src}`} width={500} height={500} alt={`Image ${index + 1}`} />
+            {Images?.map((src, index) => (
+              <div key={index} className="">
+                <h3 className="text-center py-10 px-2 rounded-lg shadow-lg min-h-54 min-w-96">
+                  <Image className="rounded-lg shadow-lg object-fill" src={`${process.env.NEXT_PUBLIC_Files_URL}/${src}`} width={500} height={500} alt={`Image ${index + 1}`} />
                 </h3>
               </div>
             ))}

@@ -41,7 +41,7 @@ const HeroSection = ({data}) => {
               {slides.map((slide, index) => (
                 <Image
                   key={index}
-                  src={`/Uploads/Hero-Section/${slide.image}`}
+                  src={`${process.env.NEXT_PUBLIC_Files_URL}/${slide.image}`}
                   width={1000}
                   height={1000}
                   className="object-fill w-full h-full"

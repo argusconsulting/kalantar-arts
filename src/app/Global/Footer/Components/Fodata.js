@@ -26,6 +26,7 @@ const Fodata = ({data}) => {
 
   // return null when route start with /admin
   if (pathname.startsWith("/Admin")) return null;
+  if (pathname.startsWith("/Login")) return null;
   return (
     <footer className="bg-white">
       <section className="w-full flex flex-wrap px-8 sm:px-16 lg:px-40 py-10 lg:py-16">

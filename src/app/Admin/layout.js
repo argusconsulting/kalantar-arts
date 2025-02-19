@@ -1,12 +1,22 @@
-// Import the Link component from next/link
-import Link from 'next/link';
+// metadata should be in a separate server component
 
-export const metadata = {
-    title: "Admin Dashboard",
-    description: "Manage the application settings and data from the Admin dashboard.",
-};
+// Now the actual layout
+'use client';
+
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AdminLayout({ children }) {
+    const router = useRouter();
+
+    useEffect(() => {
+        const userData = localStorage.getItem('userdata');
+        if (!userData) {
+            router.push('/Login');
+        }
+    }, [router]);
+
     return (
         <div className="min-h-screen flex">
             {/* Sidebar */}
@@ -15,25 +25,23 @@ export default function AdminLayout({ children }) {
                 <nav>
                     <ul className="space-y-4">
                         <li>
-                            {/* Use Link component for client-side navigation */}
-                            <Link href="/Admin/DashBoard"
-                              
-                className="block hover:text-blue-400">Dashboard
+                            <Link href="/Admin/DashBoard" className="block hover:text-blue-400">
+                                Dashboard
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/MenuBaar"
-                                className="block hover:text-blue-400">MenuBaar
+                            <Link href="/Admin/Users" className="block hover:text-blue-400">
+                            Users
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/Petals"
-                                className="block hover:text-blue-400">6-Petals
+                            <Link href="/Admin/Petals" className="block hover:text-blue-400">
+                                6-Petals
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/MainMenu"
-                                className="block hover:text-blue-400">MainMenu
+                            <Link href="/Admin/HeroSlider" className="block hover:text-blue-400">
+                            Hero_Slider
                             </Link>
                         </li>
                     </ul>

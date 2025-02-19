@@ -31,7 +31,7 @@ const Petals = ({ Petals6 }) => {
               {/* Content Inside Diamond */}
               <div className="clip-diamond bg-white w-[20rem] lg:w-[30.75rem] h-[12rem] lg:h-[18.75rem] flex items-center justify-center">
                 <Image
-                  src={`/Uploads/Petals/${item.hero_img}`}
+                  src={`${process.env.NEXT_PUBLIC_Files_URL}/${item.hero_img}`}
                   width={1000}
                   height={1000}
                   alt={item.title}
