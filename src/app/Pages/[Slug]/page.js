@@ -16,6 +16,7 @@ const Page = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${process.env.JWT_SECRET}`,
           },
+          cache: "no-store",
         });
         const result = await response.json();
         setData(result);

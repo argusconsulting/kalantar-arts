@@ -27,9 +27,9 @@ const Navbaar = ({data}) => {
   };
 
   return (
-    <header className="fixed left-0 top-0 right-0 z-[500] h-[8.5rem] flex items-center px-6 md:px-20 bg-white shadow-md" onMouseLeave={() => setHoveredMenu(null)}>
+    <header className="fixed left-0 top-0 right-0 z-[500] h-[7.5rem] flex items-center px-6 md:px-20 bg-white shadow-md" onMouseLeave={() => setHoveredMenu(null)}>
       <div className="flex justify-between items-center relative w-full">
-        <figure className="w-[8.125rem]">
+        <figure className="w-[7.125rem]">
           <Link href="/">
             <Image src="/Logos/Kalantar-logo.svg" width={1000} height={1000} alt="Logo" />
           </Link>
@@ -41,7 +41,7 @@ const Navbaar = ({data}) => {
               <div key={index} onMouseEnter={() => setHoveredMenu(menu.id)}>
                 <li className="cursor-pointer hover:text-pink-500">{menu.title}</li>
                 {SubMenu?.length > 0 && hoveredMenu === menu.id && (
-                  <div className="absolute z-[500] flex right-2 top-20 bg-white rounded-md shadow-md p-6">
+                  <div className="absolute z-[500] flex right-2 top-16 bg-white rounded-md shadow-md p-6">
                     {SubMenu?.filter(submenu => submenu.main_menu_id === hoveredMenu).map((submenu, subIndex) => (
                       <div key={subIndex} className={`pl-4 ${subIndex === 0 ? "" : "border-l-2 border-gray-300"} `}>
                         <h4 className={`text-xl font-medium ${submenu.IsLink === 1 ? 'text-transparent' : ''}`}>{submenu.title}</h4>
@@ -74,7 +74,7 @@ const Navbaar = ({data}) => {
       </div>
 
       {isMobileMenuOpen && (
-        <div className="absolute right-0 top-[8.5rem] bg-white shadow-md w-[250px] p-4 md:hidden">
+        <div className="absolute right-0 top-[6.5rem] bg-white shadow-md w-[250px] p-4 md:hidden">
           <ul className="flex flex-col gap-4">
             {MainMenu.map((menu, index) => (
               <div key={index}>
