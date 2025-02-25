@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 const ImageUpload = ({ multiple = false, onUpload }) => {
@@ -60,7 +61,7 @@ const ImageUpload = ({ multiple = false, onUpload }) => {
             {previews.length > 0 && (
                 <div className="flex gap-2 mt-2">
                     {previews.map((src, index) => (
-                        <img key={index} src={src} alt="Preview" className="w-16 h-16 object-cover rounded" />
+                        <Image height={16} width={16} key={index} src={src} alt="Preview" className="w-16 h-16 object-cover rounded" />
                     ))}
                 </div>
             )}

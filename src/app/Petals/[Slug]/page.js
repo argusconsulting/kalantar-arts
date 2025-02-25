@@ -16,6 +16,7 @@ const Page = () => {
   const url = useMemo(() => pathname.split("/")[2], [pathname]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchData = async () => {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Petals`, {
