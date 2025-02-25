@@ -16,6 +16,7 @@ const Page = () => {
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [editId, setEditId] = useState(null);
+    const [Custom_Link, setCustomeLink] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -44,7 +45,7 @@ const Page = () => {
         const response = await fetch(url, {
             method,
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sub_menu_id: subMenuId, name, link, target, richtext }),
+            body: JSON.stringify({ sub_menu_id: subMenuId, name, link, target,Custom_Link}),
         });
 
         if (response.ok) {
@@ -76,6 +77,7 @@ const Page = () => {
         setLink(item.link);
         setTarget(item.target);
         setRichtext(item.richtext);
+        setCustomeLink(item.Custom_Link);
         setOpen(true);
     };
 
@@ -85,6 +87,7 @@ const Page = () => {
         setLink("");
         setTarget(false);
         setRichtext("");
+        setCustomeLink('');
         setEditId(null);
     };
 
@@ -109,6 +112,10 @@ const Page = () => {
                         <Checkbox checked={target} onChange={(e) => setTarget(e.target.checked)} />
                         <label>Open in New Tab</label>
                     </div>
+                    <div className="flex items-center mt-2">
+                        <Checkbox checked={Custom_Link} onChange={(e) => setCustomeLink(e.target.checked)} />
+                        <label>For Custome Linked</label>
+                    </div>
                     
                 </DialogContent>
                 <DialogActions>
@@ -127,6 +134,7 @@ const Page = () => {
                             <TableCell>Name</TableCell>
                             <TableCell>Link</TableCell>
                             <TableCell>Target</TableCell>
+                            <TableCell>Custome Link</TableCell>
                             <TableCell>Creation Date</TableCell>
                             <TableCell>Update Date</TableCell>
                             <TableCell>Actions</TableCell>
@@ -141,6 +149,10 @@ const Page = () => {
                                 <TableCell>
                                     <Checkbox checked={item.target} disabled />
                                 </TableCell>
+                                <TableCell>
+                                    <Checkbox checked={item.Custom_Link} disabled />
+                                </TableCell>
+
                                 <TableCell>{item.creation_date}</TableCell>
                                 <TableCell>{item.update_date}</TableCell>
                                 <TableCell className="flex gap-x-4">
