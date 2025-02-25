@@ -15,7 +15,8 @@ export default function AdminLayout({ children }) {
         if (!userData) {
             router.push('/Login');
         }
-    }, [router]);
+     
+    }, []);
 
     return (
         <div className="min-h-screen flex">
@@ -35,6 +36,22 @@ export default function AdminLayout({ children }) {
                             </Link>
                         </li>
                         <li>
+                            <Link href="/Admin/Menu" className="block hover:text-blue-400">
+                           Header Main Menu
+                            </Link>
+                            <Link href="/Admin/Menu/SubMenu" className="block hover:text-blue-400">
+                           Header Sub Menu
+                            </Link>
+                            <Link href="/Admin/Menu/SubMenu/MenuLinks" className="block hover:text-blue-400">
+                           Header Links Menu
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/Admin/DynamicPages" className="block hover:text-blue-400">
+                            Dynamic -Pages
+                            </Link>
+                        </li>
+                        <li>
                             <Link href="/Admin/Petals" className="block hover:text-blue-400">
                                 6-Petals
                             </Link>
@@ -44,6 +61,18 @@ export default function AdminLayout({ children }) {
                             Hero_Slider
                             </Link>
                         </li>
+                     
+                        <li>
+                            <Link href="/Admin/Socialupload" className="block hover:text-blue-400">
+                            Socialupload
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/Admin/SocialMedia" className="block hover:text-blue-400">
+                            SocialMedia
+                            </Link>
+                        </li>
+
                     </ul>
                 </nav>
             </aside>
