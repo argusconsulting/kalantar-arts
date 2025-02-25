@@ -89,7 +89,7 @@ const CustomSlider = ({ Slider1 }) => {
                 <IoIosArrowRoundForward className="-rotate-45" size={50} color="#FFFFFF" />
               </Link>
             </div>
-            <Image src={`/Slider/${item.Image}`} alt="slider" width={1080} height={450} />
+            <Image src={`${process.env.NEXT_PUBLIC_Files_URL}/${item.Image}`} alt="slider" width={1080} height={450} />
           </div>
         ))}
       </Slider>

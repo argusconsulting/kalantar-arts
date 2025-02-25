@@ -47,7 +47,10 @@ const Navbaar = ({data}) => {
                         <h4 className={`text-xl font-medium ${submenu.IsLink === 1 ? 'text-transparent' : ''}`}>{submenu.title}</h4>
                         <ul className={`w-[15.875rem] mt-2 flex flex-col gap-y-2 ${submenu.IsLinks === true ? 'hidden' : ''}`}>
                           {LinkMenu.filter(linkItem => linkItem.sub_menu_id === submenu.id).map((item, itemIndex) => (
-                            <Link href={`/Pages/${item.link}`} key={itemIndex} target={item.target} className="hover:text-pink-500 px-1">
+                            
+                            
+                              item.Custom_Link === 1 ? (
+                                <Link href={item.link} key={itemIndex} target={item.target} className="hover:text-pink-500 px-1">
                               <div className="w-full flex">
                                 <div className={`w-1/6 items-start mt-[0.625rem] flex justify-around ${submenu.IsLink === 1 ? 'hidden' : ''}`}>
                                   <div className="rounded-full h-2 w-2 bg-black"></div>
@@ -55,6 +58,21 @@ const Navbaar = ({data}) => {
                                 <span className={`${submenu.IsLink === 1 ? ' font-semibold text-lg' : 'text-base font-extralight'} w-5/6 `}>{item.name}</span>
                               </div>
                             </Link>
+                              ):(
+
+                                <Link href={`/Pages/${item.link}`} key={itemIndex}  className="hover:text-pink-500 px-1">
+                              <div className="w-full flex">
+                                <div className={`w-1/6 items-start mt-[0.625rem] flex justify-around ${submenu.IsLink === 1 ? 'hidden' : ''}`}>
+                                  <div className="rounded-full h-2 w-2 bg-black"></div>
+                                </div>
+                                <span className={`${submenu.IsLink === 1 ? ' font-semibold text-lg' : 'text-base font-extralight'} w-5/6 `}>{item.name}</span>
+                              </div>
+                            </Link>
+                              )
+                            
+                            
+                            
+                            
                           ))}
                         </ul>
                       </div>

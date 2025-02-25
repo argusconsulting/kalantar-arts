@@ -56,7 +56,7 @@ const Fodata = ({data}) => {
                     className={` ${icon.name === 'Facebook' && 'p-1'}`}
                   >
                     <Image
-                      src={`/Social-Icos/${icon.image}`}
+                      src={`${process.env.NEXT_PUBLIC_Files_URL}/${icon.image}`}
                       alt={icon.name}
                       width={32}
                       height={32}
