@@ -21,7 +21,13 @@ const Page = () => {
 
     console.log(data);
     const fetchData = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
+        });
         const result = await response.json();
         setData(result);
     };
@@ -32,7 +38,11 @@ const Page = () => {
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks/${editId}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
             body: JSON.stringify({ richtext }),
         });
 

@@ -18,7 +18,13 @@ const Page = () => {
     }, []);
 
     const fetchData = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Hero_Slider`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Hero_Slider`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
+        });
         const result = await response.json();
         setData(result);
     };
@@ -32,7 +38,11 @@ const Page = () => {
 
         const response = await fetch(url, {
             method,
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
             body: JSON.stringify({ quote: Quote, author: Author, image: HeroImage }),
         });
 
@@ -51,7 +61,11 @@ const Page = () => {
 
     const handleDelete = async (id) => {
         if (confirm("Are you sure you want to delete this item?")) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Hero_Slider/${id}`, { method: "DELETE" });
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Hero_Slider/${id}`, { method: "DELETE", headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store", });
             if (response.ok) {
                 alert("Quote deleted successfully!");
                 fetchData();
@@ -75,11 +89,13 @@ const Page = () => {
                 Create Quote
             </Button>
 
-            <Dialog open={open} onClose={() => setOpen(false)}>
+            <Dialog fullWidth maxWidth="md"   open={open} onClose={() => setOpen(false)}>
                 <DialogTitle>{editId ? "Edit Quote" : "Create Quote"}</DialogTitle>
                 <DialogContent>
                     <TextField
                         fullWidth
+                        multiline
+                        minRows={6} // Adjusts height (h-44 is roughly 6 rows)
                         label="Quote (Supports Hindi & English)"
                         value={Quote}
                         onChange={(e) => setQuote(e.target.value)}
@@ -96,6 +112,11 @@ const Page = () => {
                         margin="dense"
                         required
                     />
+                    <div className="flex items-center gap-2">
+                                                                                                <Image
+                                                                                                     width={50} height={50} src={`${process.env.NEXT_PUBLIC_Files_URL}/${HeroImage}`} alt="Gallery" className="w-44 object-cover mr-2 p-2 mb-2" />
+                                                                                               
+                                                                                            </div>
                     <ImageUpload multiple={false} onUpload={setHeroImage} />
                 </DialogContent>
                 <DialogActions>

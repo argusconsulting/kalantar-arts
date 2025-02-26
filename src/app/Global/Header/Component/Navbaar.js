@@ -12,7 +12,7 @@ const Navbaar = ({data}) => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [expandedMenus, setExpandedMenus] = useState({}); // Track expanded menus
   const pathname = usePathname();
-  console.log(pathname);
+
 
 
 
@@ -26,6 +26,7 @@ const Navbaar = ({data}) => {
     }));
   };
 
+ 
   return (
     <header className="fixed left-0 top-0 right-0 z-[500] h-[7.5rem] flex items-center px-6 md:px-20 bg-white shadow-md" onMouseLeave={() => setHoveredMenu(null)}>
       <div className="flex justify-between items-center relative w-full">

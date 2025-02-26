@@ -24,13 +24,25 @@ const Page = () => {
     }, []);
 
     const fetchData = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
+        });
         const result = await response.json();
         setData(result);
     };
 
     const fetchSubMenus = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
+        });
         const result = await response.json();
         setSubMenus(result);
     };
@@ -44,7 +56,11 @@ const Page = () => {
 
         const response = await fetch(url, {
             method,
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
             body: JSON.stringify({ sub_menu_id: subMenuId, name, link, target,Custom_Link}),
         });
 
@@ -60,7 +76,11 @@ const Page = () => {
 
     const handleDelete = async (id) => {
         if (confirm("Are you sure you want to delete this item?")) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks/${id}`, { method: "DELETE" });
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks/${id}`, { method: "DELETE", headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store", });
             if (response.ok) {
                 alert("SubMenuLink deleted successfully!");
                 fetchData();

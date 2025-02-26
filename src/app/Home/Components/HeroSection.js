@@ -16,14 +16,19 @@ const HeroSection = ({ data }) => {
   }, [slides]);
 
   return (
-    <section className="relative flex justify-center items-center h-screen overflow-hidden bg-gradient-to-r from-[#E8DFF7] to-[#B292D9]">
-      
-      <div  className="flex  justify-center items-center h-screen overflow-hidden">
+    <section className="relative  md:pt-32 pt-36 flex justify-center items-center min-h-screen overflow-hidden bg-gradient-to-r from-[#E8DFF7] to-[#B292D9] px-4 md:px-10">
+      <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-7xl relative">
         {slides.length > 0 && (
-          <div className="flex flex-col md:flex-row w-full md:px-20">
-            <div className="  h-[20rem]  w-[25] md:w-1/2 p-5 flex justify-center">
-            {/* <Image className="  hidden md:block absolute top-32 w-32 left-72  md:left-80 z-5" src="/Other-Icons/paper-clip 1.svg" alt="" width={1000} height={1000} /> */}
-              <div className="border-x-[1rem] border-t-[1rem] border-b-[2rem] border-white w-full max-w-md md:max-w-full md:h-[25rem] max-h-96 overflow-hidden">
+          <div className="flex flex-col md:flex-row w-full relative">
+            <div className="w-full md:w-1/2 flex justify-center p-4 relative">
+              <Image 
+                className="absolute  z-[50]  top[10%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24"
+                src='/Other-Icons/paper-clip 1.svg' 
+                width={1000} 
+                height={1000} 
+                alt='image'
+              />
+              <div className="border-x-[1rem] mt-4 border-t-[1rem] border-b-[2rem] border-white w-[30rem] h-96 overflow-hidden relative">
                 <motion.img
                   key={currentIndex}
                   initial={{ x: "100%" }}
@@ -38,20 +43,20 @@ const HeroSection = ({ data }) => {
                 />
               </div>
             </div>
-            <div className="md:w-1/2 flex flex-col justify-between p-5">
+            <div className="w-full md:w-1/2 flex flex-col justify-between p-4 text-center md:text-left">
               <div className="w-full">
                 <Image
                   src="/Other-Icons/“.svg"
-                  className="object-contain w-10 mb-4 max-md:w-6"
+                  className="object-contain w-10 mb-4 mx-auto md:mx-0 max-md:w-6"
                   alt=""
                   width={1000}
                   height={1000}
                 />
-                <p className="text-base md:text-3xl transition-transform duration-1000 ease-in-out font-bold tracking-tighter p-2 text-[#FFDD00] leading-relaxed opacity-90">
+                <p className="text-sm sm:text-lg md:text-3xl font-bold tracking-tighter p-2    text-[#ffd500] leading-relaxed opacity-90">
                   {slides[currentIndex].quote}
                 </p>
               </div>
-              <span className="text-sm md:text-xl transition-transform duration-1000 ease-in-out text-white font-bold">
+              <span className="text-xs sm:text-sm md:text-xl text-white font-bold mt-2">
                 {slides[currentIndex].author}
               </span>
             </div>

@@ -21,7 +21,13 @@ const Page = () => {
     }, []);
 
     const fetchData = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Slider`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Slider`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.JWT_SECRET}`,
+            },
+            cache: "no-store", // ✅ Ensure fresh data (Disable caching)
+          });
         const result = await response.json();
         setData(result);
     };
@@ -35,7 +41,11 @@ const Page = () => {
 
         const response = await fetch(url, {
             method,
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
             body: JSON.stringify({ type, icon, image, title, description, href }),
         });
 
@@ -51,7 +61,13 @@ const Page = () => {
 
     const handleDelete = async (id) => {
         if (confirm("Are you sure you want to delete this item?")) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Slider/${id}`, { method: "DELETE" });
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Slider/${id}`, { method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                  },
+                  cache: "no-store",
+             });
             if (response.ok) {
                 alert("Slider deleted successfully!");
                 fetchData();
@@ -65,7 +81,7 @@ const Page = () => {
         setEditId(item.id);
         setType(item.type);
         setIcon(item.icon);
-        setImage(item.image);
+        setImage(item.Image);
         setTitle(item.title);
         setDescription(item.description);
         setHref(item.href);
@@ -96,6 +112,11 @@ const Page = () => {
                     <TextField fullWidth label="Title" value={title} onChange={(e) => setTitle(e.target.value)} margin="dense" required />
                     <TextField fullWidth label="Description" value={description} onChange={(e) => setDescription(e.target.value)} margin="dense" required />
                     <TextField fullWidth label="Href" value={href} onChange={(e) => setHref(e.target.value)} margin="dense" required />
+                   <div className="flex items-center gap-2">
+                                                                                               <Image
+                                                                                                    width={50} height={50} src={`${process.env.NEXT_PUBLIC_Files_URL}/${image}`} alt="Gallery" className="w-44 object-cover mr-2 p-2 mb-2" />
+                                                                                              
+                                                                                           </div>
                     <ImageUpload multiple={false} onUpload={setImage} />
                 </DialogContent>
                 <DialogActions>

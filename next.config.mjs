@@ -14,6 +14,11 @@ const nextConfig = {
             port: '3500',
             pathname: '/**',
           },
+          {
+            protocol: 'https',
+            hostname: 'api.kalantarart.org',
+            pathname: '/**',
+          },
         ],
       },
 };

@@ -19,13 +19,25 @@ const Page = () => {
     }, []);
 
     const fetchData = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
+        });
         const result = await response.json();
         setData(result);
     };
 
     const fetchMainMenus = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/MainMenu`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/MainMenu`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
+        });
         const result = await response.json();
         setMainMenus(result);
     };
@@ -39,7 +51,11 @@ const Page = () => {
 
         const response = await fetch(url, {
             method,
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
             body: JSON.stringify({ main_menu_id: mainMenuId, title, IsLink: isLink, slug }),
         });
 
@@ -55,7 +71,11 @@ const Page = () => {
 
     const handleDelete = async (id) => {
         if (confirm("Are you sure you want to delete this item?")) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu/${id}`, { method: "DELETE" });
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu/${id}`, { method: "DELETE", headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store", });
             if (response.ok) {
                 alert("SubMenu deleted successfully!");
                 fetchData();

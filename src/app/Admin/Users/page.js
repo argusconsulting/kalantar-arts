@@ -17,7 +17,13 @@ export default function ManageUsers() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+        },
+        cache: "no-store", // ✅ Ensure fresh data (Disable caching)
+      });
       const data = await response.json();
       setUsers(data);
     } catch (err) {
@@ -34,8 +40,10 @@ export default function ManageUsers() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.JWT_SECRET}`,
         },
+        cache: "no-store",
         body: JSON.stringify({ username, email, password }),
       });
 
@@ -59,6 +67,11 @@ export default function ManageUsers() {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
         method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+        },
+        cache: "no-store",
       });
 
       if (!response.ok) {

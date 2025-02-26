@@ -18,7 +18,13 @@ const Page = () => {
     }, []);
 
     const fetchData = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/social_media`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/social_media`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.JWT_SECRET}`,
+            },
+            cache: "no-store", // ✅ Ensure fresh data (Disable caching)
+          });
         const result = await response.json();
         setData(result);
     };
@@ -32,7 +38,11 @@ const Page = () => {
 
         const response = await fetch(url, {
             method,
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
             body: JSON.stringify({ name, link, image }),
         });
 
@@ -48,7 +58,11 @@ const Page = () => {
 
     const handleDelete = async (id) => {
         if (confirm("Are you sure you want to delete this item?")) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/social_media/${id}`, { method: "DELETE" });
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/social_media/${id}`, { method: "DELETE" , headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store"});
             if (response.ok) {
                 alert("Social Media deleted successfully!");
                 fetchData();
@@ -84,6 +98,11 @@ const Page = () => {
                 <DialogContent>
                     <TextField fullWidth label="Name" value={name} onChange={(e) => setName(e.target.value)} margin="dense" required />
                     <TextField fullWidth label="Link" value={link} onChange={(e) => setLink(e.target.value)} margin="dense" required />
+                        <div className="flex items-center gap-2">
+                                                                            <Image
+                                                                                 width={50} height={50} src={`${process.env.NEXT_PUBLIC_Files_URL}/${image}`} alt="Gallery" className="w-16 h-16 object-cover mr-2 p-2 mb-2" />
+                                                                           
+                                                                        </div>
                     <ImageUpload multiple={false} onUpload={setImage} />
                 </DialogContent>
                 <DialogActions>

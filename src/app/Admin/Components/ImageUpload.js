@@ -72,10 +72,10 @@ const ImageUpload = ({ multiple = false, onUpload }) => {
                 {loading ? "Uploading..." : "Upload"}
             </button>
             {!loading ? (
-                <span>File Uploaded</span>
+                <span></span>
             ):(
                 (
-                    <span></span>
+                    <span>File Uploaded</span>
                 )
             )}
         </div>

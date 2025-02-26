@@ -29,7 +29,13 @@ const Page = () => {
     }, []);
 
     const fetchPetals = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Petals`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Petals`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store",
+        });
         const data = await response.json();
         setPetals(data);
 
@@ -47,7 +53,11 @@ const Page = () => {
 
             const response = await fetch(url, {
                 method,
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                  },
+                  cache: "no-store",
                 body: JSON.stringify({
                     title,
                     subtitle,
@@ -76,6 +86,11 @@ const Page = () => {
         if (!confirm("Are you sure you want to delete this item?")) return;
         await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Petals/${id}`, {
             method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              },
+              cache: "no-store"
         });
         fetchPetals();
     };
@@ -102,6 +117,12 @@ const Page = () => {
         setEditingId(null);
     };
 
+
+    const handleDeleteImage = (indexToDelete) => {
+        setGalleryImages((prevImages) =>
+          prevImages.filter((_, index) => index !== indexToDelete)
+        );
+      };
     return (
         <div className="p-4">
             <Button
@@ -118,19 +139,51 @@ const Page = () => {
                     <Card className="mb-6 p-4 shadow-lg">
                         <Button onClick={(e) => setIsformer(false)} className=" bg-red-600 p-2 text-white">Close</Button>
                         <CardContent>
-                            <form onSubmit={handleSubmit} className="space-y-4">
+                            <form onSubmit={handleSubmit} className="space-y-4 w-full">
                                 <TextField label="Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} required />
                                 <TextField label="Subtitle" fullWidth value={subtitle} onChange={(e) => setSubtitle(e.target.value)} required />
                                 <TextField label="Slug" fullWidth value={slug} onChange={(e) => setSlug(e.target.value)} required />
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">Hero Image</label>
+                                    <div>
+                                        <label>Cureent Images</label>
+                                        <div>
+                                            
+                                         
+                                                <div className="flex items-center gap-2">
+                                                    <Image
+                                                         width={50} height={50} src={`${process.env.NEXT_PUBLIC_Files_URL}/${heroImage}`} alt="Gallery" className="w-16 h-16 object-cover mr-2 mb-2" />
+                                                   
+                                                </div>
+                                           
+                                        </div>
+                                        
+                                    </div>
                                     {activeImageUpload === "hero" && <ImageUpload multiple={false} onUpload={setHeroImage} />}
                                     <Button variant="contained" size="small" onClick={() => setActiveImageUpload("hero")}>
                                         Activate Hero Image Upload
                                     </Button>
                                 </div>
-                                <div>
+                                <div className=" w-full">
+                                   
+                                    
                                     <label className="block text-sm font-medium text-gray-700">Gallery Images</label>
+                                    <div className=" w-full">
+                                        <label>Cureent Images</label>
+                                        <div className=" w-full">
+                                            
+                                            {galleryImages.map((image, index) => (
+                                                <div key={index} className="flex flex-row items-center gap-2">
+                                                    <Image
+                                                        key={image} width={50} height={50} src={`${process.env.NEXT_PUBLIC_Files_URL}/${image}`} alt="Gallery" className="w-16 h-16 object-cover mr-2 mb-2" />
+                                                    <IconButton onClick={() => handleDeleteImage(index)}>
+                                                        <Delete />
+                                                    </IconButton>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        
+                                    </div>
                                     {activeImageUpload === "gallery" && <ImageUpload multiple={true} onUpload={setGalleryImages} />}
                                     <Button variant="contained" size="small" onClick={() => setActiveImageUpload("gallery")}>
                                         Activate Gallery Image Upload
