@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 const DynamicPage = ({ data }) => {
-  if (!data || data.length === 0) {
+  if (!data[0]?.Richtext) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-900 px-4 lg:px-20">
         <h2 className="text-5xl font-bold text-red-600">404</h2>
@@ -21,7 +21,7 @@ const DynamicPage = ({ data }) => {
   return (
     <div className="min-h-screen flex flex-col items-center mt-20 py-12 justify-center bg-gray-100 text-gray-900 px-4 lg:px-20">
       <div className="w-full max-w-4xl">
-        <div dangerouslySetInnerHTML={{ __html: data[0]?.Richtext || "" }} />
+        <div dangerouslySetInnerHTML={{ __html: data[0].Richtext }} />
       </div>
     </div>
   );
