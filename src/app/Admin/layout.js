@@ -74,7 +74,11 @@ export default function AdminLayout({ children }) {
                         </li>
 
                     </ul>
+                   
                 </nav>
+                <button className=' py-2 px-3  bg-red-500 text-white rounded-md absolute bottom-2 '>
+                    Logout
+                </button>
             </aside>
 
             {/* Main Content */}

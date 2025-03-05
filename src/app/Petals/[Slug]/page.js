@@ -1,4 +1,3 @@
-
 import Petal from "./Petal";
 
 // ✅ Server-side Data Fetching
@@ -21,6 +20,34 @@ const fetchData = async (slug) => {
     return null;
   }
 };
+
+// ✅ Metadata Function
+export async function generateMetadata({ params }) {
+  const slug = params.Slug;
+  const data = await fetchData(slug);
+
+  if (!data) {
+    return {
+      title: "Page Not Found",
+      description: "The requested page could not be found.",
+    };
+  }
+
+  return {
+  
+    title: data.title || "Petal Page",
+    description: data.description || "Detailed information about the selected petal.",
+    openGraph: {
+      
+      title: data.title || "Petal Page",
+      description: data.description || "Detailed information about the selected petal.",
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/petal/${slug}`,
+      images: data.hero_img
+      ? [{ url: `${process.env.NEXT_PUBLIC_Files_URL}/${data.hero_img}`, width: 1000, height: 1000, alt: data.title }]
+      : [],
+    },
+  };
+}
 
 // ✅ Page Component (Server Component)
 export default async function Page({ params }) {
