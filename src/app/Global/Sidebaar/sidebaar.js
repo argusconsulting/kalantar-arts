@@ -1,7 +1,7 @@
 "use client"; // Ensure this is a client component for interactivity
 
 import React from "react";
-
+import { usePathname } from "next/navigation";
 const SocialMediaSidebar = () => {
   const socialLinks = [
     { name: "Facebook", icon: "facebook", url: "https://www.facebook.com/artkalantar/" },
@@ -9,7 +9,10 @@ const SocialMediaSidebar = () => {
     { name: "LinkedIn", icon: "linkedin", url: "https://in.linkedin.com/company/kalantar-art-foundation" },
     { name: "Instagram", icon: "instagram", url: "https://www.instagram.com/kalantarart" },
   ];
-
+  const pathname = usePathname();
+  // return null when route start with /admin
+  if (pathname.startsWith("/KL-Admin")) return null;
+  if (pathname.startsWith("/Login")) return null;
   return (
     <div className="fixed left-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 p-2 bg-gray-800 text-white rounded-r-lg shadow-lg z-50">
       {socialLinks.map((link, index) => (
