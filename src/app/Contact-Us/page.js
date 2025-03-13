@@ -62,14 +62,15 @@ export default function ContactUs() {
         {/* Contact Information */}
         <div className="text-center bg-white shadow-md rounded-xl p-6 border border-gray-200 max-w-md mx-auto">
           <p className="text-xl font-semibold text-gray-700">Our Office</p>
-          <p className="text-gray-600">29-A, Sector-93B, Noida, UTTAR PRADESH 201304, IN</p>
-          <p className="text-gray-600">📞 Phone: <a href="tel:+1234567890" className="hover:text-blue-500">+1 234 567 890</a></p>
-          <p className="text-gray-600">✉️ Email: <a href="mailto:contact@company.com" className="hover:text-blue-500">contact@company.com</a></p>
+          <p className="text-gray-600">Plot No. 29-A, Sector-93B, Noida, Uttar Pradesh - 201304 India</p>
+          <p className="text-gray-600">📞 Phone: <a href="tel:(0120)3634646" className="hover:text-blue-500">(0120)3634646          </a></p>
+          <p className="text-gray-600">✉️ Email: <a href="mailto:Kalantarfoundation@gmail.com" className="hover:text-blue-500">Kalantarfoundation@gmail.com</a></p>
 
           {/* WhatsApp Link */}
           <div className="mt-5">
             <a
-              href="https://wa.me/918758704414"
+              href="https://wa.me/919625819972
+"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-green-500 text-white px-5 py-3 rounded-lg font-bold text-lg hover:bg-green-600 transition"
