@@ -17,7 +17,7 @@ export default function Page() {
           if (!userData) {
               router.push('/Login');
           }else{
-             router.push('/Admin');
+             router.push('/KL-Admin');
           }
       }, [router]);
 
@@ -44,7 +44,7 @@ export default function Page() {
       }
       
       localStorage.setItem('userdata', JSON.stringify(data.token));
-      router.push('/Admin');
+      router.push('/KL-Admin');
     } catch (err) {
       setError(err.message);
     }

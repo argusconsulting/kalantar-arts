@@ -25,7 +25,7 @@ const Fodata = ({data}) => {
   const pathname = usePathname();
 
   // return null when route start with /admin
-  if (pathname.startsWith("/Admin")) return null;
+  if (pathname.startsWith("/KL-Admin")) return null;
   if (pathname.startsWith("/Login")) return null;
   return (
     <footer className="bg-white">
@@ -77,16 +77,43 @@ const Fodata = ({data}) => {
               Quick Links
               </h4>
               <ul className="space-y-2 text-sm text-gray-600">
+              <li >
+                    <Link href="/" className="hover:text-blue-700 transition-colors duration-300 ease-in-out">Home</Link>
+                  </li>
                 {data.mainMenu.map((link, subIndex) => (
                   <li key={subIndex}>
                     <Link href="/" className="hover:text-blue-700 transition-colors duration-300 ease-in-out">{link.title}</Link>
                   </li>
                 ))}
+                 <li >
+                    <Link href="/Contact-Us" className="hover:text-blue-700 transition-colors duration-300 ease-in-out">Contact Us</Link>
+                  </li>
               </ul>
             </nav>
          
         </div>
       </section>
+      <div className=" w-full">
+        <div className="flex flex-wrap justify-center gap-4 text-sm">
+          {/* CIN Number */}
+          <div className="flex items-center gap-2">
+            <span className="font-semibold  text-black">CIN No. :</span>
+            <span className="text-gray-800">U85300UP2022NPL168405</span>
+          </div>
+
+          {/* NGO Darpan Unique ID */}
+          <div className="flex items-center gap-2">
+            <span className="font-semibold  text-black">NGO Darpan Unique ID :</span>
+            <span className="text-gray-800">UP/2022/0327989</span>
+          </div>
+
+          {/* Section 80G Unique Registration Number */}
+          <div className="flex items-center gap-2">
+            <span className="font-semibold  text-black">Section 80G unique registration number :</span>
+            <span className="text-gray-800">AAJCK6972BF20221</span>
+          </div>
+        </div>
+      </div>
       <section className="bg-gray-100 py-6">
         <div className="flex flex-col items-center text-center text-gray-600">
           <Link

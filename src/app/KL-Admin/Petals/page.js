@@ -39,7 +39,7 @@ const Page = () => {
         const data = await response.json();
         setPetals(data);
 
-        console.log(data);
+        // console.log(data);
     };
 
     const handleSubmit = async (e) => {
@@ -117,6 +117,23 @@ const Page = () => {
         setEditingId(null);
     };
 
+    const modules = {
+        toolbar: [
+          [{ header: [1, 2, 3, 4, 5, 6, false] }], // Headers
+          [{ font: [] }], // Font selection
+          [{ size: [] }], // Font sizes
+          ["bold", "italic", "underline", "strike"], // Text styles
+          [{ script: "sub" }, { script: "super" }], // Subscript / superscript
+          [{ color: [] }, { background: [] }], // Font & background colors
+          [{ list: "ordered" }, { list: "bullet" }, { list: "check" }], // Lists
+          [{ indent: "-1" }, { indent: "+1" }], // Indentation
+          [{ align: [] }], // Alignments
+          ["blockquote", "code-block"], // Blockquote & Code block
+          ["link", "image", "video", "formula"], // Media & Math formulas
+          [{ direction: "rtl" }], // Right-to-left text support
+          ["clean"], // Remove formatting
+        ],
+      };
 
     const handleDeleteImage = (indexToDelete) => {
         setGalleryImages((prevImages) =>
@@ -197,7 +214,7 @@ const Page = () => {
                                                 {isFullScreen ? <FullscreenExit /> : <Fullscreen />}
                                             </Button>
                                         </div>
-                                        <ReactQuill value={description} onChange={setDescription} className="h-full" />
+                                        <ReactQuill   modules={modules} value={description} onChange={setDescription} className="h-full" />
                                     </div>
                                 </div>
                                 <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>

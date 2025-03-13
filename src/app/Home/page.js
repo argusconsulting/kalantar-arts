@@ -65,7 +65,7 @@ const HomePage = async () => {
   
   <HeroSection data={data}/>
   <Petals Petals6={data.Petals6} />
-  <Slider Slider1={data.Slider1}/>
+  {/* <Slider Slider1={data.Slider1}/> */}
   <Headlight highlight1={data.highlight1}/>
   </>
   )

@@ -15,20 +15,23 @@ const HeroSection = ({ data }) => {
     return () => clearInterval(interval);
   }, [slides]);
 
+  const formatAuthor = (author) => {
+    if (!author) return ""; // Handle cases where author data is missing
+    const parts = author.split(","); // Split at comma
+    return (
+      <>
+        {parts[0]},<br /> {parts.slice(1).join(",")}
+      </>
+    );
+  };
+
   return (
-    <section className="relative  md:pt-32 pt-36 flex justify-center items-center min-h-screen overflow-hidden bg-gradient-to-r from-[#E8DFF7] to-[#B292D9] px-4 md:px-10">
-      <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-7xl relative">
+    <section className="relative flex justify-center  md:mt-24 items-center h-screen md:h-[75vh] overflow-hidden bg-gradient-to-r bg-[#f8deeb] px-4 md:px-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-7xl relative">
         {slides.length > 0 && (
-          <div className="flex flex-col md:flex-row w-full relative">
-            <div className="w-full md:w-1/2 flex justify-center p-4 relative">
-              <Image 
-                className="absolute  z-[50]  top[10%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24"
-                src='/Other-Icons/paper-clip 1.svg' 
-                width={1000} 
-                height={1000} 
-                alt='image'
-              />
-              <div className="border-x-[1rem] mt-4 border-t-[1rem] border-b-[2rem] border-white w-[30rem] h-96 overflow-hidden relative">
+          <>
+            <div className="flex justify-center items-center p-2 relative">
+              <div className="border-[0.5rem] border-black w-full h-[20rem] md:h-[32rem] overflow-hidden relative">
                 <motion.img
                   key={currentIndex}
                   initial={{ x: "100%" }}
@@ -43,24 +46,31 @@ const HeroSection = ({ data }) => {
                 />
               </div>
             </div>
-            <div className="w-full md:w-1/2 flex flex-col justify-between p-4 text-center md:text-left">
+            <div className="flex flex-col justify-center items-center p-4 text-center md:text-left">
               <div className="w-full">
-                <Image
-                  src="/Other-Icons/“.svg"
-                  className="object-contain w-10 mb-4 mx-auto md:mx-0 max-md:w-6"
-                  alt=""
-                  width={1000}
-                  height={1000}
-                />
-                <p className="text-sm sm:text-lg md:text-3xl font-bold tracking-tighter p-2    text-[#ffd500] leading-relaxed opacity-90">
+                <p className="text-sm text-justify sm:text-lg md:text-2xl font-bold tracking-tighter p-2 text-[#e51183] leading-relaxed opacity-90">
+                  <Image
+                    src="/Other-Icons/start.png"
+                    className="inline-block w-3 h-3 align-top "
+                    alt="Quote Start"
+                    width={10}
+                    height={10}
+                  />
                   {slides[currentIndex].quote}
+                  <Image
+                    src="/Other-Icons/end.png"
+                    className="inline-block w-3 h-3 align-top "
+                    alt="Quote End"
+                    width={10}
+                    height={10}
+                  />
                 </p>
               </div>
-              <span className="text-xs sm:text-sm md:text-xl text-white font-bold mt-2">
-                {slides[currentIndex].author}
+              <span className="text-xs w-full sm:text-sm md:text-xl text-black font-bold mt-2">
+                {formatAuthor(slides[currentIndex].author)}
               </span>
             </div>
-          </div>
+          </>
         )}
       </div>
     </section>

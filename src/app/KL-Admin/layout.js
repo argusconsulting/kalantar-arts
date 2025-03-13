@@ -18,6 +18,13 @@ export default function AdminLayout({ children }) {
      
     }, []);
 
+
+    const logout = () => {
+        localStorage.removeItem('userdata'); // Remove stored user data
+       
+        router.push('/Login'); // Redirect to login page
+    };
+
     return (
         <div className="min-h-screen flex">
             {/* Sidebar */}
@@ -26,66 +33,73 @@ export default function AdminLayout({ children }) {
                 <nav>
                     <ul className="space-y-4">
                         <li>
-                            <Link href="/Admin/DashBoard" className="block hover:text-blue-400">
+                            <Link href="/KL-Admin/DashBoard" className="block hover:text-blue-400">
                                 Dashboard
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/Users" className="block hover:text-blue-400">
+                            <Link href="/KL-Admin/Users" className="block hover:text-blue-400">
                             Users
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/Menu" className="block hover:text-blue-400">
+                            <Link href="/KL-Admin/Menu" className="block hover:text-blue-400">
                            Header Main Menu
                             </Link>
-                            <Link href="/Admin/Menu/SubMenu" className="block hover:text-blue-400">
+                            <Link href="/KL-Admin/Menu/SubMenu" className="block hover:text-blue-400">
                            Header Sub Menu
                             </Link>
-                            <Link href="/Admin/Menu/SubMenu/MenuLinks" className="block hover:text-blue-400">
+                            <Link href="/KL-Admin/Menu/SubMenu/MenuLinks" className="block hover:text-blue-400">
                            Header Links Menu
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/DynamicPages" className="block hover:text-blue-400">
+                            <Link href="/KL-Admin/DynamicPages" className="block hover:text-blue-400">
                             Dynamic -Pages
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/Petals" className="block hover:text-blue-400">
+                            <Link href="/KL-Admin/Petals" className="block hover:text-blue-400">
                                 6-Petals
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/HeroSlider" className="block hover:text-blue-400">
+                            <Link href="/KL-Admin/HeroSlider" className="block hover:text-blue-400">
                             Hero_Slider
                             </Link>
                         </li>
                      
                         <li>
-                            <Link href="/Admin/Socialupload" className="block hover:text-blue-400">
+                            <Link href="/KL-Admin/Socialupload" className="block hover:text-blue-400">
                             Socialupload
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Admin/SocialMedia" className="block hover:text-blue-400">
+                            <Link href="/KL-Admin/SocialMedia" className="block hover:text-blue-400">
                             SocialMedia
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link href="/KL-Admin/Highlits" className="block hover:text-blue-400">
+                            Highlits
                             </Link>
                         </li>
 
                     </ul>
                    
                 </nav>
-                <button className=' py-2 px-3  bg-red-500 text-white rounded-md absolute bottom-2 '>
-                    Logout
-                </button>
+                
             </aside>
 
             {/* Main Content */}
             <div className="flex-1">
                 {/* Header */}
-                <header className="bg-gray-100 border-b border-gray-300 p-4">
+                <header className="bg-gray-100 flex justify-between border-b border-gray-300 p-4">
                     <h1 className="text-xl font-semibold">Admin Dashboard</h1>
+                    <button onClick={() => logout()} className=' py-2 px-3  bg-red-500 text-white rounded-md  '>
+                    Logout
+                </button>
                 </header>
 
                 {/* Page Content */}

@@ -1,11 +1,12 @@
 "use client";
-
+import DOMPurify from "dompurify";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { MdArrowForwardIos } from "react-icons/md";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Quill styles
 // ✅ Dynamically Import react-slick
 const Slider = dynamic(() => import("react-slick"), { ssr: false });
 
@@ -46,18 +47,18 @@ const Petal = ({ data }) => {
   };
 
   return (
-    <section className="mt-[14rem] px-4 lg:px-20">
+    <section className="mt-[5rem] bg-gradient-to-r from-[#faddeb] to-[#f195be] px-4 lg:px-20">
       {/* ✅ Main Content */}
-      <section>
-        <div className="flex flex-col lg:flex-row items-center gap-6 w-full justify-between">
-          <div className="relative">
+      <section className="pt-20">
+        <div className="flex flex-col lg:flex-row items-center gap-6  justify-around">
+          <div className="relative ">
             <div className="absolute inset-0 transform scale-105 clip-diamond bg-yellow-400"></div>
-            <div className="clip-diamond bg-white w-[20rem] lg:w-[30.75rem] h-[12rem] lg:h-[18.75rem] flex items-center justify-center">
+            <div className="clip-diamond bg-white w-[21rem] lg:w-[31.75rem] h-[13rem] lg:h-[19.75rem] flex items-center justify-center">
               <Image src={`${process.env.NEXT_PUBLIC_Files_URL}/${data.hero_img}`} width={1000} height={1000} alt={data.title} className="w-full h-full object-cover" />
             </div>
           </div>
 
-          <div className="flex flex-col items-center text-center gap-4 lg:gap-6 w-full lg:w-2/4">
+          <div className="flex flex-col items-center text-center gap-4 lg:gap-6  ">
             <h2 className="text-2xl lg:text-4xl font-bold">{data.title}</h2>
             <Image src="/Uploads/Vector 35.svg" alt="Decoration" width={1000} height={1000} className="w-[40%] lg:w-[60%]" />
             <h3 className="text-xl lg:text-3xl font-medium">{data.subtitle}</h3>
@@ -65,8 +66,12 @@ const Petal = ({ data }) => {
         </div>
 
         {/* ✅ Dangerous HTML Rendering */}
-        <div className="my-8 lg:my-14 text-lg lg:text-2xl font-normal px-4 lg:px-28">
-          <div className="text-left" dangerouslySetInnerHTML={{ __html: data.description }}></div>
+        <div className="my-8 lg:my-14">
+          <ReactQuill
+            value={data?.description || ""}
+            readOnly={true}
+            theme="bubble" // Use "bubble" or "snow" for styling
+          />
         </div>
       </section>
 

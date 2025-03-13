@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "./Global/Header/Header";
 import Footer from "./Global/Footer/Footer";
 import Donate from "./Global/Components/Donate";
+import SocialMediaSidebar from "./Global/Sidebaar/sidebaar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,20 +18,47 @@ const geistMono = localFont({
 
 export const metadata = {
   title: "Kalantar Art Faoundation",
-  description: "Kalantar Art Foundation is a non-profit organization that helps the under-priviledged section of the society to learn art and also promote artists",
+  description: `
+  Kalantar Art Foundation ais a well-known non-profit organization working towards a huge social re-engineering process by way of art-based activities (both - for privileged and underprivileged sections of the society). Our art programmes include (but are not limited to):
+
+ 
+For the Privileged Section:
+
+CTC (Colors Transforming the Corporates) : Art based Behavioural Trainings for the Corporates
+Art over Coffee : Small get togethers provoking the hidden art within us
+Mix Media : Art Exchange Programmes
+ 
+For the underprivileged section:
+
+कलादीक्षा – free art education in slums and villages
+कला प्रसार – promoting art through seminars and conferences
+कारागार के कलाकार – motivational and employment based art sessions for the prison inmates
+देश का प्रथम (आदर्श) कला ग्राम – making of the 1st Art Village of the country (and in process of making many more)
+
+We invite you to be a part of this mission
+Free Art Education, Art Programs for Prison Inmates, Art Seminars, National Level Art Festivals and Competitions, Training the 64 arts from the Vedas, Trainings related to Painting, Music, Dance, Theatre, Creative Writing and others, Social re-engineering by way of art practices, Mental Wellness Advisery, Corporate Trainings, and Organizational Behavior Consulting
+  `,
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+      <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+/>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header/>
         {children}
+        <SocialMediaSidebar/>
         <Donate/>
         <Footer/>
       </body>
+      
     </html>
   );
 }

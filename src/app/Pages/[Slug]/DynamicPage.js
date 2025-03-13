@@ -1,5 +1,6 @@
 "use client";
-
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Quill styles
 import Link from "next/link";
 
 const DynamicPage = ({ data }) => {
@@ -20,8 +21,13 @@ const DynamicPage = ({ data }) => {
 
   return (
     <div className="min-h-screen flex flex-col items-center mt-20 py-12 justify-center bg-gray-100 text-gray-900 px-4 lg:px-20">
-      <div className="w-full max-w-4xl">
-        <div dangerouslySetInnerHTML={{ __html: data[0].Richtext }} />
+      <div className="w-full  h-full">
+      
+        <ReactQuill
+        value={data[0].Richtext || ""}
+        readOnly={true}
+        theme="bubble" // Use "bubble" or "snow" for styling
+      />
       </div>
     </div>
   );

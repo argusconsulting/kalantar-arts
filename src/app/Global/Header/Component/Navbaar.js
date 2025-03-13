@@ -16,7 +16,7 @@ const Navbaar = ({data}) => {
 
 
 
-  if (pathname.startsWith("/Admin")) return null;
+  if (pathname.startsWith("/KL-Admin")) return null;
   if (pathname.startsWith("/Login")) return null;
 
   const toggleMenu = (menuId) => {
@@ -38,6 +38,11 @@ const Navbaar = ({data}) => {
 
         <nav className="hidden md:block">
           <ul className="flex gap-10 text-lg">
+            
+              <li  className="cursor-pointer hover:text-pink-500">
+                <Link href={`/`}>Home</Link>
+              </li>
+          
             {MainMenu.map((menu, index) => (
               <div key={index} onMouseEnter={() => setHoveredMenu(menu.id)}>
                 <li className="cursor-pointer hover:text-pink-500">{menu.title}</li>
@@ -82,6 +87,9 @@ const Navbaar = ({data}) => {
                 )}
               </div>
             ))}
+            <li  className="cursor-pointer hover:text-pink-500">
+                <Link href={`/Contact-Us`}>Contact Us</Link>
+              </li>
           </ul>
         </nav>
 

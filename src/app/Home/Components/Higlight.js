@@ -9,11 +9,11 @@ const Headlight = ({ highlight1 }) => {
   }
 
   return (
-    <section className="h-full w-full flex items-center justify-center">
+    <section className="h-full w-full mt-10 flex items-center justify-center">
       <div className="w-full h-full">
         <Image
           
-          src={`/Uploads/${item.image}`}
+          src={`${process.env.NEXT_PUBLIC_Files_URL}/${item.image}`}
           alt="headlight"
           width={1920}
           height={546}
