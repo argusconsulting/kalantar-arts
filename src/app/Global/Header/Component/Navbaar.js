@@ -66,7 +66,12 @@ const Navbaar = ({data}) => {
                             </Link>
                               ):(
 
-                                <Link href={`/Pages/${item.link}`} key={itemIndex}  className="hover:text-pink-500 px-1">
+                                <Link 
+                              key={itemIndex} 
+                              href={item.Custom_Link === 1 ? item.link : `/Pages/${item.link}`} 
+                              target={item.target === 1 ? "_blank" : "_self"} 
+                              className="hover:text-pink-500 px-1"
+                            >
                               <div className="w-full flex">
                                 <div className={`w-1/6 items-start mt-[0.625rem] flex justify-around ${submenu.IsLink === 1 ? 'hidden' : ''}`}>
                                   <div className="rounded-full h-2 w-2 bg-black"></div>

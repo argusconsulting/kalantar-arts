@@ -10,13 +10,13 @@ const Page = () => {
     const [subMenuId, setSubMenuId] = useState("");
     const [name, setName] = useState("");
     const [link, setLink] = useState("");
-    const [target, setTarget] = useState(false);
+    const [target, setTarget] = useState(0);
     const [richtext, setRichtext] = useState("");
     const [subMenus, setSubMenus] = useState([]);
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [editId, setEditId] = useState(null);
-    const [Custom_Link, setCustomeLink] = useState('');
+    const [Custom_Link, setCustomeLink] = useState(0);
 
     useEffect(() => {
         fetchData();
@@ -129,13 +129,14 @@ const Page = () => {
                     <TextField fullWidth label="Name" value={name} onChange={(e) => setName(e.target.value)} margin="dense" required />
                     <TextField fullWidth label="Link" value={link} onChange={(e) => setLink(e.target.value)} margin="dense" required />
                     <div className="flex items-center mt-2">
-                        <Checkbox checked={target} onChange={(e) => setTarget(e.target.checked)} />
-                        <label>Open in New Tab</label>
-                    </div>
-                    <div className="flex items-center mt-2">
-                        <Checkbox checked={Custom_Link} onChange={(e) => setCustomeLink(e.target.checked)} />
-                        <label>For Custome Linked</label>
-                    </div>
+    <Checkbox checked={target === 1} onChange={(e) => setTarget(e.target.checked ? 1 : 0)} />
+    <label>Open in New Tab</label>
+</div>
+<div className="flex items-center mt-2">
+    <Checkbox checked={Custom_Link === 1} onChange={(e) => setCustomeLink(e.target.checked ? 1 : 0)} />
+    <label>For Custome Linked</label>
+</div>
+
                     
                 </DialogContent>
                 <DialogActions>
@@ -167,11 +168,12 @@ const Page = () => {
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.link}</TableCell>
                                 <TableCell>
-                                    <Checkbox checked={item.target} disabled />
-                                </TableCell>
-                                <TableCell>
-                                    <Checkbox checked={item.Custom_Link} disabled />
-                                </TableCell>
+    <Checkbox checked={item.target === 1} disabled />
+</TableCell>
+<TableCell>
+    <Checkbox checked={item.Custom_Link === 1} disabled />
+</TableCell>
+
 
                                 <TableCell>{item.creation_date}</TableCell>
                                 <TableCell>{item.update_date}</TableCell>

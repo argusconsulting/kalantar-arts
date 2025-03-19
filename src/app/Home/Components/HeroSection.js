@@ -66,7 +66,7 @@ const HeroSection = ({ data }) => {
                   />
                 </p>
               </div>
-              <span className="text-xs w-full sm:text-sm md:text-xl text-black font-bold mt-2">
+              <span className="text-xs w-full sm:text-sm md:text-xl pl-3 text-black font-bold mt-2">
                 {formatAuthor(slides[currentIndex].author)}
               </span>
             </div>
