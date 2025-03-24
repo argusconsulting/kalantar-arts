@@ -128,6 +128,7 @@ const Fodata = ({data}) => {
               width={80}
               height={80}
               className="mb-4"
+             
             />
             <span className="text-sm">
               &#169; {new Date().getFullYear()} Kalantar Art | Powered by Argus

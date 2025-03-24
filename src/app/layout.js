@@ -54,7 +54,7 @@ export default function RootLayout({ children }) {
       >
         <Header/>
         {children}
-        <SocialMediaSidebar/>
+        {/* <SocialMediaSidebar/> */}
         <Donate/>
         <Footer/>
       </body>

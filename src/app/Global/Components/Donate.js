@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 const Donate = () => {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/Admin")) return null;
+  if (pathname.startsWith("/KL-Admin")) return null;
 
   return (
     <motion.button

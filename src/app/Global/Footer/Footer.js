@@ -1,3 +1,4 @@
+import SocialMediaSidebar from "../Sidebaar/sidebaar";
 import Fodata from "./Components/Fodata";
 const fetchData = async () => {
     try {
@@ -45,7 +46,10 @@ const fetchData = async () => {
 const Footer =  async () => {
     const data = await fetchData();
     return (
+      <>
        <Fodata data={data}/> 
+       <SocialMediaSidebar data={data.social_media1}/>
+      </>
        
     );
 }
