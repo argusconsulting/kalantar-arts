@@ -154,8 +154,31 @@ const Page = () => {
                                     <Checkbox checked={item.IsLink} disabled />
                                 </TableCell>
                                 <TableCell>{item.slug}</TableCell>
-                                <TableCell>{item.creation_date}</TableCell>
-                                <TableCell>{item.update_date}</TableCell>
+                                <TableCell>
+
+{new Date(item.creation_date).toLocaleString('en-US', {
+year: 'numeric',
+month: 'long',
+day: 'numeric',
+hour: 'numeric',
+minute: '2-digit',
+hour12: true
+})}
+</TableCell>
+<TableCell>
+
+
+{new Date(item.update_date).toLocaleString('en-US', {
+year: 'numeric',
+month: 'long',
+day: 'numeric',
+hour: 'numeric',
+minute: '2-digit',
+hour12: true
+})}
+</TableCell>
+                                {/* <TableCell>{item.creation_date}</TableCell>
+                                <TableCell>{item.update_date}</TableCell> */}
                                 <TableCell className="flex gap-x-4">
                                     <Button size="small" onClick={() => handleEdit(item)} variant="contained" color="secondary">Edit</Button>
                                     <Button size="small" onClick={() => handleDelete(item.id)} variant="contained" color="error" className="ml-2">Delete</Button>

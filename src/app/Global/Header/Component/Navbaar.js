@@ -2,31 +2,45 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
-import { IoMenu,IoClose  } from "react-icons/io5";
-const Navbaar = ({data}) => {
+import { IoMenu, IoClose } from "react-icons/io5";
+
+const Navbaar = ({ data }) => {
   const [MainMenu, setMainMenu] = useState(data.mainMenu);
-  const [SubMenu, setSubMenu] =useState(data.subMenu);
-  const [LinkMenu, setLinkMenu] =useState(data.linkMenu);
+  const [SubMenu, setSubMenu] = useState(data.subMenu);
+  const [LinkMenu, setLinkMenu] = useState(data.linkMenu);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState(null);
-  const [expandedMenus, setExpandedMenus] = useState({}); // Track expanded menus
+  const [expandedMainMenuId, setExpandedMainMenuId] = useState(null);
+  const [expandedSubMenuId, setExpandedSubMenuId] = useState(null);
   const pathname = usePathname();
-
-
-
 
   if (pathname.startsWith("/KL-Admin")) return null;
   if (pathname.startsWith("/Login")) return null;
 
-  const toggleMenu = (menuId) => {
-    setExpandedMenus((prev) => ({
-      ...prev,
-      [menuId]: !prev[menuId], // Toggle the expanded state
-    }));
+  const toggleMainMenu = (menuId) => {
+    setExpandedMainMenuId(prev => prev === menuId ? null : menuId);
+    // Collapse any open submenu when toggling main menu
+    setExpandedSubMenuId(null);
   };
 
- 
+  const toggleSubMenu = (submenuId) => {
+    setExpandedSubMenuId(prev => prev === submenuId ? null : submenuId);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    setExpandedMainMenuId(null);
+    setExpandedSubMenuId(null);
+  };
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    closeMobileMenu();
+  }, [pathname]);
+
   return (
     <header className="fixed left-0 top-0 right-0 z-[500] h-[7.5rem] flex items-center px-6 md:px-20 bg-white shadow-md" onMouseLeave={() => setHoveredMenu(null)}>
       <div className="flex justify-between items-center relative w-full">
@@ -38,52 +52,34 @@ const Navbaar = ({data}) => {
 
         <nav className="hidden md:block">
           <ul className="flex gap-10 text-lg">
-            
-              <li  className="cursor-pointer hover:text-pink-500">
-                <Link href={`/`}>Home</Link>
-              </li>
-          
-            {MainMenu.map((menu, index) => (
-              <div key={index} onMouseEnter={() => setHoveredMenu(menu.id)}>
+            <li className="cursor-pointer hover:text-pink-500">
+              <Link href="/">Home</Link>
+            </li>
+            {MainMenu.map((menu) => (
+              <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)}>
                 <li className="cursor-pointer hover:text-pink-500">{menu.title}</li>
                 {SubMenu?.length > 0 && hoveredMenu === menu.id && (
                   <div className="absolute z-[500] flex right-2 top-16 bg-white rounded-md shadow-md p-6">
                     {SubMenu?.filter(submenu => submenu.main_menu_id === hoveredMenu).map((submenu, subIndex) => (
-                      <div key={subIndex} className={`pl-4 ${subIndex === 0 ? "" : "border-l-2 border-gray-300"} `}>
+                      <div key={submenu.id} className={`pl-4 ${subIndex === 0 ? "" : "border-l-2 border-gray-300"}`}>
                         <h4 className={`text-xl font-medium ${submenu.IsLink === 1 ? 'text-transparent' : ''}`}>{submenu.title}</h4>
                         <ul className={`w-[15.875rem] mt-2 flex flex-col gap-y-2 ${submenu.IsLinks === true ? 'hidden' : ''}`}>
-                          {LinkMenu.filter(linkItem => linkItem.sub_menu_id === submenu.id).map((item, itemIndex) => (
-                            
-                            
-                              item.Custom_Link === 1 ? (
-                                <Link href={item.link} key={itemIndex} target={item.target} className="hover:text-pink-500 px-1">
-                              <div className="w-full flex">
-                                <div className={`w-1/6 items-start mt-[0.625rem] flex justify-around ${submenu.IsLink === 1 ? 'hidden' : ''}`}>
-                                  <div className="rounded-full h-2 w-2 bg-black"></div>
-                                </div>
-                                <span className={`${submenu.IsLink === 1 ? ' font-semibold text-lg' : 'text-base font-extralight'} w-5/6 `}>{item.name}</span>
-                              </div>
-                            </Link>
-                              ):(
-
-                                <Link 
-                              key={itemIndex} 
-                              href={item.Custom_Link === 1 ? item.link : `/Pages/${item.link}`} 
-                              target={item.target === 1 ? "_blank" : "_self"} 
+                          {LinkMenu.filter(linkItem => linkItem.sub_menu_id === submenu.id).map((item) => (
+                            <Link
+                              key={item.id}
+                              href={item.Custom_Link === 1 ? item.link : `/Pages/${item.link}`}
+                              target={item.target === 1 ? "_blank" : "_self"}
                               className="hover:text-pink-500 px-1"
                             >
                               <div className="w-full flex">
                                 <div className={`w-1/6 items-start mt-[0.625rem] flex justify-around ${submenu.IsLink === 1 ? 'hidden' : ''}`}>
                                   <div className="rounded-full h-2 w-2 bg-black"></div>
                                 </div>
-                                <span className={`${submenu.IsLink === 1 ? ' font-semibold text-lg' : 'text-base font-extralight'} w-5/6 `}>{item.name}</span>
+                                <span className={`${submenu.IsLink === 1 ? 'font-semibold text-lg' : 'text-base font-extralight'} w-5/6`}>
+                                  {item.name}
+                                </span>
                               </div>
                             </Link>
-                              )
-                            
-                            
-                            
-                            
                           ))}
                         </ul>
                       </div>
@@ -92,53 +88,122 @@ const Navbaar = ({data}) => {
                 )}
               </div>
             ))}
-            <li  className="cursor-pointer hover:text-pink-500">
-                <Link href={`/Contact-Us`}>Contact Us</Link>
-              </li>
+            <li className="cursor-pointer hover:text-pink-500">
+              <Link href="/Contact-Us">Contact Us</Link>
+            </li>
           </ul>
         </nav>
 
         <div className="md:hidden">
-          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-lg">
-            {isMobileMenuOpen ? <IoClose size={40} color="#e4097f" /> : <IoMenu size={40} color="#e4097f"/>}
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+            className="text-lg"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {isMobileMenuOpen ? <IoClose size={40} color="#e4097f" /> : <IoMenu size={40} color="#e4097f" />}
           </button>
         </div>
       </div>
 
-      {isMobileMenuOpen && (
-        <div className="absolute right-0 top-[6.5rem] bg-white shadow-md w-[250px] p-4 md:hidden">
-          <ul className="flex flex-col gap-4">
-            {MainMenu.map((menu, index) => (
-              <div key={index}>
-                <li className="cursor-pointer text-lg hover:text-pink-500" onClick={() => toggleMenu(menu.id)}>
-                  {menu.title}
-                </li>
-                {expandedMenus[menu.id] && SubMenu?.length > 0 && (
-                  <div className="pl-4">
-                    {SubMenu?.filter(submenu => submenu.main_menu_id === menu.id).map((submenu, subIndex) => (
-                      <div key={subIndex}>
-                        <h4 className="text-base font-medium">{submenu.title}</h4>
-                        {expandedMenus[submenu.id] && (
-                          <ul className="w-full mt-2 flex flex-col gap-y-2">
-                            {LinkMenu.filter(linkItem => linkItem.sub_menu_id === submenu.id).map((item, itemIndex) => (
-                              <Link href={`/Pages/${item.link}`} key={itemIndex} target={item.target} className="hover:text-pink-500 px-1">
-                                <span className="text-sm">{item.name}</span>
-                              </Link>
-                            ))}
-                          </ul>
-                        )}
-                        <button onClick={() => toggleMenu(submenu.id)} className="text-sm text-gray-500">
-                          {expandedMenus[submenu.id] ? "Collapse" : "Expand"}
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </ul>
-        </div>
-      )}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ duration: 0.3 }}
+            className="absolute right-0 top-[6.5rem] bg-white shadow-lg w-[250px] p-4 md:hidden rounded-lg border border-gray-100 z-[500]"
+          >
+            <ul className="flex flex-col gap-2">
+              <li className="cursor-pointer text-lg font-medium hover:text-pink-500 py-2">
+                <Link href="/" onClick={closeMobileMenu}>Home</Link>
+              </li>
+              
+              {MainMenu.map((menu) => (
+                <div key={menu.id} className="overflow-hidden">
+                  <motion.li 
+                    whileTap={{ scale: 0.95 }}
+                    className="cursor-pointer text-lg font-medium hover:text-pink-500 flex items-center justify-between py-2"
+                    onClick={() => toggleMainMenu(menu.id)}
+                  >
+                    <span>{menu.title}</span>
+                    <motion.span
+                      animate={{ rotate: expandedMainMenuId === menu.id ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronDownIcon className="h-5 w-5 text-gray-500" />
+                    </motion.span>
+                  </motion.li>
+
+                  <AnimatePresence>
+                    {expandedMainMenuId === menu.id && (
+                      <motion.div
+                        initial={{ height: 0 }}
+                        animate={{ height: "auto" }}
+                        exit={{ height: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="pl-4 border-l-2 border-gray-100"
+                      >
+                        {SubMenu?.filter(submenu => submenu.main_menu_id === menu.id).map((submenu) => (
+                          <div key={submenu.id} className="overflow-hidden">
+                            <motion.div 
+                              whileTap={{ scale: 0.98 }}
+                              className="flex items-center justify-between py-2 cursor-pointer"
+                              onClick={() => toggleSubMenu(submenu.id)}
+                            >
+                              <h4 className="text-base font-medium hover:text-pink-500">
+                                {submenu.title}
+                              </h4>
+                              <motion.span
+                                animate={{ rotate: expandedSubMenuId === submenu.id ? 180 : 0 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+                              </motion.span>
+                            </motion.div>
+
+                            <AnimatePresence>
+                              {expandedSubMenuId === submenu.id && (
+                                <motion.ul
+                                  initial={{ height: 0 }}
+                                  animate={{ height: "auto" }}
+                                  exit={{ height: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="w-full flex flex-col gap-y-1 ml-2"
+                                >
+                                  {LinkMenu.filter(linkItem => linkItem.sub_menu_id === submenu.id).map((item) => (
+                                    <motion.li
+                                      key={item.id}
+                                      whileHover={{ x: 2 }}
+                                    >
+                                      <Link 
+                                        href={item.Custom_Link === 1 ? item.link : `/Pages/${item.link}`}
+                                        target={item.target === 1 ? "_blank" : "_self"}
+                                        className="hover:text-pink-500 px-1 py-1 block text-sm"
+                                        onClick={closeMobileMenu}
+                                      >
+                                        {item.name}
+                                      </Link>
+                                    </motion.li>
+                                  ))}
+                                </motion.ul>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
+              
+              <li className="cursor-pointer text-lg font-medium hover:text-pink-500 py-2">
+                <Link href="/Contact-Us" onClick={closeMobileMenu}>Contact Us</Link>
+              </li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

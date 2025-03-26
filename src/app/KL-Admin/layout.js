@@ -69,11 +69,11 @@ export default function AdminLayout({ children }) {
                             </Link>
                         </li>
                      
-                        <li>
+                        {/* <li>
                             <Link href="/KL-Admin/Socialupload" className="block hover:text-blue-400">
                             Socialupload
                             </Link>
-                        </li>
+                        </li> */}
                         <li>
                             <Link href="/KL-Admin/SocialMedia" className="block hover:text-blue-400">
                             SocialMedia
@@ -83,6 +83,12 @@ export default function AdminLayout({ children }) {
                         <li>
                             <Link href="/KL-Admin/Highlits" className="block hover:text-blue-400">
                             Highlits
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link href="/KL-Admin/Contact-US" className="block hover:text-blue-400">
+                            Contact Us 
                             </Link>
                         </li>
 
