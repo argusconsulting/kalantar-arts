@@ -17,12 +17,8 @@ const Navbaar = ({ data }) => {
   const [expandedSubMenuId, setExpandedSubMenuId] = useState(null);
   const pathname = usePathname();
 
-  if (pathname.startsWith("/KL-Admin")) return null;
-  if (pathname.startsWith("/Login")) return null;
-
   const toggleMainMenu = (menuId) => {
     setExpandedMainMenuId(prev => prev === menuId ? null : menuId);
-    // Collapse any open submenu when toggling main menu
     setExpandedSubMenuId(null);
   };
 
@@ -41,6 +37,9 @@ const Navbaar = ({ data }) => {
     closeMobileMenu();
   }, [pathname]);
 
+  // Early return conditions moved after all hooks
+  if (pathname.startsWith("/KL-Admin")) return null;
+  if (pathname.startsWith("/Login")) return null;
   return (
     <header className="fixed left-0 top-0 right-0 z-[500] h-[7.5rem] flex items-center px-6 md:px-20 bg-white shadow-md" onMouseLeave={() => setHoveredMenu(null)}>
       <div className="flex justify-between items-center relative w-full">
