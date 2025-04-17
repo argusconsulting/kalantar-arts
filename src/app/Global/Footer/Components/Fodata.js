@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const Fodata = ({ data }) => {
+const Fodata = ({ data ,FooterLinks }) => {
   const linkGroups = [
     {
       title: "Contact Us",
@@ -74,38 +74,50 @@ const Fodata = ({ data }) => {
         </div>
 
         {/* Quick Links */}
-        <div className="w-full lg:w-2/5 flex flex-wrap justify-between px-2 sm:px-4">
+        <div className="w-full lg:w-2/5 flex justify-evenly px-2 sm:px-4">
           <nav className="w-full sm:w-1/2 lg:w-auto mb-6 sm:mb-8 lg:mb-0">
             <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">
               Quick Links
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-gray-600">
-              <li>
-                <Link 
-                  href="/" 
-                  className="hover:text-blue-700 transition-colors duration-300 ease-in-out"
-                >
-                  Home
-                </Link>
-              </li>
-              {data.mainMenu.map((link, subIndex) => (
-                <li key={subIndex}>
+             
+              {FooterLinks.filter(row => row.type === 'quick').map((link, Index) => (
+                <li key={Index}>
                   <Link 
-                    href="/" 
+                    href={link.link} 
                     className="hover:text-blue-700 transition-colors duration-300 ease-in-out"
                   >
-                    {link.title}
+                    {link.name}
+                  </Link>
+                  
+                </li>
+              ))}
+              <Link 
+                    href="/Contact-Us" 
+                    className="hover:text-blue-700 transition-colors duration-300 ease-in-out"
+                  >
+                    Contact Us
+                  </Link>
+            </ul>
+          </nav>
+
+          <nav className="w-full sm:w-1/2 lg:w-auto mb-6 sm:mb-8 lg:mb-0">
+            <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">
+            Related Sites
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm text-gray-600">
+             
+              {FooterLinks.filter(row => row.type === 'related').map((link, Index) => (
+                <li key={Index}>
+                  <Link 
+                    href={link.link} 
+                    className="hover:text-blue-700 transition-colors duration-300 ease-in-out"
+                  >
+                    {link.name}
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link 
-                  href="/Contact-Us" 
-                  className="hover:text-blue-700 transition-colors duration-300 ease-in-out"
-                >
-                  Contact Us
-                </Link>
-              </li>
+              
             </ul>
           </nav>
         </div>

@@ -19,6 +19,11 @@ const nextConfig = {
             hostname: 'api.kalantarart.org',
             pathname: '/**',
           },
+          {
+            protocol: 'https',
+            hostname: 'source.unsplash.com',
+            pathname: '/**',
+          },
         ],
       },
       

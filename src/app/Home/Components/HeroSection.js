@@ -26,12 +26,12 @@ const HeroSection = ({ data }) => {
   };
 
   return (
-    <section className="relative flex justify-center  md:mt-24 items-center h-screen md:h-[75vh] overflow-hidden bg-gradient-to-r bg-[#f8deeb] px-4 md:px-5">
+    <section className="relative flex justify-center   items-center h-screen  overflow-hidden linearGradient px-4 md:px-5">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-7xl relative">
         {slides.length > 0 && (
           <>
             <div className="flex justify-center items-center p-2 relative">
-              <div className="border-[0.5rem] border-black w-full h-[20rem] md:h-[32rem] overflow-hidden relative">
+              <div className="border-[0.5rem] border-white w-full h-[20rem] md:h-[32rem] overflow-hidden relative">
                 <motion.img
                   key={currentIndex}
                   initial={{ x: "100%" }}
@@ -48,25 +48,28 @@ const HeroSection = ({ data }) => {
             </div>
             <div className="flex flex-col justify-center items-center p-4 text-center md:text-left">
               <div className="w-full">
-                <p className="text-sm text-justify sm:text-lg md:text-2xl font-bold tracking-tighter p-2 text-[#e51183] leading-relaxed opacity-90">
-                  <Image
-                    src="/Other-Icons/start.png"
-                    className="inline-block w-3 h-3 align-top "
+                <div className=" w-full justify-start items-start">
+                <Image
+                    src="/Other-Icons/“.svg"
+                    className="inline-block w-10 h-10 align-top "
                     alt="Quote Start"
                     width={10}
                     height={10}
                   />
+                </div>
+                <p className="text-sm text-justify sm:text-lg md:text-2xl font-bold tracking-tighter p-2 text-white leading-relaxed opacity-90">
+                  
                   {slides[currentIndex].quote}
-                  <Image
+                  {/* <Image
                     src="/Other-Icons/end.png"
                     className="inline-block w-3 h-3 align-top "
                     alt="Quote End"
                     width={10}
                     height={10}
-                  />
+                  /> */}
                 </p>
               </div>
-              <span className="text-xs w-full sm:text-sm md:text-xl pl-3 text-black font-bold mt-2">
+              <span className="text-xs w-full sm:text-sm md:text-xl pl-3 text-white font-bold mt-2">
                 {formatAuthor(slides[currentIndex].author)}
               </span>
             </div>

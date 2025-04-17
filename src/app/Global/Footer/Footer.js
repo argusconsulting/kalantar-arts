@@ -2,7 +2,7 @@ import SocialMediaSidebar from "../Sidebaar/sidebaar";
 import Fodata from "./Components/Fodata";
 const fetchData = async () => {
     try {
-      const [mainMenuRes, social_media, linkMenuRes] = await Promise.all([
+      const [mainMenuRes, social_media, linkMenuRes,FooterLinks] = await Promise.all([
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/MainMenu`, {
           headers: {
             'Content-Type': 'application/json',
@@ -25,29 +25,41 @@ const fetchData = async () => {
 
         
         }),
+
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/FooterLinks`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'authorization': `Bearer ${process.env.JWT_SECRET}`,
+          },
+          cache: 'no-store'
+
+        
+        }),
+
       ]);
   
-      if (!mainMenuRes.ok || !social_media.ok || !linkMenuRes.ok) {
+      if (!mainMenuRes.ok || !social_media.ok || !linkMenuRes.ok || !FooterLinks.ok) {
         throw new Error("Failed to fetch menu data");
       }
   
-      const [mainMenu, social_media1, linkMenu] = await Promise.all([
+      const [mainMenu, social_media1, linkMenu, FooterLinksdata] = await Promise.all([
         mainMenuRes.json(),
         social_media.json(),
         linkMenuRes.json(),
+        FooterLinks.json()
       ]);
   
-      return { mainMenu, social_media1, linkMenu };
+      return { mainMenu, social_media1, linkMenu,FooterLinksdata };
     } catch (error) {
       console.error("Error fetching data:", error);
-      return { mainMenu: [], social_media1: [], linkMenu: [] }; // Return empty arrays in case of error
+      return { mainMenu: [], social_media1: [], linkMenu: [],FooterLinksdata : [] }; // Return empty arrays in case of error
     }
   };
 const Footer =  async () => {
     const data = await fetchData();
     return (
       <>
-       <Fodata data={data}/> 
+       <Fodata data={data} FooterLinks={data.FooterLinksdata}/> 
        <SocialMediaSidebar data={data.social_media1}/>
       </>
        

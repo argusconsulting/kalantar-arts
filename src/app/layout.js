@@ -4,6 +4,17 @@ import Header from "./Global/Header/Header";
 import Footer from "./Global/Footer/Footer";
 import Donate from "./Global/Components/Donate";
 import SocialMediaSidebar from "./Global/Sidebaar/sidebaar";
+import { Martel,Roboto } from "next/font/google";
+const martel = Martel({
+  subsets: ['latin'],
+  weight: ['400', '700'], // Adjust weights as needed
+  display: 'swap',        // Choose your preferred display setting
+});
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '700'], // Adjust weights as needed
+  display: 'swap',        // Choose your preferred display setting
+});
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -50,7 +61,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={` ${roboto.className}  ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
         {children}

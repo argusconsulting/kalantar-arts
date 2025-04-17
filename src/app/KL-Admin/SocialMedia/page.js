@@ -13,6 +13,7 @@ const Page = () => {
     const [open, setOpen] = useState(false);
     const [editId, setEditId] = useState(null);
 
+    console.log(image)
     useEffect(() => {
         fetchData();
     }, []);

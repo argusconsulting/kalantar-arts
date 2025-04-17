@@ -5,7 +5,7 @@
 
 .linearGradient{
   /* background: linear-gradient(90deg, #E8DFF7 0%, #B292D9 100%); */
-  background-image: url('/Other-Icons/Group\ 152.svg'); /* Path to the SVG */
+  background-image: url('/Other-Icons/Group 152.png'); /* Path to the SVG */
   background-repeat: no-repeat; /* Prevents repeating */
   background-position: center; /* Centers the SVG */
   background-size: cover; /* Ensures it covers the entire container */
@@ -24,6 +24,10 @@
   69.11% 97%, 30.89% 97%, 23.50% 97%, 16.66% 91.05%, 
   12.89% 81.06%, 0.78% 49.02%
 );
+
+.clip-wave-top {
+  clip-path: path('M0,40 C150,0 350,80 600,40 C850,0 1050,80 1200,40 L1200,0 L0,0 Z');
+}
 
 }
 

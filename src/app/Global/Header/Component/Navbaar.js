@@ -6,8 +6,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import { IoMenu, IoClose } from "react-icons/io5";
+import { Roboto } from 'next/font/google';
 
-const Navbaar = ({ data }) => {
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
+});
+const Navbaar = ({ data,SITE_DATA }) => {
   const [MainMenu, setMainMenu] = useState(data.mainMenu);
   const [SubMenu, setSubMenu] = useState(data.subMenu);
   const [LinkMenu, setLinkMenu] = useState(data.linkMenu);
@@ -41,9 +47,24 @@ const Navbaar = ({ data }) => {
   if (pathname.startsWith("/KL-Admin")) return null;
   if (pathname.startsWith("/Login")) return null;
   return (
-    <header className="fixed left-0 top-0 right-0 z-[500] h-[7.5rem] flex items-center px-6 md:px-20 bg-white shadow-md" onMouseLeave={() => setHoveredMenu(null)}>
-      <div className="flex justify-between items-center relative w-full">
-        <figure className="w-[7.125rem]">
+   <>
+   
+   <header roboto className="fixed left-0 top-0 right-0 z-[500] h-[7.5rem] flex flex-col items-center  bg-white shadow-md" onMouseLeave={() => setHoveredMenu(null)}>
+   <section className=" flex justify-between items-center w-full h-9  md:px-14  px-5 border-b-2 border-dotted border-black">
+    <div className=" flex gap-2">
+      <Image src="/phone-flip.svg" height={20} width={20} alt="."/>
+      <Link href={`tel:${SITE_DATA.contact_no}`}>Reach Out to Us : {SITE_DATA.contact_no}</Link>
+    </div>
+    <div className=" flex gap-2 items-center">
+      <Link href="https://www.facebook.com/artkalantar/"><Image src="/Social-Icos/facebook.png" height={20} width={20} alt="."/></Link>
+      <Link href="https://www.instagram.com/kalantarart"><Image src="/Social-Icos/instagram.png" height={20} width={20} alt="."/></Link>
+      <Link  href="https://www.youtube.com/kalantarart"><Image src="/Social-Icos/youtube-brands.svg" height={20} width={20} alt="."/></Link>
+      <Link href="https://in.linkedin.com/company/kalantar-art-foundation"><Image src="/Social-Icos/linkedin-brands.svg" height={20} width={20} alt="."/></Link>
+    </div>
+   </section>
+    
+      <div className="flex px-6 md:px-20 py-2 justify-between items-center relative w-full">
+        <figure className="w-[5.125rem]">
           <Link href="/">
             <Image src="/Logos/Kalantar-logo.svg" width={1000} height={1000} alt="Logo" />
           </Link>
@@ -204,6 +225,7 @@ const Navbaar = ({ data }) => {
         )}
       </AnimatePresence>
     </header>
+   </>
   );
 };
 

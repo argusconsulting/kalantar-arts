@@ -42,6 +42,8 @@ export default function AdminLayout({ children }) {
                             Users
                             </Link>
                         </li>
+                    
+                        
                         <li>
                             <Link href="/KL-Admin/Menu" className="block hover:text-blue-400">
                            Header Main Menu
@@ -85,7 +87,22 @@ export default function AdminLayout({ children }) {
                             Highlits
                             </Link>
                         </li>
-
+                        <li>
+                            <Link href="/KL-Admin/Donation" className="block hover:text-blue-400">
+                            Donation
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/KL-Admin/FooterLinks" className="block hover:text-blue-400">
+                             FooterLinks
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/KL-Admin/ArtInitiatives" className="block hover:text-blue-400">
+                             ArtInitiatives
+                            </Link>
+                        </li>
+                       
                         <li>
                             <Link href="/KL-Admin/Contact-US" className="block hover:text-blue-400">
                             Contact Us 
