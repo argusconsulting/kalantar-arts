@@ -32,7 +32,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import ImageUpload from "../Components/ImageUpload";
 
-const page = () => {
+const Page = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState({
     data: false,
@@ -526,4 +526,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

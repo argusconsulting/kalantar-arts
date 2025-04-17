@@ -28,7 +28,7 @@ export default function Artpurpuse() {
                         <div className="border border-gray-200 p-6 rounded">
                             <h3 className="text-xl font-medium text-gray-800 mb-3">Preserving Cultural Heritage</h3>
                             <p className="text-gray-600">
-                                Dedicated to reviving and promoting India's rich artistic traditions, we support artisans by creating
+                                Dedicated to reviving and promoting India&apos;s rich artistic traditions, we support artisans by creating
                                 opportunities to sustain their craft while adapting to contemporary markets.
                             </p>
                         </div>

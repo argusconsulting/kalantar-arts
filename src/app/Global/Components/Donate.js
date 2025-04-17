@@ -3,7 +3,7 @@
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -88,13 +88,6 @@ const DonatePopup = ({ open, onClose }) => {
     const isValid = Object.values(fieldValidity).every(Boolean);
     setAllFieldsValid(isValid);
   }, [fieldValidity]);
-
-  // Auto-submit when payment proof is uploaded
-  useEffect(() => {
-    if (paymentProofData && showReceiptUpload) {
-      handlePaymentComplete();
-    }
-  }, [paymentProofData]);
 
   const validateField = (name, value) => {
     switch (name) {
@@ -201,7 +194,7 @@ const DonatePopup = ({ open, onClose }) => {
     setPaymentMethod('');
   };
 
-  const handlePaymentComplete = async () => {
+  const handlePaymentComplete = useCallback(async () => {
     try {
       const panNumber = sessionStorage.getItem("pan_number");
       if (!panNumber) throw new Error("PAN number not found in session");
@@ -246,7 +239,14 @@ const DonatePopup = ({ open, onClose }) => {
       console.error('Error updating payment method:', error);
       alert('There was an error updating your payment method. Please contact support.');
     }
-  };
+  }, [paymentMethod, onClose, paymentProofData]);
+
+  // Auto-submit when payment proof is uploaded
+  useEffect(() => {
+    if (paymentProofData && showReceiptUpload) {
+      handlePaymentComplete();
+    }
+  }, [paymentProofData, showReceiptUpload, handlePaymentComplete]);
 
   const resetForm = () => {
     setFormData({
@@ -330,7 +330,7 @@ const DonatePopup = ({ open, onClose }) => {
                     Welcome Dear Donor,
                   </Typography>
                   <Typography variant="body1" align="justify" sx={{ color: "#444", lineHeight: 1.8 }}>
-                    First of all, we thank you for your noble thought towards supporting Kalantar's social cause.
+                    First of all, we thank you for your noble thought towards supporting Kalantar&apos;s social cause.
                     <br /><br />
                     We are committed to bring a huge social revolution by way of practicing art. We are largely working with the underprivileged community, the prisoners, the orphans and construction sites under our free art education programs.
                     <br /><br />
@@ -581,7 +581,7 @@ const DonatePopup = ({ open, onClose }) => {
                     </Typography>
                   </Box>
                   <Typography variant="body2" color="textSecondary">
-                    Please use the reference "DONATION" when making the transfer.
+                    Please use the reference &quot;DONATION&quot; when making the transfer.
                   </Typography>
                 </Box>
               )}
@@ -650,10 +650,12 @@ const DonatePopup = ({ open, onClose }) => {
                 <Image src="/Logos/Kalantar-logo.svg" alt="Logo" width={100} height={100}/>
               </Box>
               <Typography variant="body1" sx={{ my: 3 }}>
-                Thanks For Your Generous Approach To Support Kalantar Art Foundation.
+              Thank you for donating to Kalantar Art Foundation. Your certificate
+under Section-80G will be sent on your registered email ID and mobile
+number soon.
               </Typography>
               <Typography variant="body1" sx={{ mb: 3 }}>
-                Your generous contribution will make a difference.
+              In case we have not received the payment, then we will inform you and request for payment receipt
               </Typography>
               <LocalFloristIcon sx={{ fontSize: 60, color: '#E84691', mb: 2 }} />
               <FlowerDropAnimation />

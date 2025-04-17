@@ -5,7 +5,7 @@ import ImageUpload from "../Components/ImageUpload";
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Snackbar, Alert, CircularProgress } from "@mui/material";
 import Image from "next/image";
 
-const page = () => {
+const Page = () => {
     const [dateMonth, setDateMonth] = useState("");
     const [dateDay, setDateDay] = useState("");
     const [title, setTitle] = useState("");
@@ -367,4 +367,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;
