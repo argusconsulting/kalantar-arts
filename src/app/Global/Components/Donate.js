@@ -402,7 +402,14 @@ const DonatePopup = ({ open, onClose }) => {
                     </InputAdornment>
                   ),
                 }}
-                helperText={!fieldValidity.panNumber && formData.panNumber && "Format: ABCDE1234F"}
+                helperText={
+                  !fieldValidity.panNumber && formData.panNumber && (
+                    <span style={{ color: 'red', fontWeight: 'bold' }}>
+                      Format: ABCDE1234F
+                    </span>
+                  )
+                }
+                
               />
               
               <TextField
