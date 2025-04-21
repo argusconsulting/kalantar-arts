@@ -92,13 +92,13 @@ const DonatePopup = ({ open, onClose }) => {
   const validateField = (name, value) => {
     switch (name) {
       case 'name':
-        return value.trim().length >= 3;
+        return /^[A-Za-z]/.test(value);
       case 'panNumber':
         return /^[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}$/.test(value);
       case 'address':
         return value.trim().length >= 10;
       case 'contactNumber':
-        return /^\d{10}$/.test(value);
+        return /^[6-9]\d{9}$/.test(value);
       case 'email':
         return /^\S+@\S+\.\S+$/.test(value);
       case 'donationAmount':
@@ -112,12 +112,36 @@ const DonatePopup = ({ open, onClose }) => {
     const { name, value } = e.target;
     let processedValue = value;
     
+    if (name === 'name') {
+      // Remove non-alphabetic characters
+      let cleaned = value.replace(/[^a-zA-Z]/g, '');
+    
+      // You can also set a maximum length if needed, e.g., 50 characters
+      cleaned = cleaned.substring(0, 50);
+    
+      // Check if cleaned value is valid (e.g., ensure it is not empty)
+      if (cleaned.length === 0) {
+        processedValue = ''; // Handle empty value as needed
+      } else {
+        processedValue = cleaned; // Set cleaned value
+      }
+    }
+    
     if (name === 'panNumber') {
       processedValue = value.toUpperCase();
     }
     
     if (name === 'contactNumber') {
-      processedValue = value.replace(/\D/g, '').substring(0, 10);
+      // Remove non-digits and trim to 10 characters
+      let cleaned = value.replace(/\D/g, '').substring(0, 10);
+    
+      // Validate first digit
+      if (cleaned.length > 0 && /^[0-5]/.test(cleaned)) {
+        // If starts with 0-5, set to empty or handle as needed
+        processedValue = '';
+      } else {
+        processedValue = cleaned;
+      }
     }
     
     setFormData(prev => ({

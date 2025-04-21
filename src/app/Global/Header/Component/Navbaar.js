@@ -53,7 +53,7 @@ const Navbaar = ({ data,SITE_DATA }) => {
    <section className=" flex justify-between items-center w-full h-9  md:px-14  px-5 border-b-2 border-dotted border-black">
     <div className=" flex gap-2">
       <Image src="/phone-flip.svg" height={20} width={20} alt="."/>
-      <Link href={`tel:${SITE_DATA.contact_no}`}>Reach Out to Us : {SITE_DATA.contact_no}</Link>
+      <Link className=" md:text-sm text-xs" href={`tel:${SITE_DATA.contact_no}`}>Reach Out to Us : {SITE_DATA.contact_no}</Link>
     </div>
     <div className=" flex gap-2 items-center">
       <Link href="https://www.facebook.com/artkalantar/"><Image src="/Social-Icos/facebook.png" height={20} width={20} alt="."/></Link>
