@@ -90,7 +90,7 @@ const Page = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data?.map((item) => (
+                    {data?.filter((item) => item.customepage == 0).map((item) => (
                         <tr key={item.id}>
                             <td className="border border-gray-300 p-2">{item.name}</td>
                             <td className="border border-gray-300 p-2">

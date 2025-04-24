@@ -17,6 +17,7 @@ const Page = () => {
     const [open, setOpen] = useState(false);
     const [editId, setEditId] = useState(null);
     const [Custom_Link, setCustomeLink] = useState(0);
+    const [Custom_ImagePage, setCustom_ImagePage] = useState(0);
 
     useEffect(() => {
         fetchData();
@@ -24,24 +25,24 @@ const Page = () => {
     }, []);
 
     const fetchData = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks`,{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${process.env.JWT_SECRET}`,
-              },
-              cache: "no-store",
+            },
+            cache: "no-store",
         });
         const result = await response.json();
         setData(result);
     };
 
     const fetchSubMenus = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu`,{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${process.env.JWT_SECRET}`,
-              },
-              cache: "no-store",
+            },
+            cache: "no-store",
         });
         const result = await response.json();
         setSubMenus(result);
@@ -59,9 +60,9 @@ const Page = () => {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${process.env.JWT_SECRET}`,
-              },
-              cache: "no-store",
-            body: JSON.stringify({ sub_menu_id: subMenuId, name, link, target,Custom_Link}),
+            },
+            cache: "no-store",
+            body: JSON.stringify({ sub_menu_id: subMenuId, name, link, target, Custom_Link, customepage: Custom_ImagePage }),
         });
 
         if (response.ok) {
@@ -76,11 +77,13 @@ const Page = () => {
 
     const handleDelete = async (id) => {
         if (confirm("Are you sure you want to delete this item?")) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks/${id}`, { method: "DELETE", headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.JWT_SECRET}`,
-              },
-              cache: "no-store", });
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks/${id}`, {
+                method: "DELETE", headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                },
+                cache: "no-store",
+            });
             if (response.ok) {
                 alert("SubMenuLink deleted successfully!");
                 fetchData();
@@ -98,6 +101,7 @@ const Page = () => {
         setTarget(item.target);
         setRichtext(item.richtext);
         setCustomeLink(item.Custom_Link);
+        setCustom_ImagePage(item.customepage);
         setOpen(true);
     };
 
@@ -108,6 +112,7 @@ const Page = () => {
         setTarget(false);
         setRichtext("");
         setCustomeLink('');
+        setCustom_ImagePage('');
         setEditId(null);
     };
 
@@ -129,15 +134,21 @@ const Page = () => {
                     <TextField fullWidth label="Name" value={name} onChange={(e) => setName(e.target.value)} margin="dense" required />
                     <TextField fullWidth label="Link" value={link} onChange={(e) => setLink(e.target.value)} margin="dense" required />
                     <div className="flex items-center mt-2">
-    <Checkbox checked={target === 1} onChange={(e) => setTarget(e.target.checked ? 1 : 0)} />
-    <label>Open in New Tab</label>
-</div>
-<div className="flex items-center mt-2">
-    <Checkbox checked={Custom_Link === 1} onChange={(e) => setCustomeLink(e.target.checked ? 1 : 0)} />
-    <label>For Custome Linked</label>
-</div>
+                        <Checkbox checked={target === 1} onChange={(e) => setTarget(e.target.checked ? 1 : 0)} />
+                        <label>Open in New Tab</label>
+                    </div>
+                    <div className="flex items-center mt-2">
+                        <Checkbox checked={Custom_Link === 1} onChange={(e) => setCustomeLink(e.target.checked ? 1 : 0)} />
+                        <label>For Custome Linked</label>
+                    </div>
 
-                    
+                    <div className="flex items-center mt-2">
+                        <Checkbox checked={Custom_ImagePage === 1} onChange={(e) => setCustom_ImagePage(e.target.checked ? 1 : 0)} />
+                        <label>Custome ImagesPage</label>
+                    </div>
+
+
+
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpen(false)}>Cancel</Button>
@@ -156,6 +167,7 @@ const Page = () => {
                             <TableCell>Link</TableCell>
                             <TableCell>Target</TableCell>
                             <TableCell>Custome Link</TableCell>
+                            <TableCell>Custome ImagesPage</TableCell>
                             <TableCell>Creation Date</TableCell>
                             <TableCell>Update Date</TableCell>
                             <TableCell>Actions</TableCell>
@@ -168,36 +180,39 @@ const Page = () => {
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.link}</TableCell>
                                 <TableCell>
-    <Checkbox checked={item.target === 1} disabled />
-</TableCell>
-<TableCell>
-    <Checkbox checked={item.Custom_Link === 1} disabled />
-</TableCell>
+                                    <Checkbox checked={item.target === 1} disabled />
+                                </TableCell>
+                                <TableCell>
+                                    <Checkbox checked={item.Custom_Link === 1} disabled />
+                                </TableCell>
+                                <TableCell>
+                                    <Checkbox checked={item.customepage === 1} disabled />
+                                </TableCell>
 
 
-<TableCell>
+                                <TableCell>
 
-{new Date(item.creation_date).toLocaleString('en-US', {
-year: 'numeric',
-month: 'long',
-day: 'numeric',
-hour: 'numeric',
-minute: '2-digit',
-hour12: true
-})}
-</TableCell>
-<TableCell>
+                                    {new Date(item.creation_date).toLocaleString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        hour12: true
+                                    })}
+                                </TableCell>
+                                <TableCell>
 
 
-{new Date(item.update_date).toLocaleString('en-US', {
-year: 'numeric',
-month: 'long',
-day: 'numeric',
-hour: 'numeric',
-minute: '2-digit',
-hour12: true
-})}
-</TableCell>
+                                    {new Date(item.update_date).toLocaleString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        hour12: true
+                                    })}
+                                </TableCell>
                                 <TableCell className="flex gap-x-4">
                                     <Button size="small" onClick={() => handleEdit(item)} variant="contained" color="secondary">Edit</Button>
                                     <Button size="small" onClick={() => handleDelete(item.id)} variant="contained" color="error" className="ml-2">Delete</Button>

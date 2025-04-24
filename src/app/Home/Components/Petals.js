@@ -20,12 +20,12 @@ const Petals = ({ Petals6 }) => {
         </h2>
       </div>
 
-      <section className="w-full h-full clip-wave-top  items-center">
+      <section className="w-full  mt-16 md:mt-0 h-full clip-wave-top  items-center">
         {/* Header */}
 
 
         {/* Diamond-shaped Content */}
-        <div className=" relative w-full h-full grid md:grid-cols-2 bg-[#e84691] bg-opacity-90 py-20 max-md:grid-cols-1 max-md:px-2 px-20 gap-10">
+        <div className=" relative w-full h-full grid md:grid-cols-2 bg-[#e84691]  py-20 max-md:grid-cols-1 max-md:px-2 px-20 gap-10">
          
          
          <Image className=" absolute w-full -top-10" src="/Rectangle 147.png" alt="" width={1000} height={1000}/>

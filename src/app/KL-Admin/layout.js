@@ -102,6 +102,29 @@ export default function AdminLayout({ children }) {
                              ArtInitiatives
                             </Link>
                         </li>
+
+                        <li>
+                            <Link href="/KL-Admin/Gallary" className="block hover:text-blue-400">
+                            Gallary
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/KL-Admin/CustomePage" className="block hover:text-blue-400">
+                            CustomePage
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/KL-Admin/ArtPurpose " className="block hover:text-blue-400">
+                            ArtPurpose
+                            </Link>
+                        </li>
+                       
+                        <li>
+                            <Link href="/KL-Admin/PopupAdmin " className="block hover:text-blue-400">
+                            PopupAdmin
+                            </Link>
+                        </li>
+                        
                        
                         <li>
                             <Link href="/KL-Admin/Contact-US" className="block hover:text-blue-400">

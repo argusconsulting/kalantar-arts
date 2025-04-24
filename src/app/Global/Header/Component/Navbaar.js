@@ -87,7 +87,14 @@ const Navbaar = ({ data,SITE_DATA }) => {
                           {LinkMenu.filter(linkItem => linkItem.sub_menu_id === submenu.id).map((item) => (
                             <Link
                               key={item.id}
-                              href={item.Custom_Link === 1 ? item.link : `/Pages/${item.link}`}
+                              href={
+                                item.Custom_Link === 1
+                                  ? item.link
+                                  : item.customepage === 1
+                                  ? `/${submenu.title.replace(/\s+/g, "-")}/${item.link.replace(/\s+/g, "-")}`
+                                  : `/Pages/${item.link}`
+                              }
+                              
                               target={item.target === 1 ? "_blank" : "_self"}
                               className="hover:text-pink-500 px-1"
                             >
@@ -197,7 +204,13 @@ const Navbaar = ({ data,SITE_DATA }) => {
                                       whileHover={{ x: 2 }}
                                     >
                                       <Link 
-                                        href={item.Custom_Link === 1 ? item.link : `/Pages/${item.link}`}
+                                        href={
+                                          item.Custom_Link === 1
+                                            ? item.link
+                                            : item.customepage === 1
+                                            ? `/${submenu.title.replace(/\s+/g, "-")}/${item.link.replace(/\s+/g, "-")}`
+                                            : `/Pages/${item.link}`
+                                        }
                                         target={item.target === 1 ? "_blank" : "_self"}
                                         className="hover:text-pink-500 px-1 py-1 block text-sm"
                                         onClick={closeMobileMenu}

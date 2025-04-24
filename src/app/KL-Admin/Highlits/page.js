@@ -92,9 +92,9 @@ const Page = () => {
 
     return (
         <div className="p-6">
-            <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+            {/* <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
                 Create Highlight
-            </Button>
+            </Button> */}
 
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <DialogTitle>{editId ? "Edit Highlight" : "Create Highlight"}</DialogTitle>
@@ -136,7 +136,7 @@ const Page = () => {
                                 <TableCell>{item.link}</TableCell>
                                 <TableCell className="flex gap-x-4">
                                     <Button size="small" onClick={() => handleEdit(item)} variant="contained" color="secondary">Edit</Button>
-                                    <Button size="small" onClick={() => handleDelete(item.id)} variant="contained" color="error" className="ml-2">Delete</Button>
+                                    {/* <Button size="small" onClick={() => handleDelete(item.id)} variant="contained" color="error" className="ml-2">Delete</Button> */}
                                 </TableCell>
                             </TableRow>
                         ))}

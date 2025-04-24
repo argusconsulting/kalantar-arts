@@ -27,11 +27,11 @@ const HeroSection = ({ data }) => {
 
   return (
     <section className="relative flex justify-center   items-center h-screen  overflow-hidden linearGradient px-4 md:px-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-7xl relative">
+      <div className="grid grid-cols-1 md:grid-cols-2  md:gap-8 w-full max-w-7xl relative">
         {slides.length > 0 && (
           <>
-            <div className="flex justify-center items-center p-2 relative">
-              <div className="border-[0.5rem] border-white w-full h-[20rem] md:h-[32rem] overflow-hidden relative">
+            <div className="flex mt-16 md:mt-0 justify-center items-center p-2 relative">
+              <div className="border-[0.5rem] border-white w-full h-[15rem] md:h-[32rem] overflow-hidden relative">
                 <motion.img
                   key={currentIndex}
                   initial={{ x: "100%" }}
