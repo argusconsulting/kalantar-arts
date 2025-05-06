@@ -28,7 +28,7 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "Kalantar Art Faoundation",
+  title: "Kalantar Art Foundation",
   description: `
   Kalantar Art Foundation ais a well-known non-profit organization working towards a huge social re-engineering process by way of art-based activities (both - for privileged and underprivileged sections of the society). Our art programmes include (but are not limited to):
 
