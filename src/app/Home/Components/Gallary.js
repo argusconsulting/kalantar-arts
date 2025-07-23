@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { ArrowRight, Link } from "lucide-react"
+import Link from 'next/link';
+// import { ArrowRight, Link } from "lucide-react"
 
 const Gallary = ({ data }) => {
   return (
@@ -39,13 +40,13 @@ const Gallary = ({ data }) => {
               fill
               className="object-cover hover:scale-105 transition-transform duration-300"
             />
-            <Link 
+            <Link
               href={data.find(item => item.id === id)?.link} 
               className="absolute cursor-pointer justify-between items-center bottom-0 left-0 right-0 bg-[#E84691D9] flex w-full opacity-85 text-white px-3 py-1 text-sm"
             >
               <span>{data.find(item => item.id === id)?.caption}</span>
               <span className="border-2 border-white rounded-full p-1">
-                <ArrowRight className="h-4 w-4" />
+                {/* <ArrowRight className="h-4 w-4" /> */}
               </span>
             </Link>
           </div>

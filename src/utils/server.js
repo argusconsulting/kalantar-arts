@@ -47,7 +47,7 @@ const uploadFile = async (file, multiple = false) => {
   return response.json();
 };
 
-// Authentication Examples
+// Authentication Examples dmfhdj
 const auth = {
   // Traditional Login
   async login(username, password) {
