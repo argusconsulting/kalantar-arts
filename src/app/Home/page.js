@@ -23,49 +23,56 @@ const fetchData = async () => {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-        cache: 'no-store',
+       next: { revalidate: 60 } // refresh data every 60s
+
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/Petals`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-        cache: 'no-store',
+       next: { revalidate: 60 } // refresh data every 60s
+
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/highlight/1`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-        cache: 'no-store',
+       next: { revalidate: 60 } // refresh data every 60s
+
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/Slider`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-        cache: 'no-store',
+       next: { revalidate: 60 } // refresh data every 60s
+
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/Initiatives`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-        cache: 'no-store',
+       next: { revalidate: 60 } // refresh data every 60s
+
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/ArtPurpose/1`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-        cache: 'no-store',
+       next: { revalidate: 60 } // refresh data every 60s
+
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/gallery`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-        cache: 'no-store',
+       next: { revalidate: 60 } // refresh data every 60s
+
       }),
 
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/gallery`, {
@@ -73,7 +80,8 @@ const fetchData = async () => {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-        cache: 'no-store',
+       next: { revalidate: 60 } // refresh data every 60s
+
       }),
     ]);
 

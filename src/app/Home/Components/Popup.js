@@ -20,7 +20,8 @@ const PopupComponent = () => {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${process.env.JWT_SECRET}`,
                         },
-                        cache: 'no-store',
+                       next: { revalidate: 60 } // refresh data every 60s
+
                     }
                 );
 

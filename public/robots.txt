@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow internal paths (optional, based on your setup)
+Disallow: /api/
+Disallow: /KL-Admin
+Disallow: /Admin
+
+# Specify your sitemap
+Sitemap: https://www.kalantarart.org/sitemap.xml
