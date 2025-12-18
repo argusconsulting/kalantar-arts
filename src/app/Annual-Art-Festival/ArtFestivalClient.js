@@ -6,7 +6,7 @@ import { Martel } from "next/font/google"
 import {
   TextField, Button, IconButton, MenuItem, Select, FormControl,
   InputLabel, Checkbox, FormControlLabel, Accordion, AccordionSummary,
-  AccordionDetails, Typography, Box, Card, CardContent, CircularProgress, 
+  AccordionDetails, Typography, Box, Card, CardContent, CircularProgress,
   Alert, Snackbar, Dialog, DialogContent, DialogActions // Added Dialog imports
 } from "@mui/material"
 import {
@@ -28,17 +28,17 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
   const [expanded, setExpanded] = useState("panel0")
   const [category, setCategory] = useState("")
   const [acceptedPolicy, setAcceptedPolicy] = useState(false)
-  
+
   // Use prop from server, default to 0 if undefined
   const [availableTickets, setAvailableTickets] = useState(initialAvailableTickets)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState({ type: "", text: "", open: false })
-  
+
   // State for Success Popup
   const [showSuccess, setShowSuccess] = useState(false)
-  
+
   const [formData, setFormData] = useState({
-    name: "", org: "", mobile: "", email: "", city: "" 
+    name: "", org: "", mobile: "", email: "", city: ""
   })
 
   const { speakers } = festivalData
@@ -48,7 +48,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
   const calculateTotal = () => {
     let total = delegates * TICKET_PRICE;
     if (delegates >= 6) {
-      total = total - 1000; 
+      total = total - 1000;
     }
     return total;
   }
@@ -89,11 +89,11 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
 
       // 2. Create Order (Your Backend)
       // NOTE: Ensure this URL is correct (localhost for dev, actual domain for prod)
-      const orderRes = await fetch(process.env.NEXT_PUBLIC_RAZORPAY_order_URI, {
+      const orderRes = await fetch("/api/payment/create-order", {
         method: "POST",
-        headers: { "Content-Type": "application/json",Authorization: `Bearer ${process.env.JWT_SECRET}`, },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: totalAmount, 
+          amount: totalAmount,
           currency: "INR",
           payment_type: "ticket",
           username: formData.name,
@@ -110,42 +110,42 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
 
       // 3. Open Razorpay
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, 
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: orderData.order.amount, // Expecting value in Paise (e.g. 500000)
         currency: orderData.order.currency,
         name: "Kalantar Art Foundation",
         description: "Art Festival Ticket Booking",
-        order_id: orderData.order.id, 
-        
+        order_id: orderData.order.id,
+
         // Handlers - Payment Success Logic
         handler: async function (response) {
-            // console.log("Razorpay Response Success:", response); 
-            try {
-                // Verify Signature with Backend
-                const verifyRes = await fetch(process.env.NEXT_PUBLIC_RAZORPAY_verify_URI, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json",Authorization: `Bearer ${process.env.JWT_SECRET}`, },
-                    body: JSON.stringify({
-                        razorpay_order_id: response.razorpay_order_id,
-                        razorpay_payment_id: response.razorpay_payment_id,
-                        razorpay_signature: response.razorpay_signature
-                    })
-                });
-                
-                const verifyData = await verifyRes.json();
+          // console.log("Razorpay Response Success:", response); 
+          try {
+            // Verify Signature with Backend
+            const verifyRes = await fetch("/api/payment/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              })
+            });
 
-                // If Backend says signature is valid -> Book Ticket
-                if (verifyData.success || verifyData.status === 'success') {
-                    await bookTicket(response);
-                } else {
-                    setLoading(false);
-                    setMessage({ type: "error", text: "Payment Verification Failed! Please contact support.", open: true });
-                }
-            } catch (err) {
-                // console.error("Verification Error:", err);
-                setLoading(false);
-                setMessage({ type: "error", text: "Verification API Connection Failed", open: true });
+            const verifyData = await verifyRes.json();
+
+            // If Backend says signature is valid -> Book Ticket
+            if (verifyData.success || verifyData.status === 'success') {
+              await bookTicket(response);
+            } else {
+              setLoading(false);
+              setMessage({ type: "error", text: "Payment Verification Failed! Please contact support.", open: true });
             }
+          } catch (err) {
+            // console.error("Verification Error:", err);
+            setLoading(false);
+            setMessage({ type: "error", text: "Verification API Connection Failed", open: true });
+          }
         },
         prefill: {
           name: formData.name,
@@ -157,23 +157,23 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
         },
         // Explicitly handle modal dismissal (User closed popup)
         modal: {
-            ondismiss: function() {
-                setLoading(false);
-                // console.log("Payment modal closed by user");
-            }
+          ondismiss: function () {
+            setLoading(false);
+            // console.log("Payment modal closed by user");
+          }
         }
       };
 
       const paymentObject = new window.Razorpay(options);
-      
+
       // Handle Explicit Payment Failures (Bank failed, etc)
-      paymentObject.on('payment.failed', function (response){
+      paymentObject.on('payment.failed', function (response) {
         // console.error("Payment Failed Event:", response.error);
         setLoading(false);
-        setMessage({ 
-            type: "error", 
-            text: `Payment Failed: ${response.error.description || "Transaction declined"}`, 
-            open: true 
+        setMessage({
+          type: "error",
+          text: `Payment Failed: ${response.error.description || "Transaction declined"}`,
+          open: true
         });
       });
 
@@ -189,11 +189,10 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
   // Final Booking Call (Called only after verification)
   const bookTicket = async (razorpayResponse) => {
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_Booking_API_URL, {
+      const res = await fetch("/api/art-festival/book", {
         method: "POST",
         headers: {
-          "Accept": "application/vnd.api+json",
-          "Content-Type": "application/vnd.api+json"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           name: formData.name,
@@ -203,7 +202,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
           ticket_price: TICKET_PRICE,
           number_of_tickets: delegates,
           category: category,
-          payment_id: razorpayResponse.razorpay_payment_id 
+          payment_id: razorpayResponse.razorpay_payment_id
         })
       });
 
@@ -234,8 +233,8 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
       </Snackbar>
 
       {/* --- SUCCESS POPUP DIALOG --- */}
-      <Dialog 
-        open={showSuccess} 
+      <Dialog
+        open={showSuccess}
         onClose={() => setShowSuccess(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -257,23 +256,23 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
           </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "center", pb: 4 }}>
-            <Button 
-                onClick={() => {
-                    setShowSuccess(false);
-                    // Optional: Reset form or reload page
-                    // window.location.reload(); 
-                    setFormData({ name: "", org: "", mobile: "", email: "", city: "" });
-                }} 
-                variant="contained" 
-                sx={{ 
-                    bgcolor: "#EC4899", 
-                    "&:hover": { bgcolor: "#DB2777" },
-                    px: 4,
-                    py: 1
-                }}
-            >
-                Close
-            </Button>
+          <Button
+            onClick={() => {
+              setShowSuccess(false);
+              // Optional: Reset form or reload page
+              // window.location.reload(); 
+              setFormData({ name: "", org: "", mobile: "", email: "", city: "" });
+            }}
+            variant="contained"
+            sx={{
+              bgcolor: "#EC4899",
+              "&:hover": { bgcolor: "#DB2777" },
+              px: 4,
+              py: 1
+            }}
+          >
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -348,7 +347,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
                   <TextField label="Organization" name="org" value={formData.org} onChange={handleInputChange} variant="outlined" fullWidth size="small" />
                   <TextField label="Mobile Number" name="mobile" value={formData.mobile} onChange={handleInputChange} variant="outlined" fullWidth size="small" required />
                   <TextField label="Email ID" name="email" value={formData.email} onChange={handleInputChange} variant="outlined" fullWidth size="small" type="email" required />
-                   <TextField label="City" name="city" value={formData.city} onChange={handleInputChange} variant="outlined" fullWidth size="small" required />
+                  <TextField label="City" name="city" value={formData.city} onChange={handleInputChange} variant="outlined" fullWidth size="small" required />
 
                   <FormControl fullWidth size="small" required>
                     <InputLabel>Category</InputLabel>
@@ -366,26 +365,26 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
                       <IconButton onClick={() => setDelegates(Math.max(1, delegates - 1))} sx={{ bgcolor: "#EC4899", color: "white", "&:hover": { bgcolor: "#DB2777" } }} size="small">
                         <Remove fontSize="small" />
                       </IconButton>
-                      <TextField 
-                        type="number" value={delegates} 
+                      <TextField
+                        type="number" value={delegates}
                         onChange={(e) => {
-                           const val = Math.max(1, parseInt(e.target.value) || 1);
-                           if(val <= availableTickets) setDelegates(val);
-                        }} 
-                        size="small" sx={{ width: 50, "& input": { textAlign: "center", p: 0.5 } }} 
+                          const val = Math.max(1, parseInt(e.target.value) || 1);
+                          if (val <= availableTickets) setDelegates(val);
+                        }}
+                        size="small" sx={{ width: 50, "& input": { textAlign: "center", p: 0.5 } }}
                       />
                       <IconButton onClick={() => setDelegates(delegates + 1)} disabled={delegates >= availableTickets}
-                        sx={{ bgcolor: "#EC4899", color: "white", "&:hover": { bgcolor: "#DB2777" }, "&:disabled": { bgcolor: "#fecdd3"} }} size="small">
+                        sx={{ bgcolor: "#EC4899", color: "white", "&:hover": { bgcolor: "#DB2777" }, "&:disabled": { bgcolor: "#fecdd3" } }} size="small">
                         <Add fontSize="small" />
                       </IconButton>
                     </Box>
                   </Box>
 
                   {/* PRIVACY POLICY CHECKBOX */}
-                  <FormControlLabel control={<Checkbox size="small" checked={acceptedPolicy} onChange={(e) => setAcceptedPolicy(e.target.checked)} />} 
-                    label={<Typography variant="caption" color="text.secondary">I accept the Privacy Policy</Typography>} 
+                  <FormControlLabel control={<Checkbox size="small" checked={acceptedPolicy} onChange={(e) => setAcceptedPolicy(e.target.checked)} />}
+                    label={<Typography variant="caption" color="text.secondary">I accept the Privacy Policy</Typography>}
                   />
-                  
+
                   <Typography variant="caption" color={availableTickets < 10 ? "error" : "text.secondary"} textAlign="center">
                     {availableTickets > 0 ? `Only ${availableTickets} seats left. Hurry!` : "Sold Out"}
                   </Typography>
@@ -428,7 +427,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
 
         {/* --- TICKET INCLUDES SECTION --- */}
         <section className="mb-20">
-              <div className="bg-[#FFF9FC] py-12 px-6 md:px-12 rounded-lg">
+          <div className="bg-[#FFF9FC] py-12 px-6 md:px-12 rounded-lg">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-serif text-gray-800 inline-flex items-center gap-3 justify-center">
                 <span className="w-8 h-8 md:w-10 md:h-10">
@@ -454,7 +453,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
 
         {/* --- SPEAKERS CAROUSEL --- */}
         <section className="mb-20 overflow-hidden">
-           <Typography variant="h3" component="h2" textAlign="center" fontWeight="bold" mb={6}>Our Panelists & Speakers</Typography>
+          <Typography variant="h3" component="h2" textAlign="center" fontWeight="bold" mb={6}>Our Panelists & Speakers</Typography>
           <div className="relative max-w-6xl mx-auto px-4 md:px-20 h-[600px] md:h-[500px]">
             <div className="relative w-full h-full flex items-center justify-center">
               {speakers.map((speaker, index) => {
@@ -467,7 +466,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
                 else if (position === 2) { zIndex = 30; scale = 0.7; opacity = 0.3; translateX = 480; blur = "blur(2px)" }
                 else if (position === speakers.length - 2) { zIndex = 30; scale = 0.7; opacity = 0.3; translateX = -480; blur = "blur(2px)" }
                 else { zIndex = 0; scale = 0.5; opacity = 0; translateX = position < speakers.length / 2 ? 600 : -600 }
-                
+
                 return (
                   <div key={index} className="absolute transition-all duration-700 ease-in-out cursor-pointer"
                     style={{ zIndex, transform: `translateX(${translateX}px) scale(${scale})`, opacity, filter: blur }}
@@ -487,7 +486,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
           </div>
           <div className="text-center mt-2 max-w-5xl mx-auto px-4">
             <Typography variant="h5" component="h3" fontWeight="bold" sx={{ whiteSpace: "pre-line" }}>
-             <span className="text-base">{speakers[activeSlide].name}</span>
+              <span className="text-base">{speakers[activeSlide].name}</span>
             </Typography>
             <div className="flex justify-center items-center gap-2 mt-4">
               {speakers.map((_, index) => (
