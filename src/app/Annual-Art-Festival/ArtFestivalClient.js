@@ -91,7 +91,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
       // NOTE: Ensure this URL is correct (localhost for dev, actual domain for prod)
       const orderRes = await fetch(process.env.NEXT_PUBLIC_RAZORPAY_order_URI, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",Authorization: `Bearer ${process.env.JWT_SECRET}`, },
         body: JSON.stringify({
           amount: totalAmount, 
           currency: "INR",
@@ -124,7 +124,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
                 // Verify Signature with Backend
                 const verifyRes = await fetch(process.env.NEXT_PUBLIC_RAZORPAY_verify_URI, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json",Authorization: `Bearer ${process.env.JWT_SECRET}`, },
                     body: JSON.stringify({
                         razorpay_order_id: response.razorpay_order_id,
                         razorpay_payment_id: response.razorpay_payment_id,

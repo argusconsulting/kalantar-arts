@@ -108,9 +108,9 @@ export default function DonatePage() {
 
     try {
       // 1. Create Order
-      const orderRes = await fetch(`http://localhost:3500/api/payment/create-order`, {
+      const orderRes = await fetch(`${process.env.NEXT_PUBLIC_RAZORPAY_order_URI}`, {
         method: 'POST',
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.JWT_SECRET}` },
         body: JSON.stringify({
           amount: formData.donationAmount, // Backend should handle conversion to paise if needed, or send in paise
           currency: "INR",
@@ -143,9 +143,9 @@ export default function DonatePage() {
         // 3. Verify Payment
         handler: async function (response) {
             try {
-                const verifyRes = await fetch(`http://localhost:3500/api/payment/verify`, {
+                const verifyRes = await fetch(`${process.env.NEXT_PUBLIC_RAZORPAY_verify_URI}`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json" ,Authorization: `Bearer ${process.env.JWT_SECRET}`},
                     body: JSON.stringify({
                         razorpay_order_id: response.razorpay_order_id,
                         razorpay_payment_id: response.razorpay_payment_id,
