@@ -6,10 +6,11 @@ import { Martel } from "next/font/google"
 import {
   TextField, Button, IconButton, MenuItem, Select, FormControl,
   InputLabel, Checkbox, FormControlLabel, Accordion, AccordionSummary,
-  AccordionDetails, Typography, Box, Card, CardContent, CircularProgress, Alert, Snackbar
+  AccordionDetails, Typography, Box, Card, CardContent, CircularProgress, 
+  Alert, Snackbar, Dialog, DialogContent, DialogActions // Added Dialog imports
 } from "@mui/material"
 import {
-  LocationOn, Remove, Add, ChevronLeft, ChevronRight, ExpandMore
+  LocationOn, Remove, Add, ChevronLeft, ChevronRight, ExpandMore, CheckCircle // Added CheckCircle
 } from "@mui/icons-material"
 import Image from "next/image"
 import { festivalData } from "./festivalData"
@@ -32,6 +33,9 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
   const [availableTickets, setAvailableTickets] = useState(initialAvailableTickets)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState({ type: "", text: "", open: false })
+  
+  // State for Success Popup
+  const [showSuccess, setShowSuccess] = useState(false)
   
   const [formData, setFormData] = useState({
     name: "", org: "", mobile: "", email: "", city: "" 
@@ -71,7 +75,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
     }
 
     // DEBUG: Check which key is being loaded
-    console.log("Using Razorpay Key:", process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID); 
+    // console.log("Using Razorpay Key:", process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID); 
 
     if (!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID) {
       setMessage({ type: "error", text: "Payment Key missing in .env.local", open: true });
@@ -85,7 +89,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
 
       // 2. Create Order (Your Backend)
       // NOTE: Ensure this URL is correct (localhost for dev, actual domain for prod)
-      const orderRes = await fetch("http://localhost:3500/api/payment/create-order", {
+      const orderRes = await fetch(process.env.NEXT_PUBLIC_RAZORPAY_order_URI, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -115,10 +119,10 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
         
         // Handlers - Payment Success Logic
         handler: async function (response) {
-            console.log("Razorpay Response Success:", response); 
+            // console.log("Razorpay Response Success:", response); 
             try {
                 // Verify Signature with Backend
-                const verifyRes = await fetch("http://localhost:3500/api/payment/verify", {
+                const verifyRes = await fetch(process.env.NEXT_PUBLIC_RAZORPAY_verify_URI, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -138,7 +142,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
                     setMessage({ type: "error", text: "Payment Verification Failed! Please contact support.", open: true });
                 }
             } catch (err) {
-                console.error("Verification Error:", err);
+                // console.error("Verification Error:", err);
                 setLoading(false);
                 setMessage({ type: "error", text: "Verification API Connection Failed", open: true });
             }
@@ -155,7 +159,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
         modal: {
             ondismiss: function() {
                 setLoading(false);
-                console.log("Payment modal closed by user");
+                // console.log("Payment modal closed by user");
             }
         }
       };
@@ -164,7 +168,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
       
       // Handle Explicit Payment Failures (Bank failed, etc)
       paymentObject.on('payment.failed', function (response){
-        console.error("Payment Failed Event:", response.error);
+        // console.error("Payment Failed Event:", response.error);
         setLoading(false);
         setMessage({ 
             type: "error", 
@@ -176,7 +180,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
       paymentObject.open();
 
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       setLoading(false);
       setMessage({ type: "error", text: error.message || "Error initiating payment", open: true });
     }
@@ -185,7 +189,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
   // Final Booking Call (Called only after verification)
   const bookTicket = async (razorpayResponse) => {
     try {
-      const res = await fetch("https://artfestivals.kalantarart.org/api/book-ticket", {
+      const res = await fetch(process.env.NEXT_PUBLIC_Booking_API_URL, {
         method: "POST",
         headers: {
           "Accept": "application/vnd.api+json",
@@ -204,13 +208,15 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
       });
 
       if (res.ok) {
+        // Success Logic
         setMessage({ type: "success", text: "Booking Successful! Ticket confirmed.", open: true });
         setAvailableTickets(prev => Math.max(0, prev - delegates));
+        setShowSuccess(true); // <--- Trigger the Thank You Popup
       } else {
         throw new Error("Booking API failed");
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       setMessage({ type: "error", text: "Payment verified but final booking API failed. Contact support.", open: true });
     } finally {
       setLoading(false);
@@ -226,6 +232,50 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
           {message.text}
         </Alert>
       </Snackbar>
+
+      {/* --- SUCCESS POPUP DIALOG --- */}
+      <Dialog 
+        open={showSuccess} 
+        onClose={() => setShowSuccess(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogContent sx={{ textAlign: 'center', py: 5, px: 3 }}>
+          <Box display="flex" justifyContent="center" mb={2}>
+            <CheckCircle sx={{ fontSize: 80, color: "#10B981" }} />
+          </Box>
+          <Typography variant="h4" component="h2" fontWeight="bold" gutterBottom sx={{ color: "#1F2937" }}>
+            Thank You!
+          </Typography>
+          <Typography variant="h6" sx={{ color: "#4B5563", mb: 1 }}>
+            Booking Successful
+          </Typography>
+          <Typography variant="body1" sx={{ color: "#6B7280" }}>
+            We will send you the booking details on your mail.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center", pb: 4 }}>
+            <Button 
+                onClick={() => {
+                    setShowSuccess(false);
+                    // Optional: Reset form or reload page
+                    // window.location.reload(); 
+                    setFormData({ name: "", org: "", mobile: "", email: "", city: "" });
+                }} 
+                variant="contained" 
+                sx={{ 
+                    bgcolor: "#EC4899", 
+                    "&:hover": { bgcolor: "#DB2777" },
+                    px: 4,
+                    py: 1
+                }}
+            >
+                Close
+            </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* --- HEADER --- */}
       <header className="relative h-64 text-white overflow-hidden md:px-40">
@@ -378,7 +428,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
 
         {/* --- TICKET INCLUDES SECTION --- */}
         <section className="mb-20">
-             <div className="bg-[#FFF9FC] py-12 px-6 md:px-12 rounded-lg">
+              <div className="bg-[#FFF9FC] py-12 px-6 md:px-12 rounded-lg">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-serif text-gray-800 inline-flex items-center gap-3 justify-center">
                 <span className="w-8 h-8 md:w-10 md:h-10">

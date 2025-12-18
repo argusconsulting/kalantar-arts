@@ -19,7 +19,7 @@ async function getAvailableTickets() {
     
     return 0; // Fallback if structure doesn't match
   } catch (error) {
-    console.error("Error fetching tickets:", error);
+    // console.error("Error fetching tickets:", error);
     return 0; // Default to 0 to prevent overselling on error
   }
 }
