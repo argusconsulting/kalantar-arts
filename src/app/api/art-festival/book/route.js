@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
+import { validateOrigin } from '@/utils/security';
 
 export async function POST(request) {
+    if (!validateOrigin(request)) {
+        return NextResponse.json({ error: "Forbidden Access" }, { status: 403 });
+    }
+
     try {
         const body = await request.json();
         const { name, email, phone, city, ticket_price, number_of_tickets, category, payment_id } = body;

@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
+import { validateOrigin } from '@/utils/security';
 
 export async function POST(request) {
+    if (!validateOrigin(request)) {
+        return NextResponse.json({ error: "Forbidden Access" }, { status: 403 });
+    }
+
     try {
         const body = await request.json();
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
