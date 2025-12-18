@@ -42,16 +42,22 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
   })
 
   const { speakers } = festivalData
-  const TICKET_PRICE = 5000; // Base price in Rupees
+  const PRICE_STANDARD = 1999;
+  const PRICE_BULK = 1499;
 
-  // --- LOGIC ---
+
+  // Helper to determine the current price per person based on quantity
+  const getPricePerTicket = () => {
+    return delegates >= 6 ? PRICE_BULK : PRICE_STANDARD;
+  };
+
+  // Calculate total based on the dynamic unit price
   const calculateTotal = () => {
-    let total = delegates * TICKET_PRICE;
-    if (delegates >= 6) {
-      total = total - 1000;
-    }
-    return total;
-  }
+    return delegates * getPricePerTicket();
+  };
+
+
+
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -199,7 +205,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
           email: formData.email,
           phone: formData.mobile,
           city: formData.city,
-          ticket_price: TICKET_PRICE,
+          ticket_price: currentUnitCookiePrice,
           number_of_tickets: delegates,
           category: category,
           payment_id: razorpayResponse.razorpay_payment_id
@@ -320,19 +326,29 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
               style={{ backgroundImage: "url('/baground.png')" }}>
               <div className="relative bg-white rounded-2xl p-6 h-full">
                 {festivalData.about.map((paragraph, i) => (
-                  <p key={i} className="text-sm leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: paragraph }} />
+                  <p key={i} className="text-base text-justify leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: paragraph }} />
                 ))}
-                <ul className="text-sm space-y-2 mb-4">
-                  <li>• Two panel discussions will be chaired by:</li>
+                <h2 className=" w-full text-center font-bold text-base">{`The seminar (as part of KALANTAR 2025) will comprise of:`}</h2>
+                <ul className="text-base space-y-2 mb-4 my-5">
+                  {/* <li>• Two panel discussions will be chaired by:</li>
                   {festivalData.panelists.map((panelist, i) => (
                     <li key={i} className="pl-4 font-semibold">{panelist}</li>
-                  ))}
-                  <li>• Annual awards</li>
-                  <li>• Keynote speeches by experts</li>
+                  ))} */}
+                  <li>{`• Two panel discussions`}</li>
+                  <li>{`• Annual awards`}</li>
+                  <li>{`• Keynote speeches by experts.`}</li>
                 </ul>
-                <p className="text-sm leading-relaxed font-semibold text-pink-600">
+
+                <div className="text-sm leading-relaxed font-semibold">
+
+                  <p className=" font-bold text-base">
+
+                    <span className=" ">{`This year’s art festival KALANTAR 2025 has been supported by the`}</span><span className=" text-[#E4097F]"> Ministry of Education, Ministry of Culture, UGC, AICTE, CBSE </span>  various universities and many state governments for larger participation
+                  </p>
+                </div>
+                {/* <p className="text-sm leading-relaxed font-semibold text-pink-600">
                   Supported by: <strong>{festivalData.supporters}</strong>
-                </p>
+                </p> */}
               </div>
             </div>
           </div>
@@ -352,7 +368,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
                   <FormControl fullWidth size="small" required>
                     <InputLabel>Category</InputLabel>
                     <Select value={category} onChange={(e) => setCategory(e.target.value)} label="Category">
-                      {["student", "teacher", "professional", "corporate", "Private"].map(opt => (
+                      {["student", "teacher", "professional", "Private"].map(opt => (
                         <MenuItem key={opt} value={opt} sx={{ textTransform: 'capitalize' }}>{opt}</MenuItem>
                       ))}
                     </Select>
@@ -395,7 +411,59 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
                     sx={{ background: "linear-gradient(to right, #EC4899, #DB2777)", fontWeight: "bold", textTransform: "none" }}>
                     {loading ? <CircularProgress size={24} color="inherit" /> : `Pay ₹${calculateTotal()} & Book`}
                   </Button>
+
+
+
+
+
+                  {/* --- ANIMATED DISCOUNT POPUP --- */}
+                  <Box sx={{ mt: 2, height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    {delegates < 6 ? (
+                      <Typography
+                        variant="caption"
+                        className=" text-sm"
+                        sx={{
+                          color: "#E11D48", // Red/Pinkish attention color
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          display: "block",
+                          // Animation: Gentle pulse to grab attention
+                          animation: "pulse 2s infinite",
+                          "@keyframes pulse": {
+                            "0%": { transform: "scale(1)", opacity: 0.8 },
+                            "50%": { transform: "scale(1.05)", opacity: 1 },
+                            "100%": { transform: "scale(1)", opacity: 0.8 },
+                          }
+                        }}
+                      >
+                        ✨ 20% Flat Discount on registration fees, if number of participants is 6 or more
+                      </Typography>
+                    ) : (
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: "#059669", // Green for success
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 0.5,
+                          // Animation: A quick pop in when applied
+                          animation: "popIn 0.3s ease-out",
+                          "@keyframes popIn": {
+                            "0%": { transform: "scale(0.5)", opacity: 0 },
+                            "100%": { transform: "scale(1)", opacity: 1 },
+                          }
+                        }}
+                      >
+                        <CheckCircle fontSize="inherit" /> Bulk Discount Applied! (₹1499/person)
+                      </Typography>
+                    )}
+                  </Box>
+
                 </Box>
+
+                
               </CardContent>
             </Card>
           </div>
@@ -466,7 +534,6 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
                 else if (position === 2) { zIndex = 30; scale = 0.7; opacity = 0.3; translateX = 480; blur = "blur(2px)" }
                 else if (position === speakers.length - 2) { zIndex = 30; scale = 0.7; opacity = 0.3; translateX = -480; blur = "blur(2px)" }
                 else { zIndex = 0; scale = 0.5; opacity = 0; translateX = position < speakers.length / 2 ? 600 : -600 }
-
                 return (
                   <div key={index} className="absolute transition-all duration-700 ease-in-out cursor-pointer"
                     style={{ zIndex, transform: `translateX(${translateX}px) scale(${scale})`, opacity, filter: blur }}

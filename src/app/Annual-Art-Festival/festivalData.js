@@ -7,16 +7,16 @@ export const festivalData = {
     theme: "“Art and its Impact”"
   },
   about: [
-    "The word 'Art' has moved beyond its traditional role of aesthetic appreciation. Today, it is being effectively used to help people improve self-awareness and emotional intelligence, reduce distress and promote positive emotions.",
-    "Kalantar Art Foundation, a leading non-profit organization is practicing above and our different initiatives, we have been able to impact thousands of lives through the art.",
-    "We would like to introduce the above concept to organizations, institutions and individuals through our Annual Art Festival, Kalantar 2025 at the India International Centre on 26th Dec, 2025 from 9:00 am to 5:00 pm.",
-    "This Art Festival will be a collective initiative to provide panel discussions on nearly a lakh of participants from various age groups, sections of the society and parts of the country through a National Level Online Art Competition of our Calendar of Compassion Campaign."
+    `The word “Art” has moved beyond its traditional role of aesthetic decorations and illustrations. Today, it is being effectively used to help people improve self-awareness and emotional resilience, resolving conflicts, reduce distress and personal growth.`,
+    `Kalantar Art Foundation, a leading non-profit organization is practicing above and through our different initiatives, we have been able to impact thousands of lives through different forms of arts.`,
+    `We would like to introduce the above concept to organizations, institutions and individuals through <b>a well curated seminar at the India International Centre on 26th Dec, 2025 (9:00 am – 5:00 pm) </b> and hope to convert this interaction into more meaningful engagements in future.`,
+    `Our Annual Art Festival is a unique initiative to provoke participation of nearly a lakh of participants from various age groups, sections of the society and parts of the country through a National Level Online Competition.`
   ],
   panelists: [
     "Sh. Ajay Kumar Singh (IAS retd. Former Secretary to the Government of India)",
     "Dr. Sandhya Purecha (Chairperson-Sangeet Natak Academy and Head of NCERT on Art Textbooks Development Team)"
   ],
-  supporters: "Ministry of Education, Ministry of Culture, UGC, AICTE, CBSE, various universities and many state governments.",
+  supporters: "This year’s art festival KALANTAR 2025 has been supported by the Ministry of Education, Ministry of Culture, UGC, AICTE, CBSE, various universities and many state governments for larger participation",
   ticketInclusions: [
     { icon: "/26-Dec.svg", text: "Full Seminar pass for Kalantar 2025 at India International Centre, New Delhi on 26th December, 2025" },
     { icon: "/kit.svg", text: "Delegate Kit with Programme and Partner details" },
@@ -31,15 +31,15 @@ export const festivalData = {
   },
   speakers: [
     {
-      name: "Balvinder kumar ret IAS , founder of the Mind Therapy and TrenfingAiTools, life coach",
+      name: "Balvinder kumar (ret IAS), founder of the Mind Therapy and Trending AI Tools, Life Coach",
       image: "/penalist/balvinder.jpeg"
     },
     {
-      name: `Professor (Dr.) Ramesh Chandra Gaur\nProfessor & Dean (Administration), \nDirector & Head- Kala Nidhi Division,\nIGNCA, Delhi`,
+      name: `Professor (Dr.) Ramesh Chandra Gaur Professor & Dean (Administration), Director & Head- Kala Nidhi Division, IGNCA, Delhi`,
       image: "/penalist/Ramesh Chandra.jpeg"
     },
     {
-      name: "Dr. Biswajit Saha",
+      name: "Dr. Biswajit Saha Director - Training & Skill Development CBSE",
       image: "/penalist/drbiswajit.jpeg"
     },
   ],
