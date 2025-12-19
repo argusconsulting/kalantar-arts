@@ -42,6 +42,18 @@ export const festivalData = {
       name: "Dr. Biswajit Saha Director - Training & Skill Development CBSE",
       image: "/penalist/drbiswajit.jpeg"
     },
+     {
+      name: "Mr. Debasis Satapathy Chief General Manager (HR) - NBCC Speaker of Management Lessons through Mahabharata stories",
+      image: "/penalist/Mr. Debasis Satapathy.jpeg"
+    },
+    {
+      name: "Sri Raghvendra Singh (retd IAS) former Secretary Culture, Govt. of India",
+      image: "/penalist/Sri Raghvendra Singh.jpeg"
+    },
+    {
+      name: "Dr. Sanjeev Kishore Gautam Director General - NGMA",
+      image: "/penalist/Dr. Sanjeev Kishore Gautam.jpeg"
+    },
   ],
   faqs: [
     { question: "Who should attend this seminar?", answer: "This seminar is intended to discuss about impact of art on society in various aspects. So, anyone who wants to know and learn about the power of art and how to exploit the same for betterment of our own self and for the society." },
