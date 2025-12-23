@@ -13,6 +13,7 @@ export function validateOrigin(request) {
         process.env.NEXT_PUBLIC_APP_URL, // Production URL from env
         "https://kalantarart.org",       // Hardcoded prod url
         "https://www.kalantarart.org",
+        "http://localhost:3000",         // Local development
     ];
 
     // Check if the origin/referer starts with any of the allowed origins

@@ -6,10 +6,13 @@ export async function POST(request) {
         return NextResponse.json({ error: "Forbidden Access" }, { status: 403 });
     }
 
+
+
     try {
         const body = await request.json();
         const { name, email, phone, city, ticket_price, number_of_tickets, category, payment_id } = body;
 
+        console.log("Received booking request:", body);
         const backendUrl = process.env.NEXT_PUBLIC_Booking_API_URL;
 
         if (!backendUrl) {
@@ -34,6 +37,8 @@ export async function POST(request) {
             })
         });
 
+
+        console.log("Booking response status:", response);
         // Note: The original client code handles response.ok but expects empty body or json? 
         // The original code was: const res = await fetch(...)
         // if (res.ok) ...

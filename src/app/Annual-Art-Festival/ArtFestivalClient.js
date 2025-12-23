@@ -42,9 +42,12 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
   })
 
   const { speakers } = festivalData
-  const PRICE_STANDARD = 1999;
-  const PRICE_BULK = 1499;
+  // const PRICE_STANDARD = 1999;
+  // const PRICE_BULK = 1499;
 
+
+    const PRICE_STANDARD = 1;
+  const PRICE_BULK = 0.5;
 
   // Helper to determine the current price per person based on quantity
   const getPricePerTicket = () => {
@@ -125,7 +128,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
 
         // Handlers - Payment Success Logic
         handler: async function (response) {
-          // console.log("Razorpay Response Success:", response); 
+          console.log("Razorpay Response Success:", response); 
           try {
             // Verify Signature with Backend
             const verifyRes = await fetch("/api/payment/verify", {
@@ -140,8 +143,11 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
 
             const verifyData = await verifyRes.json();
 
+            console.log("Payment Verification Response:", verifyData);
             // If Backend says signature is valid -> Book Ticket
             if (verifyData.success || verifyData.status === 'success') {
+
+              console.log("Payment Verified, proceeding to book ticket.");
               await bookTicket(response);
             } else {
               setLoading(false);
@@ -194,24 +200,35 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
 
   // Final Booking Call (Called only after verification)
   const bookTicket = async (razorpayResponse) => {
+
+    console.log("Booking ticket with Razorpay response:", razorpayResponse);
+
+
+    const requestBody = {
+  name: formData.name,
+  email: formData.email,
+  phone: formData.mobile,
+  city: formData.city,
+ ticket_price: getPricePerTicket(),
+  number_of_tickets: delegates,
+  category: category,
+  // payment_id: razorpayResponse.razorpay_payment_id
+};
+
+
+
+console.log("Final booking request body:", requestBody);
     try {
       const res = await fetch("/api/art-festival/book", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.mobile,
-          city: formData.city,
-          ticket_price: currentUnitCookiePrice,
-          number_of_tickets: delegates,
-          category: category,
-          payment_id: razorpayResponse.razorpay_payment_id
-        })
+        body: JSON.stringify(requestBody),
       });
 
+
+      console.log("Final booking API response:", res);  
       if (res.ok) {
         // Success Logic
         setMessage({ type: "success", text: "Booking Successful! Ticket confirmed.", open: true });
@@ -221,7 +238,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
         throw new Error("Booking API failed");
       }
     } catch (error) {
-      // console.error(error);
+      console.error(error);
       setMessage({ type: "error", text: "Payment verified but final booking API failed. Contact support.", open: true });
     } finally {
       setLoading(false);
@@ -283,38 +300,89 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
       </Dialog>
 
       {/* --- HEADER --- */}
-      <header className="relative h-64 text-white overflow-hidden md:px-40">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/headebg.svg')" }} />
-        <div className="relative z-10 h-full flex items-center justify-between px-6">
-          <div className="hidden md:flex w-32 h-44 items-center relative">
-            <Image src="/artlogo.svg" alt="Logo" fill className="object-contain" priority />
+<header className="relative h-64 text-white overflow-hidden md:px-40">
+  {/* Background Image */}
+  <div
+    className="absolute inset-0 bg-cover bg-center"
+    style={{ backgroundImage: "url('/headebg.svg')" }}
+  />
+
+  {/* =========================================
+      MOBILE VIEW (< md)
+      Layout: Card Center, Text Below
+     ========================================= */}
+  <div className="md:hidden relative z-10 h-full flex flex-col items-center justify-center gap-3 px-4">
+    
+    {/* 1. Mobile Card (Centered) */}
+    <div className="p-1 h-28 w-48 bg-[#EB64A3] rounded-xl shadow-lg shrink-0">
+      <div className="border-2 border-[#FFC909] rounded-lg w-full h-full p-1 flex flex-col justify-between">
+        <div className="flex items-center h-[75%] w-full gap-1">
+          <div className="w-[40%] h-full relative flex items-center justify-center">
+            <Image src="/SEM.svg" alt="sem" fill className="object-contain" />
           </div>
-          <div className="absolute left-1/2 -translate-x-1/2 text-center w-full md:w-auto">
-            <h1 className="font-black text-3xl md:text-[48px] leading-none text-white drop-shadow-[0_4px_0_#EC268F]">
-              {festivalData.header.title}
-            </h1>
-            <h2 className="font-bold text-2xl md:text-[48px] leading-none text-white drop-shadow-[0_2px_0_#EC268F]">
-              {festivalData.header.subtitle}
-            </h2>
-          </div>
-          <div className="hidden md:flex justify-end p-2 md:p-3 h-36 md:h-40 w-48 md:w-56 bg-[#EB64A3] rounded-xl">
-            <div className="border-2 border-[#FFC909] rounded-lg w-full h-full p-2 flex flex-col justify-between">
-              <div className="flex items-center h-[80%] w-full gap-1">
-                <div className="w-[40%] h-full relative flex items-center justify-center">
-                  <Image src="/SEM.svg" alt="sem" fill className="object-contain" />
-                </div>
-                <div className="w-[50%] flex flex-col justify-center text-center text-white font-semibold leading-none">
-                  <span className="text-sm whitespace-nowrap">{festivalData.header.date}</span>
-                  <span className="text-4xl">{festivalData.header.year}</span>
-                </div>
-              </div>
-              <div className="text-center text-white font-semibold text-lg whitespace-nowrap h-[20%] flex items-center justify-center">
-                {festivalData.header.theme}
-              </div>
-            </div>
+          <div className="w-[60%] flex flex-col justify-center text-center text-white font-semibold leading-none">
+            <span className="text-xs whitespace-nowrap">{festivalData.header.date}</span>
+            <span className="text-2xl">{festivalData.header.year}</span>
           </div>
         </div>
-      </header>
+        <div className="text-center text-white font-semibold text-xs whitespace-nowrap h-[25%] flex items-center justify-center">
+          {festivalData.header.theme}
+        </div>
+      </div>
+    </div>
+
+    {/* 2. Mobile Title (Below Card) */}
+    <div className="text-center hidden md:block">
+      <h1 className="font-black text-2xl leading-none text-white drop-shadow-[0_2px_0_#EC268F]">
+        {festivalData.header.title}
+      </h1>
+      <h2 className="font-bold text-lg leading-none text-white drop-shadow-[0_1px_0_#EC268F]">
+        {festivalData.header.subtitle}
+      </h2>
+    </div>
+  </div>
+
+
+  {/* =========================================
+      DESKTOP VIEW (>= md)
+      Your specific layout: Logo Left, Text Center, Card Right
+     ========================================= */}
+  <div className="hidden md:flex relative z-10 h-full items-center justify-between px-6">
+    
+    {/* Left: Logo */}
+    <div className="w-32 h-44 items-center relative">
+      <Image src="/artlogo.svg" alt="Logo" fill className="object-contain" priority />
+    </div>
+
+    {/* Center: Title (Absolute) */}
+    <div className="absolute left-1/2 -translate-x-1/2 text-center w-auto">
+      <h1 className="font-black text-[48px] leading-none text-white drop-shadow-[0_4px_0_#EC268F]">
+        {festivalData.header.title}
+      </h1>
+      <h2 className="font-bold text-[48px] leading-none text-white drop-shadow-[0_2px_0_#EC268F]">
+        {festivalData.header.subtitle}
+      </h2>
+    </div>
+
+    {/* Right: Date Card */}
+    <div className="flex justify-end p-3 h-40 w-56 bg-[#EB64A3] rounded-xl">
+      <div className="border-2 border-[#FFC909] rounded-lg w-full h-full p-2 flex flex-col justify-between">
+        <div className="flex items-center h-[80%] w-full gap-1">
+          <div className="w-[40%] h-full relative flex items-center justify-center">
+            <Image src="/SEM.svg" alt="sem" fill className="object-contain" />
+          </div>
+          <div className="w-[50%] flex flex-col justify-center text-center text-white font-semibold leading-none">
+            <span className="text-sm whitespace-nowrap">{festivalData.header.date}</span>
+            <span className="text-4xl">{festivalData.header.year}</span>
+          </div>
+        </div>
+        <div className="text-center text-white font-semibold text-lg whitespace-nowrap h-[20%] flex items-center justify-center">
+          {festivalData.header.theme}
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
 
       {/* --- MAIN CONTENT --- */}
       <main className="px-4 py-8 md:py-16">
@@ -402,7 +470,7 @@ export default function ArtFestivalClient({ initialAvailableTickets }) {
                   />
 
                   <Typography variant="caption" color={availableTickets < 10 ? "error" : "text.secondary"} textAlign="center">
-                    {availableTickets > 0 ? `Only ${availableTickets} seats left. Hurry!` : "Sold Out"}
+                    {availableTickets > 0 ? `Only few seats left. Hurry!` : "Sold Out"}
                   </Typography>
 
                   {/* PAY BUTTON */}
