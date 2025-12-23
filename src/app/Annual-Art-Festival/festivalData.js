@@ -54,6 +54,25 @@ export const festivalData = {
       name: "Dr. Sanjeev Kishore Gautam Director General - NGMA",
       image: "/penalist/Dr. Sanjeev Kishore Gautam.jpeg"
     },
+    {
+      name: "Shri Vishal Srivastava - Chairman-Kalantar Art Foundation",
+      image: "/penalist/vishal.jpeg"
+    },
+    {
+      name: "Smt. Uma Sharma - Educationist & Trainer - CCRT",
+      image: "/penalist/uma sharma.jpeg"
+    },
+    {
+      name: "Smt. Navodita Mishra - Programme Executive - All India Radio",
+      image: "/penalist/Navodita Mishra.jpeg"
+    },
+    {
+      name: "Shri Siddharth Singh RJ - News Anchor And Commentator",
+      image: "/penalist/Shri Siddhartha Singh.jpeg"
+    }
+
+
+    
   ],
   faqs: [
     { question: "Who should attend this seminar?", answer: "This seminar is intended to discuss about impact of art on society in various aspects. So, anyone who wants to know and learn about the power of art and how to exploit the same for betterment of our own self and for the society." },
