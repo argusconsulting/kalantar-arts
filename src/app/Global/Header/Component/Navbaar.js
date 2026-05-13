@@ -49,7 +49,7 @@ const Navbaar = ({ data,SITE_DATA }) => {
   return (
    <>
    
-   <header roboto className="fixed left-0 top-0 right-0 z-[500] h-[7.5rem] flex flex-col items-center  bg-white shadow-md" onMouseLeave={() => setHoveredMenu(null)}>
+   <header className={`${roboto.className} fixed left-0 top-0 right-0 z-[500] h-[7.5rem] flex flex-col items-center bg-white shadow-md`} onMouseLeave={() => setHoveredMenu(null)}>
    <section className=" flex justify-between items-center w-full h-9  md:px-14  px-5 border-b-2 border-dotted border-black">
     <div className=" flex gap-2">
       <Image src="/phone-flip.svg" height={20} width={20} alt="."/>
