@@ -1,7 +1,9 @@
 "use client";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Quill styles
+import "react-quill-new/dist/quill.snow.css"; // Quill styles
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const DynamicPage = ({ data }) => {
   if (!data[0]?.Richtext) {

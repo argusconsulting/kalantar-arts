@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
-import "react-quill/dist/quill.snow.css";
+import "react-quill-new/dist/quill.snow.css";
 import { Fullscreen, FullscreenExit, Edit, Delete, Add } from "@mui/icons-material";
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const Page = () => {
     const [richtext, setRichtext] = useState("");

@@ -5,10 +5,10 @@ import dynamic from "next/dynamic";
 import { MdArrowForwardIos } from "react-icons/md";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Quill styles
+import "react-quill-new/dist/quill.snow.css"; // Quill styles
 // ✅ Dynamically Import react-slick
 const Slider = dynamic(() => import("react-slick"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const Petal = ({ data }) => {
   // ✅ Parse Images Safely

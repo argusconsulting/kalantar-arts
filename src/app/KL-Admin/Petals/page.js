@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import ImageUpload from "../Components/ImageUpload";
-import "react-quill/dist/quill.snow.css";
+import "react-quill-new/dist/quill.snow.css";
 import { Button, TextField, Card, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from "@mui/material";
 import { Fullscreen, FullscreenExit, Edit, Delete, Add } from "@mui/icons-material";
 import Image from "next/image";
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const Page = () => {
     const [title, setTitle] = useState("");
