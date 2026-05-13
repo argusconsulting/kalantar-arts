@@ -49,6 +49,9 @@ For the underprivileged section:
 We invite you to be a part of this mission
 Free Art Education, Art Programs for Prison Inmates, Art Seminars, National Level Art Festivals and Competitions, Training the 64 arts from the Vedas, Trainings related to Painting, Music, Dance, Theatre, Creative Writing and others, Social re-engineering by way of art practices, Mental Wellness Advisery, Corporate Trainings, and Organizational Behavior Consulting
   `,
+  verification: {
+    google: "m6DGyaFuO1ijIRWnJDZlyIH8yJBNyD5TEeU0Vc1RGUQ",
+  },
 };
 
 export default function RootLayout({ children }) {
