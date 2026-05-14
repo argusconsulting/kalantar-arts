@@ -24,7 +24,8 @@ const fetchData = async (slug) => {
 
 // ✅ Page Component (Server Component)
 export default async function Page({ params }) {
-  const slug = params.Slug; // ✅ Get dynamic slug from URL
+  const { Slug } = await params;
+  const slug = Slug; // ✅ Get dynamic slug from URL
   const data = await fetchData(slug); // ✅ Pass slug to fetchData
 
   return <DynamicPage data={data} />;

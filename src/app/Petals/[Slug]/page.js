@@ -23,7 +23,8 @@ const fetchData = async (slug) => {
 
 // ✅ Metadata Function
 export async function generateMetadata({ params }) {
-  const slug = params.Slug;
+  const { Slug } = await params;
+  const slug = Slug;
   const data = await fetchData(slug);
 
   if (!data) {
@@ -51,7 +52,8 @@ export async function generateMetadata({ params }) {
 
 // ✅ Page Component (Server Component)
 export default async function Page({ params }) {
-  const slug = params.Slug; // ✅ Get dynamic slug from URL
+  const { Slug } = await params;
+  const slug = Slug; // ✅ Get dynamic slug from URL
   const data = await fetchData(slug); // ✅ Fetch data on the server
 
   if (!data) {

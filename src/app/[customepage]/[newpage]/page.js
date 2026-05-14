@@ -23,7 +23,8 @@ const fetchData = async (slug) => {
 
 // ✅ Page Component
 export default async function Page({ params }) {
-  const slug = params.newpage; // e.g., "The-Founders"
+  const { newpage } = await params;
+  const slug = newpage; // e.g., "The-Founders"
 
   const pageData = await fetchData(slug);
 
@@ -33,5 +34,15 @@ export default async function Page({ params }) {
     return <p className="text-center text-xl text-red-500 mt-20">No data found for this page.</p>;
   }
 
-  return <TeamPage data={pageData.json_content} title={pageData.slug} />;
+  let data = pageData.json_content;
+  if (typeof data === "string") {
+    try {
+      data = JSON.parse(data);
+    } catch (error) {
+      console.error("Error parsing json_content:", error);
+      data = [];
+    }
+  }
+
+  return <TeamPage data={data || []} title={pageData.slug} />;
 }

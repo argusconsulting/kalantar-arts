@@ -15,7 +15,7 @@ export default function TeamPage({ data,title }) {
         </div>
 
         <div className="space-y-20">
-          {data.map((member, index) => (
+          {Array.isArray(data) && data.map((member, index) => (
             <div
               key={member.name}
               className={`flex flex-col md:flex-row items-center gap-12 md:gap-16`}

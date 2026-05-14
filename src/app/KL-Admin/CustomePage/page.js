@@ -103,7 +103,16 @@ const Page = () => {
         setEditId(item.id);
         setCustomepageId(item.customepage_id);
         setSlug(item.slug);
-        setJsonContent(item.json_content || []);
+        
+        let content = item.json_content;
+        if (typeof content === "string") {
+            try {
+                content = JSON.parse(content);
+            } catch (e) {
+                content = [];
+            }
+        }
+        setJsonContent(content || []);
         setShowImageUpload({}); // Reset image upload visibility
         setOpen(true);
     };
@@ -253,7 +262,17 @@ const Page = () => {
                             <TableRow key={item.id}>
                                 <TableCell>{item.slug}</TableCell>
                                 <TableCell>
-                                    {(item.json_content || []).length} entries
+                                    {(() => {
+                                        let content = item.json_content;
+                                        if (typeof content === "string") {
+                                            try {
+                                                content = JSON.parse(content);
+                                            } catch (e) {
+                                                content = [];
+                                            }
+                                        }
+                                        return (content || []).length;
+                                    })()} entries
                                 </TableCell>
                                 <TableCell className="flex gap-x-4">
                                     <Button size="small" onClick={() => handleEdit(item)} variant="contained" color="secondary">
