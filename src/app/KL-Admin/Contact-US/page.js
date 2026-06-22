@@ -21,7 +21,7 @@ const Page = () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact_submissions`, {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
             },
             cache: "no-store",
         });
@@ -40,7 +40,7 @@ const Page = () => {
             method,
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
             },
             cache: "no-store",
             body: JSON.stringify({ 
@@ -68,7 +68,7 @@ const Page = () => {
                 method: "DELETE", 
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
                 },
                 cache: "no-store", 
             });

@@ -28,7 +28,7 @@ const Page = () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks`, {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
             },
             cache: "no-store",
         });
@@ -40,7 +40,7 @@ const Page = () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu`, {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
             },
             cache: "no-store",
         });
@@ -59,7 +59,7 @@ const Page = () => {
             method,
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
             },
             cache: "no-store",
             body: JSON.stringify({ sub_menu_id: subMenuId, name, link, target, Custom_Link, customepage: Custom_ImagePage }),
@@ -80,7 +80,7 @@ const Page = () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks/${id}`, {
                 method: "DELETE", headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
                 },
                 cache: "no-store",
             });

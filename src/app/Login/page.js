@@ -31,7 +31,7 @@ export default function Page() {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
         },
         cache: "no-store",
         body: JSON.stringify({ username, password }),

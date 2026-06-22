@@ -41,13 +41,16 @@ const Gallary = ({ data }) => {
               className="object-cover hover:scale-105 transition-transform duration-300"
             />
             <Link
-              href={data.find(item => item.id === id)?.link} 
-              className="absolute cursor-pointer justify-between items-center bottom-0 left-0 right-0 bg-[#E84691D9] flex w-full opacity-85 text-white px-3 py-1 text-sm"
+              href={data.find(item => item.id === id)?.link || '#'} 
+              className="absolute cursor-pointer justify-between items-center bottom-0 left-0 right-0 bg-[#E84691D9] flex w-full opacity-85 text-white px-3 py-2 text-sm min-h-[36px]"
             >
-              <span>{data.find(item => item.id === id)?.caption}</span>
-              <span className="border-2 border-white rounded-full p-1">
-                {/* <ArrowRight className="h-4 w-4" /> */}
-              </span>
+              <span>{data.find(item => item.id === id)?.caption || "\u00A0"}</span>
+              {data.find(item => item.id === id)?.link_label && (
+                <span className="flex items-center gap-1 font-semibold hover:underline">
+                  {data.find(item => item.id === id)?.link_label}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </span>
+              )}
             </Link>
           </div>
         ))}

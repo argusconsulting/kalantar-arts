@@ -22,7 +22,7 @@ const Page = () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/social_media`, {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${process.env.JWT_SECRET}`,
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
             },
             cache: "no-store", // ✅ Ensure fresh data (Disable caching)
           });
@@ -41,7 +41,7 @@ const Page = () => {
             method,
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
               },
               cache: "no-store",
             body: JSON.stringify({ name, link, image }),
@@ -61,7 +61,7 @@ const Page = () => {
         if (confirm("Are you sure you want to delete this item?")) {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/social_media/${id}`, { method: "DELETE" , headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
               },
               cache: "no-store"});
             if (response.ok) {
