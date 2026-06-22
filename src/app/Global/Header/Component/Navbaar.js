@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -22,6 +22,15 @@ const Navbaar = ({ data,SITE_DATA }) => {
   const [expandedMainMenuId, setExpandedMainMenuId] = useState(null);
   const [expandedSubMenuId, setExpandedSubMenuId] = useState(null);
   const pathname = usePathname();
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const toggleMainMenu = (menuId) => {
     setExpandedMainMenuId(prev => prev === menuId ? null : menuId);
@@ -49,8 +58,14 @@ const Navbaar = ({ data,SITE_DATA }) => {
   return (
    <>
    
-   <header className={`${roboto.className} fixed left-0 top-0 right-0 z-[500] h-[7.5rem] flex flex-col items-center bg-white shadow-md`} onMouseLeave={() => setHoveredMenu(null)}>
-   <section className=" flex justify-between items-center w-full h-9  md:px-14  px-5 border-b-2 border-dotted border-black">
+   <header className={`${roboto.className} fixed left-0 top-0 right-0 z-[500] h-[7.5rem] flex flex-col items-center bg-white shadow-md`}>
+   <section className=" flex justify-between items-center w-full h-9  md:px-14  px-5 border-b-2 border-dotted border-black" onMouseEnter={() => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      setHoveredMenu(null);
+    }}>
     <div className=" flex gap-2">
       <Image src="/phone-flip.svg" height={20} width={20} alt="."/>
       <Link className=" md:text-sm text-xs" href={`tel:${SITE_DATA.contact_no}`}>Reach Out to Us : {SITE_DATA.contact_no}</Link>
@@ -64,7 +79,13 @@ const Navbaar = ({ data,SITE_DATA }) => {
    </section>
     
       <div className="flex px-6 md:px-20 py-2 justify-between items-center relative w-full">
-        <figure className="w-[5.125rem]">
+        <figure className="w-[5.125rem]" onMouseEnter={() => {
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+          }
+          setHoveredMenu(null);
+        }}>
           <Link href="/">
             <Image src="/Logos/Kalantar-logo.svg" width={1000} height={1000} alt="Logo" />
           </Link>
@@ -72,14 +93,37 @@ const Navbaar = ({ data,SITE_DATA }) => {
 
         <nav className="hidden md:block">
           <ul className="flex gap-10 text-lg">
-            <li className="cursor-pointer hover:text-pink-500">
+            <li className="cursor-pointer hover:text-pink-500" onMouseEnter={() => {
+              if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+              }
+              setHoveredMenu(null);
+            }}>
               <Link href="/">Home</Link>
             </li>
             {MainMenu.map((menu) => (
-              <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)}>
+              <div 
+                key={menu.id} 
+                onMouseEnter={() => {
+                  if (timeoutRef.current) {
+                    clearTimeout(timeoutRef.current);
+                    timeoutRef.current = null;
+                  }
+                  setHoveredMenu(menu.id);
+                }}
+                onMouseLeave={() => {
+                  if (timeoutRef.current) {
+                    clearTimeout(timeoutRef.current);
+                  }
+                  timeoutRef.current = setTimeout(() => {
+                    setHoveredMenu(null);
+                  }, 150);
+                }}
+              >
                 <li className="cursor-pointer hover:text-pink-500">{menu.title}</li>
                 {SubMenu?.length > 0 && hoveredMenu === menu.id && (
-                  <div className="absolute z-[500] flex right-2 top-16 bg-white rounded-md shadow-md p-6">
+                  <div className="absolute z-[500] flex left-1/2 -translate-x-1/2 top-16 bg-white rounded-md shadow-md p-6">
                     {SubMenu?.filter(submenu => submenu.main_menu_id === hoveredMenu).map((submenu, subIndex) => (
                       <div key={submenu.id} className={`pl-4 ${subIndex === 0 ? "" : "border-l-2 border-gray-300"}`}>
                         <h4 className={`text-xl font-medium ${submenu.IsLink === 1 ? 'text-transparent' : ''}`}>{submenu.title}</h4>
@@ -115,7 +159,13 @@ const Navbaar = ({ data,SITE_DATA }) => {
                 )}
               </div>
             ))}
-            <li className="cursor-pointer hover:text-pink-500">
+            <li className="cursor-pointer hover:text-pink-500" onMouseEnter={() => {
+              if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+              }
+              setHoveredMenu(null);
+            }}>
               <Link href="/Contact-Us">Contact Us</Link>
             </li>
           </ul>
