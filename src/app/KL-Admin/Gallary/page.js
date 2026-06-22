@@ -9,6 +9,7 @@ const Page = () => {
     const [caption, setCaption] = useState("");
     const [image, setImage] = useState("");
     const [link, setLink] = useState("");
+    const [linkLabel, setLinkLabel] = useState("");
     const [aspectRatio, setAspectRatio] = useState("1/1");
     const [order, setOrder] = useState("");
     const [data, setData] = useState([]);
@@ -29,7 +30,7 @@ const Page = () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/gallery`, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
                 },
                 cache: "no-store",
             });
@@ -67,6 +68,7 @@ const Page = () => {
                 image,
                 caption,
                 link: link || "#",
+                link_label: linkLabel || "Open Link",
                 aspectRatio,
                 order: parseInt(order),
             };
@@ -75,7 +77,7 @@ const Page = () => {
                 method,
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
                 },
                 body: JSON.stringify(payload),
             });
@@ -104,7 +106,7 @@ const Page = () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/gallery/${id}`, {
                 method: "DELETE",
                 headers: {
-                    Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
                 },
             });
 
@@ -125,6 +127,7 @@ const Page = () => {
         setImage(item.image);
         setCaption(item.caption || "");
         setLink(item.link || "");
+        setLinkLabel(item.link_label || "");
         setAspectRatio(item.aspectRatio || "1/1");
         setOrder(item.order.toString());
         setOpen(true);
@@ -134,6 +137,7 @@ const Page = () => {
         setCaption("");
         setImage("");
         setLink("");
+        setLinkLabel("");
         setAspectRatio("1/1");
         setOrder("");
         setEditId(null);
@@ -205,11 +209,21 @@ const Page = () => {
 
                         <TextField
                             fullWidth
-                            label="Link"
+                            label="Link URL"
                             value={link}
                             onChange={(e) => setLink(e.target.value)}
                             margin="dense"
-                            className="md:col-span-2"
+                            className="md:col-span-1"
+                        />
+
+                        <TextField
+                            fullWidth
+                            label="Link Button Text"
+                            value={linkLabel}
+                            onChange={(e) => setLinkLabel(e.target.value)}
+                            margin="dense"
+                            className="md:col-span-1"
+                            placeholder="e.g. Read More, Buy Tickets"
                         />
 
                         {image && (

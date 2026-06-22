@@ -20,7 +20,7 @@ export default function ManageUsers() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
         },
         cache: "no-store", // ✅ Ensure fresh data (Disable caching)
       });
@@ -41,7 +41,7 @@ export default function ManageUsers() {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
         },
         cache: "no-store",
         body: JSON.stringify({ username, email, password }),
@@ -69,7 +69,7 @@ export default function ManageUsers() {
         method: 'DELETE',
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
         },
         cache: "no-store",
       });

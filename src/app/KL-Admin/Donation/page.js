@@ -68,7 +68,7 @@ const Page = () => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donation_submissions`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
         },
       });
 
@@ -87,7 +87,7 @@ const Page = () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment_settings/1`, {
         headers: {
-          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
         },
       });
       if (response.ok) {
@@ -116,7 +116,7 @@ const Page = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
         },
         body: JSON.stringify({
           upi_id: paymentSettings.upiId,
@@ -143,7 +143,7 @@ const Page = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
         },
         body: JSON.stringify({
           bank_details: JSON.stringify(paymentSettings.bankDetails)
@@ -169,7 +169,7 @@ const Page = () => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donation_submissions/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
         },
       });
 
@@ -192,7 +192,7 @@ const Page = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
         },
         body: JSON.stringify(currentDonation),
       });

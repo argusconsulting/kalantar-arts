@@ -27,7 +27,7 @@ const Page = () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Popups`, {
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                  Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
                 },
                 cache: "no-store", // ✅ Ensure fresh data (Disable caching)
               });
@@ -57,7 +57,7 @@ const Page = () => {
                 method,
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
                   },
             
                 
@@ -79,7 +79,7 @@ const Page = () => {
         if (confirm("Delete this popup?")) {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Popups/${id}`, { method: "DELETE" ,  headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.JWT_SECRET}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
               },});
             if (response.ok) fetchData();
         }
