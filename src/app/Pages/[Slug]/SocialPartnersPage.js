@@ -1,7 +1,42 @@
 import { Facebook, Instagram, Youtube, Phone, Landmark } from "lucide-react";
 
-export default function SocialPartnersPage() {
-  const partners = [
+export default function SocialPartnersPage({ data }) {
+  const cmsImages = data?.[0]?.image ? data[0].image.split(',') : [];
+
+  const parsePartners = (htmlString) => {
+    if (!htmlString) return [];
+    const liRegex = /<li[^>]*>(.*?)<\/li>/gi;
+    const extracted = [];
+    let match;
+    while ((match = liRegex.exec(htmlString)) !== null) {
+      const rawContent = match[1];
+      
+      // Check if user inserted an image directly inside the bullet point
+      const imgRegex = /<img[^>]+src="([^">]+)"/i;
+      const imgMatch = rawContent.match(imgRegex);
+      const inlineImg = imgMatch ? imgMatch[1] : null;
+
+      const cleanText = rawContent
+        .replace(/<[^>]+>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .trim();
+        
+      // Look for a colon or dash to split Name and Description if provided
+      const parts = cleanText.split(/[:\-]/);
+      const name = parts[0].trim();
+      const desc = parts.length > 1 
+        ? parts.slice(1).join('-').trim() 
+        : "Proudly supporting Kalantar Art Foundation in its mission to empower communities and create lasting social impact.";
+        
+      if (name) extracted.push({ name, desc, inlineImg });
+    }
+    return extracted;
+  };
+
+  const cmsPartners = parsePartners(data?.[0]?.Richtext);
+
+  const hardcodedPartners = [
     {
       name: "Sai Hari Narayan Seva Samathan, Mumbai",
       desc: "Sai Hari Narayan Seva Samathan is committed to empowering communities through education, healthcare, and social welfare initiatives. Their dedication to humanitarian service aligns with Kalantar Art Foundation's mission of creating positive and lasting social impact. Together, we work towards building stronger and more inclusive communities.",
@@ -15,6 +50,8 @@ export default function SocialPartnersPage() {
       desc: "Sai Hari Narayan Seva Samathan is committed to empowering communities through education, healthcare, and social welfare initiatives. Their dedication to humanitarian service aligns with Kalantar Art Foundation's mission of creating positive and lasting social impact. Together, we work towards building stronger and more inclusive communities.",
     },
   ];
+
+  const partners = cmsPartners.length > 0 ? cmsPartners : hardcodedPartners;
 
   return (
     <main className="bg-white text-[#2b2b2b]">
@@ -55,7 +92,7 @@ export default function SocialPartnersPage() {
           Community &amp; Collaboration
         </p>
         <h1 className="text-3xl md:text-4xl font-bold text-[#3a1020] mb-4">
-          Our Social Partners
+          {data?.[0]?.name || "Our Social Partners"}
         </h1>
         <p className="text-sm md:text-base text-[#5a3a45] max-w-2xl mx-auto">
           We believe that art is a catalyst for profound societal
@@ -73,8 +110,16 @@ export default function SocialPartnersPage() {
         <div className="grid md:grid-cols-3 gap-10">
           {partners.map((p, i) => (
             <div key={i}>
-              <div className="text-[#a91846] mb-4">
-                <Landmark size={28} />
+              <div className="w-16 h-16 rounded-md bg-white flex items-center justify-center mb-4 shadow-sm p-2 overflow-hidden">
+                {p.inlineImg || cmsImages[i] ? (
+                  <img
+                    src={p.inlineImg ? p.inlineImg : `${process.env.NEXT_PUBLIC_Files_URL}/${cmsImages[i]}`}
+                    alt={p.name}
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <Landmark size={28} className="text-[#a91846]" />
+                )}
               </div>
               <h3 className="text-[#a91846] font-semibold text-sm mb-3">
                 {p.name}

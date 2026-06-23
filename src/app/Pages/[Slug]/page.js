@@ -3,6 +3,7 @@ import ChairmanPage from "./ChairmanPage";
 import GovernmentPartnersPage from "./GovernmentPartnersPage";
 import SocialPartnersPage from "./SocialPartnersPage";
 import PhotoGalleryPage from "./PhotoGalleryPage";
+import VideoGalleryPage from "./VideoGalleryPage";
 
 // ✅ Server-side Data Fetching
 const fetchData = async (slug) => {
@@ -30,21 +31,25 @@ export default async function Page({ params }) {
   const { Slug } = await params;
   const slug = Slug;
 
+  // ✅ Fetch data from API for ALL pages so custom pages can use CMS data
+  const data = await fetchData(slug);
+
   // ✅ Check FIRST, before fetching anything
-  if (slug === "Chairman") {
-    return <ChairmanPage />;
+  if (slug === "Chairman" || slug === "Heartfelts-Chairman") {
+    return <ChairmanPage data={data} />;
   }
   if (slug === "Government-Partners") {
-    return <GovernmentPartnersPage />;
+    return <GovernmentPartnersPage data={data} />;
   }
   if (slug === "Social-Partners") {
-    return <SocialPartnersPage />;
+    return <SocialPartnersPage data={data} />;
   }
-if (slug === "Photo-Gallery") {
-     return <PhotoGalleryPage />;
-   }
+  if (slug === "Photo-Gallery") {
+    return <PhotoGalleryPage data={data} />;
+  }
+  if (slug === "Video-Gallery") {
+    return <VideoGalleryPage data={data} />;
+  }
 
-  // Only fetch from API for non-static pages
-  const data = await fetchData(slug);
   return <DynamicPage data={data} />;
 }
