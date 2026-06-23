@@ -167,7 +167,7 @@ const Page = () => {
                                    
                                     
                                     <label className="block text-sm font-medium text-gray-700">Bottom Gallery Images</label>
-                                    <p className="text-xs text-gray-500 mb-2">This controls the sliding gallery at the bottom. Use the text editor's Image button to insert images inside the text itself.</p>
+                                    <p className="text-xs text-gray-500 mb-2">This controls the sliding gallery at the bottom. Use the text editor&apos;s Image button to insert images inside the text itself.</p>
                                     <div className=" w-full">
                                         <label>Current Images</label>
                                         <div className=" w-full">
