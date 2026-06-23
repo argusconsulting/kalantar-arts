@@ -1,4 +1,6 @@
 import TeamPage from "./TeamPage";
+import ChairmanPage from "./ChairmanPage";
+import SocialPartnersPage from "./SocialPartnersPage";
 
 // ✅ Fetch page data using slug param
 const fetchData = async (slug) => {

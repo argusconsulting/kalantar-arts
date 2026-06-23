@@ -1,5 +1,8 @@
-
 import DynamicPage from "./DynamicPage";
+import ChairmanPage from "./ChairmanPage";
+import GovernmentPartnersPage from "./GovernmentPartnersPage";
+import SocialPartnersPage from "./SocialPartnersPage";
+import PhotoGalleryPage from "./PhotoGalleryPage";
 
 // ✅ Server-side Data Fetching
 const fetchData = async (slug) => {
@@ -9,7 +12,7 @@ const fetchData = async (slug) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.JWT_SECRET}`,
       },
-      cache: "no-store", // ✅ Ensure fresh data (Disable caching)
+      cache: "no-store",
     });
 
     if (!response.ok) throw new Error("Failed to fetch data");
@@ -25,8 +28,23 @@ const fetchData = async (slug) => {
 // ✅ Page Component (Server Component)
 export default async function Page({ params }) {
   const { Slug } = await params;
-  const slug = Slug; // ✅ Get dynamic slug from URL
-  const data = await fetchData(slug); // ✅ Pass slug to fetchData
+  const slug = Slug;
 
+  // ✅ Check FIRST, before fetching anything
+  if (slug === "Chairman") {
+    return <ChairmanPage />;
+  }
+  if (slug === "Government-Partners") {
+    return <GovernmentPartnersPage />;
+  }
+  if (slug === "Social-Partners") {
+    return <SocialPartnersPage />;
+  }
+if (slug === "Photo-Gallery") {
+     return <PhotoGalleryPage />;
+   }
+
+  // Only fetch from API for non-static pages
+  const data = await fetchData(slug);
   return <DynamicPage data={data} />;
 }
