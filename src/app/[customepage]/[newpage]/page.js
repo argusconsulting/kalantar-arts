@@ -28,8 +28,6 @@ export default async function Page({ params }) {
 
   const pageData = await fetchData(slug);
 
-
-
   if (!pageData) {
     return <p className="text-center text-xl text-red-500 mt-20">No data found for this page.</p>;
   }
@@ -44,5 +42,17 @@ export default async function Page({ params }) {
     }
   }
 
-  return <TeamPage data={data || []} title={pageData.slug} />;
+  const isFounders = slug?.toLowerCase().includes("founder");
+
+  return (
+    <TeamPage
+      data={data || []}
+      title={pageData.slug}
+      subtitle={
+        isFounders
+          ? "Two passionate leaders united by a vision to empower society through art, creativity, and social transformation."
+          : undefined
+      }
+    />
+  );
 }
