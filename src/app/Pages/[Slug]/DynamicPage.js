@@ -1,10 +1,7 @@
 "use client";
-import "react-quill-new/dist/quill.snow.css"; // Quill styles
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useState } from "react";
-
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const DynamicPage = ({ data }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -147,13 +144,7 @@ const DynamicPage = ({ data }) => {
 
         {/* Rich Text Content */}
         {data[0].Richtext && (
-          <div className="prose max-w-none">
-            <ReactQuill
-              value={data[0].Richtext}
-              readOnly={true}
-              theme="bubble"
-            />
-          </div>
+          <div className="prose max-w-none tiptap-content" dangerouslySetInnerHTML={{ __html: data[0].Richtext }} />
         )}
 
         {/* Huge Bottom Action Button */}

@@ -5,10 +5,8 @@ import dynamic from "next/dynamic";
 import { MdArrowForwardIos } from "react-icons/md";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "react-quill-new/dist/quill.snow.css"; // Quill styles
 // ✅ Dynamically Import react-slick
 const Slider = dynamic(() => import("react-slick"), { ssr: false });
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const Petal = ({ data }) => {
   // ✅ Parse Images Safely
@@ -65,14 +63,8 @@ const Petal = ({ data }) => {
           </div>
         </div>
 
-        {/* ✅ Dangerous HTML Rendering */}
-        <div className="my-8 lg:my-14">
-          <ReactQuill
-            value={data?.description || ""}
-            readOnly={true}
-            theme="bubble" // Use "bubble" or "snow" for styling
-          />
-        </div>
+        {/* ✅ HTML Rendering */}
+        <div className="my-8 lg:my-14 prose max-w-none tiptap-content" dangerouslySetInnerHTML={{ __html: data?.description || "" }} />
       </section>
 
       {/* ✅ Image Slider */}

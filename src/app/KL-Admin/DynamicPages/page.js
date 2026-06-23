@@ -3,11 +3,10 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
-import "react-quill-new/dist/quill.snow.css";
 import { Fullscreen, FullscreenExit } from "@mui/icons-material";
 import ImageUpload from "../Components/ImageUpload";
 
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+const TipTapEditor = dynamic(() => import("../Components/TipTapEditor"), { ssr: false });
 
 const Page = () => {
     const [richtext, setRichtext] = useState("");
@@ -28,24 +27,6 @@ const Page = () => {
     useEffect(() => {
         fetchData();
     }, []);
-
-    const modules = {
-        toolbar: [
-          [{ header: [1, 2, 3, 4, 5, 6, false] }], // Headers
-          [{ font: [] }], // Font selection
-          [{ size: [] }], // Font sizes
-          ["bold", "italic", "underline", "strike"], // Text styles
-          [{ script: "sub" }, { script: "super" }], // Subscript / superscript
-          [{ color: [] }, { background: [] }], // Font & background colors
-          [{ list: "ordered" }, { list: "bullet" }, { list: "check" }], // Lists
-          [{ indent: "-1" }, { indent: "+1" }], // Indentation
-          [{ align: [] }], // Alignments
-          ["blockquote", "code-block"], // Blockquote & Code block
-          ["formula"], // Math formulas
-          [{ direction: "rtl" }], // Right-to-left text support
-          ["clean"], // Remove formatting
-        ],
-      };
 
     const fetchData = async () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks`,{
@@ -303,7 +284,7 @@ const Page = () => {
                                     </div>
                                 )}
                                 <div className="flex-1 overflow-y-auto pb-12">
-                                    <ReactQuill modules={modules} value={richtext} onChange={setRichtext} style={{ height: "350px" }} />
+                                    <TipTapEditor value={richtext} onChange={setRichtext} />
                                 </div>
                             </div>
                         </div>
