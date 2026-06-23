@@ -3,12 +3,11 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import ImageUpload from "../Components/ImageUpload";
-import "react-quill-new/dist/quill.snow.css";
 import { Button, TextField, Card, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from "@mui/material";
 import { Fullscreen, FullscreenExit, Edit, Delete, Add } from "@mui/icons-material";
 import Image from "next/image";
 
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+const TipTapEditor = dynamic(() => import("../Components/TipTapEditor"), { ssr: false });
 
 const Page = () => {
     const [title, setTitle] = useState("");
@@ -117,24 +116,6 @@ const Page = () => {
         setEditingId(null);
     };
 
-    const modules = {
-        toolbar: [
-          [{ header: [1, 2, 3, 4, 5, 6, false] }], // Headers
-          [{ font: [] }], // Font selection
-          [{ size: [] }], // Font sizes
-          ["bold", "italic", "underline", "strike"], // Text styles
-          [{ script: "sub" }, { script: "super" }], // Subscript / superscript
-          [{ color: [] }, { background: [] }], // Font & background colors
-          [{ list: "ordered" }, { list: "bullet" }, { list: "check" }], // Lists
-          [{ indent: "-1" }, { indent: "+1" }], // Indentation
-          [{ align: [] }], // Alignments
-          ["blockquote", "code-block"], // Blockquote & Code block
-          ["link", "image", "video", "formula"], // Media & Math formulas
-          [{ direction: "rtl" }], // Right-to-left text support
-          ["clean"], // Remove formatting
-        ],
-      };
-
     const handleDeleteImage = (indexToDelete) => {
         setGalleryImages((prevImages) =>
           prevImages.filter((_, index) => index !== indexToDelete)
@@ -214,7 +195,7 @@ const Page = () => {
                                                 {isFullScreen ? <FullscreenExit /> : <Fullscreen />}
                                             </Button>
                                         </div>
-                                        <ReactQuill   modules={modules} value={description} onChange={setDescription} className="h-full" />
+                                        <TipTapEditor value={description} onChange={setDescription} />
                                     </div>
                                 </div>
                                 <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
