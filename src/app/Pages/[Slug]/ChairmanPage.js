@@ -39,10 +39,10 @@ export default function ChairmanPage({ data }) {
   ];
 
   const defaultIcons = [
-    <Paintbrush size={20} />,
-    <Landmark size={20} />,
-    <Users size={20} />,
-    <Sparkles size={20} />
+    <Paintbrush key="paintbrush" size={20} />,
+    <Landmark key="landmark" size={20} />,
+    <Users key="users" size={20} />,
+    <Sparkles key="sparkles" size={20} />
   ];
 
   return (

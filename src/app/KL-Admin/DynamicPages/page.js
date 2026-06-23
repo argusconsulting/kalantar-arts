@@ -168,7 +168,7 @@ const Page = () => {
                                     <span>🖼️</span> Upload Gallery Images (Top of Page)
                                 </h3>
                                 <p className="text-xs text-gray-500 mb-3">
-                                    Use this ONLY for the automated gallery grid at the top of the page. If you want to insert images INSIDE the text below, use the "Image" button inside the text editor!
+                                    Use this ONLY for the automated gallery grid at the top of the page. If you want to insert images INSIDE the text below, use the &quot;Image&quot; button inside the text editor!
                                 </p>
                                 <ImageUpload multiple={true} onUpload={handleImagesUploaded} />
                                 
@@ -259,7 +259,7 @@ const Page = () => {
                                         <span>👑</span> Chairman Profile Settings
                                     </h3>
                                     <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Badge Text (e.g. "15+")</label>
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">Badge Text (e.g. &quot;15+&quot;)</label>
                                         <input 
                                             value={extraData?.badgeText || ''} 
                                             onChange={(e) => setExtraData({...extraData, badgeText: e.target.value})}
