@@ -45,15 +45,35 @@ const FontSize = TextStyle.extend({
 });
 
 const MenuBar = ({ editor }) => {
-  if (!editor) {
-    return null;
-  }
-
   const addImage = useCallback(() => {
-    const url = window.prompt('Image URL');
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
+            method: 'POST',
+            body: formData,
+          });
+          if (response.ok) {
+            const data = await response.json();
+            const imageUrl = `${process.env.NEXT_PUBLIC_Files_URL}/${data.filename}`;
+            editor.chain().focus().setImage({ src: imageUrl }).run();
+          } else {
+            console.error("Image upload failed");
+            alert("Failed to upload image.");
+          }
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          alert("Error uploading image.");
+        }
+      }
+    };
+    input.click();
   }, [editor]);
 
   const setLink = useCallback(() => {
@@ -85,6 +105,10 @@ const MenuBar = ({ editor }) => {
       {children}
     </button>
   );
+
+  if (!editor) {
+    return null;
+  }
 
   return (
     <div className="flex flex-wrap items-center gap-1 p-2 bg-gray-100 border-b border-gray-300 sticky top-0 z-10 rounded-t-lg">

@@ -149,10 +149,10 @@ const Page = () => {
                             {/* Multi-Image Upload */}
                             <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
                                 <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                                    <span>🖼️</span> Upload Images
+                                    <span>🖼️</span> Upload Gallery Images (Top of Page)
                                 </h3>
                                 <p className="text-xs text-gray-500 mb-3">
-                                    Upload images for the gallery. You can optionally assign a specific link to each image below.
+                                    Use this ONLY for the automated gallery grid at the top of the page. If you want to insert images INSIDE the text below, use the "Image" button inside the text editor!
                                 </p>
                                 <ImageUpload multiple={true} onUpload={handleImagesUploaded} />
                                 

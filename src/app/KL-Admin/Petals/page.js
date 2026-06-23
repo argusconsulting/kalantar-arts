@@ -142,9 +142,10 @@ const Page = () => {
                                 <TextField label="Subtitle" fullWidth value={subtitle} onChange={(e) => setSubtitle(e.target.value)} required />
                                 <TextField label="Slug" fullWidth value={slug} onChange={(e) => setSlug(e.target.value)} required />
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Hero Image</label>
+                                    <label className="block text-sm font-medium text-gray-700">Top Cover/Hero Image</label>
+                                    <p className="text-xs text-gray-500 mb-2">This is the diamond-shaped cover image at the very top.</p>
                                     <div>
-                                        <label>Cureent Images</label>
+                                        <label>Current Image</label>
                                         <div>
                                             
                                          
@@ -165,9 +166,10 @@ const Page = () => {
                                 <div className=" w-full">
                                    
                                     
-                                    <label className="block text-sm font-medium text-gray-700">Gallery Images</label>
+                                    <label className="block text-sm font-medium text-gray-700">Bottom Gallery Images</label>
+                                    <p className="text-xs text-gray-500 mb-2">This controls the sliding gallery at the bottom. Use the text editor's Image button to insert images inside the text itself.</p>
                                     <div className=" w-full">
-                                        <label>Cureent Images</label>
+                                        <label>Current Images</label>
                                         <div className=" w-full">
                                             
                                             {galleryImages.map((image, index) => (
