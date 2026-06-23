@@ -32,53 +32,70 @@ export default function TeamPage({ data, title, subtitle }) {
 
       {/* White card panel, pulled up to overlap the pink header */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 pb-16">
-        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-            {Array.isArray(data) && data.map((member) => (
-              <div
-                key={member.name}
-                className="rounded-xl border border-rose-200 p-3 flex flex-col"
-              >
-                {/* Image Section - fixed 534x534 */}
-                <div className="relative w-[534px] h-[534px] max-w-full mx-auto rounded-lg overflow-hidden border border-rose-200">
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_Files_URL}/${member.image}`}
-                    alt={member.name}
-                    width={534}
-                    height={534}
-                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-
-                {/* Content Section */}
-                <div className="pt-4 space-y-1">
-                  <h2 className="text-lg font-bold text-rose-600">
-                    {member.name}
-                  </h2>
-                  <span className="text-xs uppercase tracking-widest text-rose-500 font-semibold block">
-                    {member.role}
-                  </span>
-
-                  <p className="text-gray-600 text-sm leading-relaxed mt-2">
-                    {member.description}
-                  </p>
-
-                  {/* Tags */}
-                  {Array.isArray(member.tags) && member.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      {member.tags.map((tag, i) => (
-                        <span
-                          key={i}
-                          className="text-[11px] px-3 py-1 rounded-full bg-rose-100 text-rose-600 font-medium"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+        <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-12 border border-gray-100">
+          <div className="flex flex-col gap-12">
+            {Array.isArray(data) && data.map((member, index) => {
+              // Optional: Alternate layout (left-right, right-left) based on even/odd index
+              const isEven = index % 2 === 0;
+              
+              return (
+                <div
+                  key={member.name}
+                  className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 items-center md:items-start bg-gray-50/50 p-6 sm:p-8 rounded-2xl border border-rose-100 hover:shadow-md transition-shadow duration-300`}
+                >
+                  {/* Image Section */}
+                  <div className="w-full md:w-1/3 shrink-0">
+                    <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-md border-4 border-white">
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_Files_URL}/${member.image}`}
+                        alt={member.name}
+                        width={600}
+                        height={600}
+                        className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
+                      />
                     </div>
-                  )}
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="w-full md:w-2/3 flex flex-col pt-2">
+                    <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1">
+                      {member.name}
+                    </h2>
+                    <span className="text-sm uppercase tracking-widest text-rose-600 font-bold mb-4 block">
+                      {member.role}
+                    </span>
+
+                    <div className="w-12 h-1 bg-rose-200 mb-6 rounded-full"></div>
+
+                    {/* Check if description has HTML tags (from tiptap) or is plain text */}
+                    {member.description?.includes('<') && member.description?.includes('>') ? (
+                      <div 
+                        className="prose prose-sm sm:prose-base max-w-none text-gray-600 leading-relaxed" 
+                        dangerouslySetInnerHTML={{ __html: member.description }} 
+                      />
+                    ) : (
+                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                        {member.description}
+                      </p>
+                    )}
+
+                    {/* Tags */}
+                    {Array.isArray(member.tags) && member.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-6">
+                        {member.tags.map((tag, i) => (
+                          <span
+                            key={i}
+                            className="text-xs px-4 py-1.5 rounded-full bg-rose-100 text-rose-700 font-bold shadow-sm"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
