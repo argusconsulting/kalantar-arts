@@ -125,7 +125,7 @@ export default function ChairmanPage({ data }) {
       {/* ===== QUOTE SECTION ===== */}
       <section className="px-8 md:px-24 py-16 text-center">
         <span className="text-5xl text-[#7a1430] font-serif leading-none">&rdquo;</span>
-        <div 
+        <div
           className="text-[#3a1020] text-base md:text-lg leading-relaxed max-w-4xl mx-auto mt-2 text-justify"
           dangerouslySetInnerHTML={{ __html: richTextContent }}
         ></div>
@@ -164,7 +164,7 @@ export default function ChairmanPage({ data }) {
           </p>
 
           <div className="grid grid-cols-2 gap-x-10 gap-y-8">
-            {features.slice(0,4).map((feat, idx) => (
+            {features.slice(0, 4).map((feat, idx) => (
               feat.title ? (
                 <Feature
                   key={idx}
@@ -198,43 +198,7 @@ export default function ChairmanPage({ data }) {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="bg-[#fafafa] border-t border-gray-100 px-8 md:px-16 py-10">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <img src="/images/kalantar-logo.png" alt="Kalantar" className="h-8 w-auto" />
-              <p className="font-semibold text-[#7a1430]">कलांतर</p>
-            </div>
-            <p className="text-xs text-gray-500 max-w-xs">
-              To bring a phenomenal impact on the world of art for the
-              betterment of mankind.
-            </p>
-          </div>
 
-          <div>
-            <p className="font-semibold text-sm mb-3">Quick Links</p>
-            <ul className="text-xs text-gray-500 space-y-2">
-              <li>Know Us</li>
-              <li>Our Activities</li>
-              <li>Contact Us</li>
-            </ul>
-          </div>
-
-          <div>
-            <p className="font-semibold text-sm mb-3">Related Sites</p>
-            <ul className="text-xs text-gray-500 space-y-2">
-              <li>Partner Organizations</li>
-              <li>Press &amp; Media</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="flex justify-center gap-4 mt-8">
-          <Facebook size={16} />
-          <Instagram size={16} />
-          <Youtube size={16} />
-        </div>
-      </footer>
     </main>
   );
 }
