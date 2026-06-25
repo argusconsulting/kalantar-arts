@@ -9,7 +9,42 @@ import {
   Sparkles,
 } from "lucide-react";
 
-export default function ChairmanPage() {
+export default function ChairmanPage({ data }) {
+  const cmsImages = data?.[0]?.image ? data[0].image.split(',') : [];
+  const heroImage = cmsImages[0] ? `${process.env.NEXT_PUBLIC_Files_URL}/${cmsImages[0]}` : "/images/chairman-hero.jpg";
+  // If they only uploaded 1 image, use it for both spots to prevent a broken image!
+  const profileImage = cmsImages[1] ? `${process.env.NEXT_PUBLIC_Files_URL}/${cmsImages[1]}` : (cmsImages[0] ? `${process.env.NEXT_PUBLIC_Files_URL}/${cmsImages[0]}` : "/images/chairman-profile.jpg");
+
+  const pageTitle = data?.[0]?.name || "Message from the Chairman";
+  const richTextContent = data?.[0]?.Richtext || `
+    <p>एक सुसज्जित कला बिना किसी वाद विवाद के हमारे हृदय पर दीर्घकालिक प्रभाव छोड़ती है और बड़ी से बड़ी बात आसानी से समझा देती है। वहीं शब्दों से कुछ समझाने के प्रयास में सुलझे रिश्ते भी उलझ जाते हैं। बिना किसी दूसरे की सुने अपनी कह देना और हृदय पर अमिट प्रभाव छोड़ देना ही कला का जादू है।</p>
+  `;
+
+  let extraData = { profileBio: "", badgeText: "15+", features: [] };
+  if (data?.[0]?.extra_data) {
+    try {
+      extraData = JSON.parse(data[0].extra_data);
+    } catch (e) {
+      console.error("Failed to parse extra_data", e);
+    }
+  }
+
+  const profileBio = extraData?.profileBio || "As an advocate for the democratization of art, Vishal has dedicated over a decade to building a platform where talent meets opportunity, regardless of background or geography.";
+  const badgeText = extraData?.badgeText || "15+";
+  const features = extraData?.features?.length > 0 ? extraData.features : [
+    { title: "Art Foundation", desc: "Spotlighting emerging artists on global stages." },
+    { title: "Cultural Preservation", desc: "Safeguarding heritage through digital archives." },
+    { title: "Community Impact", desc: "Art workshops for underserved communities." },
+    { title: "Creative Empowerment", desc: "Economic upliftment in traditional art forms." }
+  ];
+
+  const defaultIcons = [
+    <Paintbrush key="paintbrush" size={20} />,
+    <Landmark key="landmark" size={20} />,
+    <Users key="users" size={20} />,
+    <Sparkles key="sparkles" size={20} />
+  ];
+
   return (
     <main className="bg-white text-[#2b2b2b]">
       {/* ===== TOP UTILITY BAR ===== */}
@@ -52,7 +87,7 @@ export default function ChairmanPage() {
               Leadership&rsquo;s Vision
             </p>
             <h1 className="text-3xl md:text-4xl font-bold text-[#3a1020] mb-4 leading-tight">
-              Message from the Chairman
+              {pageTitle}
             </h1>
             <p className="text-sm md:text-base text-[#4a2030] max-w-md mb-6">
               Art has the power to inspire, connect communities, and create
@@ -65,10 +100,10 @@ export default function ChairmanPage() {
           </div>
 
           <div className="flex justify-center md:justify-end">
-            {/* Replace src with actual chairman photo asset */}
+            {/* Dynamic Chairman Photo Asset 1 */}
             <img
-              src="/images/chairman-hero.jpg"
-              alt="Vishal Srivastava, Chairman"
+              src={heroImage}
+              alt={pageTitle}
               className="w-72 h-80 object-cover rounded-md shadow-xl"
             />
           </div>
@@ -90,13 +125,10 @@ export default function ChairmanPage() {
       {/* ===== QUOTE SECTION ===== */}
       <section className="px-8 md:px-24 py-16 text-center">
         <span className="text-5xl text-[#7a1430] font-serif leading-none">&rdquo;</span>
-        <p className="text-[#3a1020] text-base md:text-lg leading-relaxed max-w-3xl mx-auto mt-2">
-          एक सुसज्जित कला बिना किसी वाद विवाद के हमारे हृदय पर दीर्घकालिक
-          प्रभाव छोड़ती है और बड़ी से बड़ी बात आसानी से समझा देती है। वहीं
-          शब्दों से कुछ समझाने के प्रयास में सुलझे रिश्ते भी उलझ जाते हैं।
-          बिना किसी दूसरे की सुने अपनी कह देना और हृदय पर अमिट प्रभाव छोड़
-          देना ही कला का जादू है।
-        </p>
+        <div 
+          className="text-[#3a1020] text-base md:text-lg leading-relaxed max-w-4xl mx-auto mt-2 text-justify"
+          dangerouslySetInnerHTML={{ __html: richTextContent }}
+        ></div>
         <p className="mt-6 text-xs tracking-widest font-semibold text-gray-500">
           VISHAL SRIVASTAVA,
           <br />
@@ -107,14 +139,14 @@ export default function ChairmanPage() {
       {/* ===== PROFILE SECTION ===== */}
       <section className="px-8 md:px-24 py-12 grid md:grid-cols-2 gap-12 items-start">
         <div className="relative w-full max-w-sm">
-          {/* Replace src with actual chairman photo asset */}
+          {/* Dynamic Chairman Photo Asset 2 */}
           <img
-            src="/images/chairman-profile.jpg"
-            alt="Vishal Srivastava"
-            className="w-full h-96 object-cover rounded-md"
+            src={profileImage}
+            alt="Vishal Srivastava Profile"
+            className="w-full h-96 object-cover rounded-md shadow-lg"
           />
           <div className="absolute bottom-4 right-[-1rem] bg-[#a91846] text-white rounded-md px-4 py-3 shadow-lg text-center">
-            <p className="text-2xl font-bold leading-none">15+</p>
+            <p className="text-2xl font-bold leading-none">{badgeText}</p>
             <p className="text-[10px] leading-tight mt-1">
               Years of
               <br />
@@ -125,35 +157,23 @@ export default function ChairmanPage() {
 
         <div>
           <h2 className="text-2xl font-bold text-[#7a1430] mb-3">
-            Vishal Srivastava
+            {pageTitle === "Heartfelts-Chairman" ? "Vishal Srivastava" : pageTitle}
           </h2>
           <p className="text-sm text-gray-600 mb-8 max-w-md">
-            As an advocate for the democratization of art, Vishal has
-            dedicated over a decade to building a platform where talent meets
-            opportunity, regardless of background or geography.
+            {profileBio}
           </p>
 
           <div className="grid grid-cols-2 gap-x-10 gap-y-8">
-            <Feature
-              icon={<Paintbrush size={20} />}
-              title="Art Foundation"
-              desc="Spotlighting emerging artists on global stages."
-            />
-            <Feature
-              icon={<Landmark size={20} />}
-              title="Cultural Preservation"
-              desc="Safeguarding heritage through digital archives."
-            />
-            <Feature
-              icon={<Users size={20} />}
-              title="Community Impact"
-              desc="Art workshops for underserved communities."
-            />
-            <Feature
-              icon={<Sparkles size={20} />}
-              title="Creative Empowerment"
-              desc="Economic upliftment in traditional art forms."
-            />
+            {features.slice(0,4).map((feat, idx) => (
+              feat.title ? (
+                <Feature
+                  key={idx}
+                  icon={defaultIcons[idx] || <Sparkles size={20} />}
+                  title={feat.title}
+                  desc={feat.desc}
+                />
+              ) : null
+            ))}
           </div>
         </div>
       </section>

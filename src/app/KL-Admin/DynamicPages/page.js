@@ -23,6 +23,7 @@ const Page = () => {
     const [urlLabel, setUrlLabel] = useState("");
     const [youtubeUrls, setYoutubeUrls] = useState("");
     const [newYoutubeUrl, setNewYoutubeUrl] = useState("");
+    const [extraData, setExtraData] = useState({ profileBio: "", badgeText: "15+", features: [] });
 
     useEffect(() => {
         fetchData();
@@ -51,7 +52,15 @@ const Page = () => {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_SECRET}`,
                 },
-                body: JSON.stringify({ Richtext: richtext, image, url, url_label: urlLabel, image_urls: imageUrls, youtube_urls: youtubeUrls }),
+                body: JSON.stringify({ 
+                    Richtext: richtext, 
+                    image, 
+                    url, 
+                    url_label: urlLabel, 
+                    image_urls: imageUrls, 
+                    youtube_urls: youtubeUrls, 
+                    extra_data: JSON.stringify(extraData) 
+                }),
             });
 
             if (response.ok) {
@@ -77,6 +86,13 @@ const Page = () => {
         setUrlLabel(item.url_label || "");
         setYoutubeUrls(item.youtube_urls || "");
         setNewYoutubeUrl("");
+        
+        try {
+            setExtraData(item.extra_data ? JSON.parse(item.extra_data) : { profileBio: "", badgeText: "15+", features: [] });
+        } catch(e) {
+            setExtraData({ profileBio: "", badgeText: "15+", features: [] });
+        }
+        
         setOpen(true);
     };
 
@@ -152,7 +168,7 @@ const Page = () => {
                                     <span>🖼️</span> Upload Gallery Images (Top of Page)
                                 </h3>
                                 <p className="text-xs text-gray-500 mb-3">
-                                    Use this ONLY for the automated gallery grid at the top of the page. If you want to insert images INSIDE the text below, use the "Image" button inside the text editor!
+                                    Use this ONLY for the automated gallery grid at the top of the page. If you want to insert images INSIDE the text below, use the &quot;Image&quot; button inside the text editor!
                                 </p>
                                 <ImageUpload multiple={true} onUpload={handleImagesUploaded} />
                                 
@@ -233,6 +249,60 @@ const Page = () => {
                                             </div>
                                         </div>
                                     )}
+                                </div>
+                            )}
+
+                            {/* Chairman Profile Special Settings */}
+                            {editName?.toLowerCase().includes("chairman") && (
+                                <div className="bg-purple-50 p-4 rounded-xl border border-purple-200 shadow-sm mt-4 space-y-3">
+                                    <h3 className="text-sm font-semibold text-purple-700 mb-2 flex items-center gap-2">
+                                        <span>👑</span> Chairman Profile Settings
+                                    </h3>
+                                    <div>
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">Badge Text (e.g. &quot;15+&quot;)</label>
+                                        <input 
+                                            value={extraData?.badgeText || ''} 
+                                            onChange={(e) => setExtraData({...extraData, badgeText: e.target.value})}
+                                            className="w-full text-sm border border-gray-300 p-2 mb-2 rounded focus:ring-1 focus:ring-purple-400 outline-none" 
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">Profile Bio</label>
+                                        <textarea 
+                                            value={extraData?.profileBio || ''} 
+                                            onChange={(e) => setExtraData({...extraData, profileBio: e.target.value})}
+                                            className="w-full text-sm border border-gray-300 p-2 mb-2 rounded h-20 focus:ring-1 focus:ring-purple-400 outline-none" 
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-medium text-gray-600 mb-2">Features (Up to 4)</label>
+                                        {[0,1,2,3].map(i => (
+                                            <div key={i} className="flex gap-2 mb-2">
+                                                <input 
+                                                    placeholder={`Title ${i+1}`}
+                                                    value={extraData?.features?.[i]?.title || ''}
+                                                    onChange={(e) => {
+                                                        const newFeatures = [...(extraData?.features || [])];
+                                                        if(!newFeatures[i]) newFeatures[i] = { title: '', desc: '' };
+                                                        newFeatures[i].title = e.target.value;
+                                                        setExtraData({...extraData, features: newFeatures});
+                                                    }}
+                                                    className="w-1/3 text-xs border border-gray-300 p-1.5 rounded focus:ring-1 focus:ring-purple-400 outline-none" 
+                                                />
+                                                <input 
+                                                    placeholder={`Description ${i+1}`}
+                                                    value={extraData?.features?.[i]?.desc || ''}
+                                                    onChange={(e) => {
+                                                        const newFeatures = [...(extraData?.features || [])];
+                                                        if(!newFeatures[i]) newFeatures[i] = { title: '', desc: '' };
+                                                        newFeatures[i].desc = e.target.value;
+                                                        setExtraData({...extraData, features: newFeatures});
+                                                    }}
+                                                    className="w-2/3 text-xs border border-gray-300 p-1.5 rounded focus:ring-1 focus:ring-purple-400 outline-none" 
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
 
