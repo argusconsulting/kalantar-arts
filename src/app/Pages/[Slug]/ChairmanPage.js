@@ -30,7 +30,7 @@ export default function ChairmanPage({ data }) {
   }
 
   const profileBio = extraData?.profileBio || "As an advocate for the democratization of art, Vishal has dedicated over a decade to building a platform where talent meets opportunity, regardless of background or geography.";
-  const badgeText = extraData?.badgeText || "15+";
+  const badgeText = extraData?.badgeText;
   const features = extraData?.features?.length > 0 ? extraData.features : [
     { title: "Art Foundation", desc: "Spotlighting emerging artists on global stages." },
     { title: "Cultural Preservation", desc: "Safeguarding heritage through digital archives." },
@@ -142,17 +142,19 @@ export default function ChairmanPage({ data }) {
           {/* Dynamic Chairman Photo Asset 2 */}
           <img
             src={profileImage}
-            alt="Vishal Srivastava Profile"
+            alt="Profile"
             className="w-full h-96 object-cover rounded-md shadow-lg"
           />
-          <div className="absolute bottom-4 right-[-1rem] bg-[#a91846] text-white rounded-md px-4 py-3 shadow-lg text-center">
-            <p className="text-2xl font-bold leading-none">{badgeText}</p>
-            <p className="text-[10px] leading-tight mt-1">
-              Years of
-              <br />
-              Visionary Leadership
-            </p>
-          </div>
+          {badgeText && (
+            <div className="absolute bottom-4 right-[-1rem] bg-[#a91846] text-white rounded-md px-4 py-3 shadow-lg text-center">
+              <p className="text-2xl font-bold leading-none">{badgeText}</p>
+              <p className="text-[10px] leading-tight mt-1">
+                Years of
+                <br />
+                Visionary Leadership
+              </p>
+            </div>
+          )}
         </div>
 
         <div>
