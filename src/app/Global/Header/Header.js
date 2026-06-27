@@ -3,28 +3,28 @@ import Navbaar from "./Component/Navbaar";
 const fetchData = async () => {
   try {
     const [mainMenuRes, subMenuRes, linkMenuRes,SITE_DATA] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/MainMenu`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/mainmenu`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
           cache: 'no-store'
       }),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/submenu`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
           cache: 'no-store'
       }),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/submenulinks`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
           cache: 'no-store'
       }),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/SITE_DATA/1`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/site_data/1`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,

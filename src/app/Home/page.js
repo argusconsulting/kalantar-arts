@@ -18,7 +18,7 @@ const fetchData = async () => {
       resArtPurpose,
       resGallery,
     ] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/Hero_Slider`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/hero_slider`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
@@ -26,7 +26,7 @@ const fetchData = async () => {
        next: { revalidate: 60 } // refresh data every 60s
 
       }),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/Petals`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/petals`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
@@ -42,7 +42,7 @@ const fetchData = async () => {
        next: { revalidate: 60 } // refresh data every 60s
 
       }),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/Slider`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/slider`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
@@ -50,7 +50,7 @@ const fetchData = async () => {
        next: { revalidate: 60 } // refresh data every 60s
 
       }),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/Initiatives`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/initiatives`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
@@ -58,7 +58,7 @@ const fetchData = async () => {
        next: { revalidate: 60 } // refresh data every 60s
 
       }),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/ArtPurpose/1`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/artpurpose/1`, {
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,

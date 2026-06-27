@@ -3,7 +3,7 @@ import Fodata from "./Components/Fodata";
 const fetchData = async () => {
     try {
       const [mainMenuRes, social_media, linkMenuRes,FooterLinks] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/MainMenu`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/mainmenu`, {
           headers: {
             'Content-Type': 'application/json',
             'authorization': `Bearer ${process.env.JWT_SECRET}`,
@@ -16,7 +16,7 @@ const fetchData = async () => {
           },
           cache: 'no-store'
         }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenuLinks`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/submenulinks`, {
           headers: {
             'Content-Type': 'application/json',
             'authorization': `Bearer ${process.env.JWT_SECRET}`,
@@ -26,7 +26,7 @@ const fetchData = async () => {
         
         }),
 
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/FooterLinks`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/footerlinks`, {
           headers: {
             'Content-Type': 'application/json',
             'authorization': `Bearer ${process.env.JWT_SECRET}`,
