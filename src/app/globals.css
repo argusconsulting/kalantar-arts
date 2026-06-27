@@ -56,11 +56,14 @@
   font-family: inherit;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  white-space: normal;
+  white-space: pre-wrap; /* Preserves newlines (\n) */
 }
 .tiptap-content p {
   margin-bottom: 1rem;
   line-height: 1.6;
+}
+.tiptap-content p:empty::after {
+  content: "\00a0"; /* Ensures completely empty <p></p> tags have height */
 }
 .tiptap-content h1 {
   font-size: 2.25rem;

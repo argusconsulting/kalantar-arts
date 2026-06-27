@@ -14,14 +14,17 @@ const ActivitiesPage = ({ data }) => {
   let Images = [];
   let heroImage = data?.hero_img || "";
   try {
-    if (data?.image) {
+    // 1. Prefer the new dedicated images JSON array (from Option A upgrade)
+    if (data?.images && data.images !== "[]") {
+      Images = JSON.parse(data.images);
+    } 
+    // 2. Fallback to old legacy comma-separated images hack
+    else if (data?.image) {
       const allImages = data.image.split(',');
       if (allImages.length > 0) {
-        heroImage = heroImage || allImages[0]; // fallback to first image in gallery
+        heroImage = heroImage || allImages[0];
         Images = allImages.slice(1);
       }
-    } else if (data?.images) {
-      Images = JSON.parse(data.images || "[]");
     }
   } catch (error) {
     console.error("Error parsing images data:", error);

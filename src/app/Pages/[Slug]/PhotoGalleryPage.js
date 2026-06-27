@@ -39,8 +39,9 @@ export default function PhotoGalleryPage({ data }) {
   // If CMS has images, format them to match the gallery structure. Otherwise, fallback to hardcoded.
   const galleryItems = cmsImages.length > 0
     ? cmsImages.map((imgName, idx) => {
-        const specificUrl = currentUrls[idx] && currentUrls[idx] !== "null" && currentUrls[idx] !== ""
-          ? (currentUrls[idx].startsWith("http") ? currentUrls[idx] : `https://${currentUrls[idx]}`)
+        const cleanUrl = currentUrls[idx]?.trim();
+        const specificUrl = cleanUrl && cleanUrl !== "null" && cleanUrl !== ""
+          ? (cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`)
           : null;
         return {
           caption: data[0]?.name || "Kalantar Highlights",
