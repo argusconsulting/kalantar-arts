@@ -25,7 +25,10 @@ const PopupComponent = () => {
                     }
                 );
 
-                if (!response.ok) throw new Error('Failed to fetch popup');
+                if (!response.ok) {
+                    if (response.status === 404) return; // Graciously handle empty state without throwing
+                    throw new Error('Failed to fetch popup');
+                }
                 const data = await response.json();
                 
                 if (Array.isArray(data) && data.length > 0) {

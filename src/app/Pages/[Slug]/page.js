@@ -4,6 +4,7 @@ import GovernmentPartnersPage from "./GovernmentPartnersPage";
 import SocialPartnersPage from "./SocialPartnersPage";
 import PhotoGalleryPage from "./PhotoGalleryPage";
 import VideoGalleryPage from "./VideoGalleryPage";
+import ActivitiesPage from "../../Activities/[Slug]/ActivitiesPage";
 
 // ✅ Server-side Data Fetching
 const fetchData = async (slug) => {
@@ -22,6 +23,23 @@ const fetchData = async (slug) => {
     return result;
   } catch (error) {
     console.error("Error fetching data:", error);
+    return [];
+  }
+};
+
+const fetchSubMenus = async () => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/SubMenu`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.JWT_SECRET}`,
+      },
+      cache: "no-store",
+    });
+    if (!response.ok) return [];
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching submenus:", error);
     return [];
   }
 };
@@ -49,6 +67,15 @@ export default async function Page({ params }) {
   }
   if (slug === "Video-Gallery") {
     return <VideoGalleryPage data={data} />;
+  }
+
+  // ✅ Automatically render Activities UI for pages under "Our Activities" (main_menu_id === 2)
+  if (data && data.length > 0) {
+    const subMenus = await fetchSubMenus();
+    const currentSubMenu = subMenus.find(s => s.id === data[0].sub_menu_id);
+    if (currentSubMenu && currentSubMenu.main_menu_id === 2) {
+      return <ActivitiesPage data={data[0]} />;
+    }
   }
 
   return <DynamicPage data={data} />;
