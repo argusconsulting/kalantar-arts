@@ -5,7 +5,7 @@ export default function ExecutiveTeamPage({ data }) {
 
   const parseTeam = (htmlString) => {
     if (!htmlString) return [];
-    
+
     // First try to extract list items, if empty try paragraphs
     let regex = /<li[^>]*>(.*?)<\/li>/gi;
     let matches = [...htmlString.matchAll(regex)];
@@ -13,11 +13,11 @@ export default function ExecutiveTeamPage({ data }) {
       regex = /<p[^>]*>(.*?)<\/p>/gi;
       matches = [...htmlString.matchAll(regex)];
     }
-    
+
     const extracted = [];
     for (const match of matches) {
       const rawContent = match[1];
-      
+
       // Check if user inserted an image directly inside the text
       const imgRegex = /<img[^>]+src="([^">]+)"/i;
       const imgMatch = rawContent.match(imgRegex);
@@ -28,16 +28,16 @@ export default function ExecutiveTeamPage({ data }) {
         .replace(/&nbsp;/g, ' ')
         .replace(/&amp;/g, '&')
         .trim();
-        
+
       if (!cleanText) continue;
 
       // Look for a colon or dash to split Name and Description if provided
       const parts = cleanText.split(/[:\-]/);
       const name = parts[0].trim();
-      const desc = parts.length > 1 
-        ? parts.slice(1).join('-').trim() 
+      const desc = parts.length > 1
+        ? parts.slice(1).join('-').trim()
         : "Executive member dedicated to our core mission.";
-        
+
       if (name) extracted.push({ name, desc, inlineImg });
     }
     return extracted;
@@ -119,7 +119,7 @@ export default function ExecutiveTeamPage({ data }) {
           <Users className="text-[#a91846]" />
           The People Behind the Mission
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
           {team.map((member, i) => (
             <div
@@ -143,7 +143,7 @@ export default function ExecutiveTeamPage({ data }) {
                 {member.name}
               </h3>
               <div className="w-10 h-1 bg-[#a91846] rounded-full mb-4"></div>
-              <p className="text-sm text-gray-500 leading-relaxed text-center">
+              <p className="text-sm text-gray-500 leading-relaxed text-left">
                 {member.desc}
               </p>
             </div>
