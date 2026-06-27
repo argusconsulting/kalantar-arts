@@ -134,6 +134,8 @@ const Navbaar = ({ data,SITE_DATA }) => {
                               href={
                                 item.Custom_Link === 1
                                   ? item.link
+                                  : menu.title === "Our Activities"
+                                  ? `/Activities/${item.link}`
                                   : item.customepage === 1
                                   ? `/${submenu.title.replace(/\s+/g, "-")}/${item.link.replace(/\s+/g, "-")}`
                                   : `/Pages/${item.link}`
@@ -257,6 +259,8 @@ const Navbaar = ({ data,SITE_DATA }) => {
                                         href={
                                           item.Custom_Link === 1
                                             ? item.link
+                                            : menu.title === "Our Activities"
+                                            ? `/Activities/${item.link}`
                                             : item.customepage === 1
                                             ? `/${submenu.title.replace(/\s+/g, "-")}/${item.link.replace(/\s+/g, "-")}`
                                             : `/Pages/${item.link}`

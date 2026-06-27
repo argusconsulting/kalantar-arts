@@ -197,8 +197,6 @@ export default function ChairmanPage({ data }) {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-
     </main>
   );
 }
