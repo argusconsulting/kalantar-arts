@@ -26,19 +26,19 @@ export default function VideoGalleryPage({ data }) {
   // If CMS has videos, use them for highlights. Otherwise fallback.
   const highlights = ytUrls.length > 0
     ? ytUrls.map((url, idx) => ({
-        caption: `Video Highlight ${idx + 1}`,
-        sub: "KALANTAR ARTS",
-        id: extractYouTubeId(url)
-      })).filter(h => h.id)
+      caption: `Video Highlight ${idx + 1}`,
+      sub: "KALANTAR ARTS",
+      id: extractYouTubeId(url)
+    })).filter(h => h.id)
     : hardcodedHighlights;
 
   // If CMS has videos, format them to match the gallery structure. Otherwise, fallback.
   const galleryItems = ytUrls.length > 0
     ? ytUrls.map((url) => ({
-        caption: data[0]?.name || "Kalantar Videos",
-        sub: "Video Gallery",
-        id: extractYouTubeId(url)
-      })).filter(h => h.id)
+      caption: data[0]?.name || "Kalantar Videos",
+      sub: "Video Gallery",
+      id: extractYouTubeId(url)
+    })).filter(h => h.id)
     : hardcodedHighlights;
 
   const scroll = (dir) => {
@@ -134,9 +134,9 @@ export default function VideoGalleryPage({ data }) {
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#2a0b17]/90 via-[#2a0b17]/30 to-transparent flex flex-col justify-end p-5">
-                 <div className="absolute inset-0 flex items-center justify-center">
-                    <Play fill="white" className="text-white opacity-80 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300 w-16 h-16 drop-shadow-xl" />
-                 </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Play fill="white" className="text-white opacity-80 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300 w-16 h-16 drop-shadow-xl" />
+                </div>
                 {h.sub && (
                   <p className="text-[10px] uppercase tracking-widest text-orange-200 font-bold mb-1 relative z-10">
                     {h.sub}
@@ -167,7 +167,7 @@ export default function VideoGalleryPage({ data }) {
                   className="w-full h-full object-cover group-hover:scale-105 opacity-80 group-hover:opacity-100 transition-all duration-500"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
-                   <Play fill="white" className="text-white opacity-90 transform scale-75 group-hover:scale-100 transition-all duration-300 w-14 h-14 drop-shadow-lg" />
+                  <Play fill="white" className="text-white opacity-90 transform scale-75 group-hover:scale-100 transition-all duration-300 w-14 h-14 drop-shadow-lg" />
                 </div>
               </div>
               <p className="text-sm font-semibold text-[#3a1020]">
@@ -179,43 +179,7 @@ export default function VideoGalleryPage({ data }) {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="bg-[#fafafa] border-t border-gray-100 px-8 md:px-16 py-10">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <img src="/images/kalantar-logo.png" alt="Kalantar" className="h-8 w-auto" />
-              <p className="font-semibold text-[#7a1430]">कलांतर</p>
-            </div>
-            <p className="text-xs text-gray-500 max-w-xs">
-              To bring a phenomenal impact on the society by way of
-              practicing all the 64 sects of art for betterment of mankind.
-            </p>
-          </div>
 
-          <div>
-            <p className="font-semibold text-sm mb-3">Quick Links</p>
-            <ul className="text-xs text-gray-500 space-y-2">
-              <li>Home</li>
-              <li>Contact Us</li>
-            </ul>
-          </div>
-
-          <div>
-            <p className="font-semibold text-sm mb-3">Related Sites</p>
-            <ul className="text-xs text-gray-500 space-y-2">
-              <li>NHDC</li>
-              <li>GDIA</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="flex justify-center gap-4 mt-8">
-          <Facebook size={16} />
-          <Instagram size={16} />
-          <Youtube size={16} />
-        </div>
-      </footer>
 
       {/* Lightbox / Video Modal */}
       {selectedVideoId && (

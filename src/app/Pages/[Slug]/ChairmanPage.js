@@ -31,6 +31,9 @@ export default function ChairmanPage({ data }) {
 
   const profileBio = extraData?.profileBio || "As an advocate for the democratization of art, Vishal has dedicated over a decade to building a platform where talent meets opportunity, regardless of background or geography.";
   const badgeText = extraData?.badgeText;
+  const authorName = extraData?.authorName || "VISHAL SRIVASTAVA";
+  const authorDesignation = extraData?.authorDesignation || "CHAIRMAN – KALANTAR ART FOUNDATION";
+  const heroDesc = extraData?.heroDesc || "Art has the power to inspire, connect communities, and create lasting impact. We believe in the transformative energy of creativity to bridge social divides.";
   const features = extraData?.features?.length > 0 ? extraData.features : [
     { title: "Art Foundation", desc: "Spotlighting emerging artists on global stages." },
     { title: "Cultural Preservation", desc: "Safeguarding heritage through digital archives." },
@@ -90,13 +93,18 @@ export default function ChairmanPage({ data }) {
               {pageTitle}
             </h1>
             <p className="text-sm md:text-base text-[#4a2030] max-w-md mb-6">
-              Art has the power to inspire, connect communities, and create
-              lasting impact. We believe in the transformative energy of
-              creativity to bridge social divides.
+              {heroDesc}
             </p>
-            <button className="bg-[#7a1430] text-white text-sm font-semibold px-6 py-3 rounded-md hover:bg-[#5e0f24] transition">
-              Discover Our Vision ↓
-            </button>
+            {data?.[0]?.url && (
+              <a href={data[0].url} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#7a1430] text-white text-sm font-semibold px-6 py-3 rounded-md hover:bg-[#5e0f24] transition">
+                {data[0]?.url_label || "Discover Our Vision ↓"}
+              </a>
+            )}
+            {!data?.[0]?.url && (
+              <button className="bg-[#7a1430] text-white text-sm font-semibold px-6 py-3 rounded-md hover:bg-[#5e0f24] transition">
+                {data?.[0]?.url_label || "Discover Our Vision ↓"}
+              </button>
+            )}
           </div>
 
           <div className="flex justify-center md:justify-end">
@@ -129,10 +137,10 @@ export default function ChairmanPage({ data }) {
           className="text-[#3a1020] text-base md:text-lg leading-relaxed max-w-4xl mx-auto mt-2 text-justify"
           dangerouslySetInnerHTML={{ __html: richTextContent }}
         ></div>
-        <p className="mt-6 text-xs tracking-widest font-semibold text-gray-500">
-          VISHAL SRIVASTAVA,
+        <p className="mt-6 text-xs tracking-widest font-semibold text-gray-500 uppercase">
+          {authorName},
           <br />
-          CHAIRMAN &ndash; KALANTAR ART FOUNDATION
+          {authorDesignation}
         </p>
       </section>
 
@@ -158,8 +166,8 @@ export default function ChairmanPage({ data }) {
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold text-[#7a1430] mb-3">
-            {pageTitle === "Heartfelts-Chairman" ? "Vishal Srivastava" : pageTitle}
+          <h2 className="text-2xl font-bold text-[#7a1430] mb-3 uppercase">
+            {authorName}
           </h2>
           <p className="text-sm text-gray-600 mb-8 max-w-md">
             {profileBio}

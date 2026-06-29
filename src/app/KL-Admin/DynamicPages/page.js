@@ -166,6 +166,18 @@ const Page = () => {
         setImageUrls(currentUrls.join(','));
     };
 
+    const handleImageNameChange = (index, newName) => {
+        const currentNames = extraData?.imageNames ? [...extraData.imageNames] : [];
+        const currentImages = image ? image.split(',') : [];
+        
+        while (currentNames.length < currentImages.length) {
+            currentNames.push("");
+        }
+        
+        currentNames[index] = newName;
+        setExtraData({...extraData, imageNames: currentNames});
+    };
+
     return (
         <div className="p-6">
             <h2 className="text-xl font-bold mb-4">Edit Dynamic Page Content</h2>
@@ -281,18 +293,32 @@ const Page = () => {
                                             {image.split(',').map((img, idx) => {
                                                 const currentUrls = imageUrls ? imageUrls.split(',') : [];
                                                 const currentUrl = currentUrls[idx] || "";
+                                                const currentNames = extraData?.imageNames || [];
+                                                const currentName = currentNames[idx] || "";
                                                 return (
                                                     <div key={idx} className="flex gap-3 items-center bg-white p-2 rounded-lg border border-gray-200 shadow-sm">
                                                         <img src={`${process.env.NEXT_PUBLIC_Files_URL}/${img}`} className="w-16 h-16 object-cover rounded shadow-sm border border-gray-100 flex-shrink-0" alt="saved" />
-                                                        <div className="flex-1">
-                                                            <label className="block text-[10px] text-gray-500 mb-1">Image Click Link (Optional)</label>
-                                                            <input 
-                                                                type="text"
-                                                                value={currentUrl}
-                                                                onChange={(e) => handleImageUrlChange(idx, e.target.value)}
-                                                                placeholder="https://partner-website.com"
-                                                                className="w-full text-xs border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-blue-400 outline-none"
-                                                            />
+                                                        <div className="flex-1 space-y-2">
+                                                            <div>
+                                                                <label className="block text-[10px] text-gray-500 mb-1">Image Name (Optional)</label>
+                                                                <input 
+                                                                    type="text"
+                                                                    value={currentName}
+                                                                    onChange={(e) => handleImageNameChange(idx, e.target.value)}
+                                                                    placeholder="e.g. Event Highlights"
+                                                                    className="w-full text-xs border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-blue-400 outline-none"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <label className="block text-[10px] text-gray-500 mb-1">Image Click Link (Optional)</label>
+                                                                <input 
+                                                                    type="text"
+                                                                    value={currentUrl}
+                                                                    onChange={(e) => handleImageUrlChange(idx, e.target.value)}
+                                                                    placeholder="https://partner-website.com"
+                                                                    className="w-full text-xs border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-blue-400 outline-none"
+                                                                />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 );
@@ -363,6 +389,30 @@ const Page = () => {
                                             value={extraData?.badgeText || ''} 
                                             onChange={(e) => setExtraData({...extraData, badgeText: e.target.value})}
                                             className="w-full text-sm border border-gray-300 p-2 mb-2 rounded focus:ring-1 focus:ring-purple-400 outline-none" 
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">Author Name (e.g. Vishal Srivastava)</label>
+                                        <input 
+                                            value={extraData?.authorName || ''} 
+                                            onChange={(e) => setExtraData({...extraData, authorName: e.target.value})}
+                                            className="w-full text-sm border border-gray-300 p-2 mb-2 rounded focus:ring-1 focus:ring-purple-400 outline-none" 
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">Author Designation (e.g. CHAIRMAN – KALANTAR ART FOUNDATION)</label>
+                                        <input 
+                                            value={extraData?.authorDesignation || ''} 
+                                            onChange={(e) => setExtraData({...extraData, authorDesignation: e.target.value})}
+                                            className="w-full text-sm border border-gray-300 p-2 mb-2 rounded focus:ring-1 focus:ring-purple-400 outline-none" 
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">Hero Description</label>
+                                        <textarea 
+                                            value={extraData?.heroDesc || ''} 
+                                            onChange={(e) => setExtraData({...extraData, heroDesc: e.target.value})}
+                                            className="w-full text-sm border border-gray-300 p-2 mb-2 rounded h-16 focus:ring-1 focus:ring-purple-400 outline-none" 
                                         />
                                     </div>
                                     <div>
