@@ -27,6 +27,7 @@ const Page = () => {
     const [urlLabel, setUrlLabel] = useState("");
     const [youtubeUrls, setYoutubeUrls] = useState("");
     const [newYoutubeUrl, setNewYoutubeUrl] = useState("");
+    const [newYoutubeName, setNewYoutubeName] = useState("");
     const [extraData, setExtraData] = useState({ profileBio: "", badgeText: "", features: [] });
     
     // Petals-style fields for Activities
@@ -112,6 +113,7 @@ const Page = () => {
         setUrlLabel(item.url_label || "");
         setYoutubeUrls(item.youtube_urls || "");
         setNewYoutubeUrl("");
+        setNewYoutubeName("");
         setCurrentSubMenuId(item.sub_menu_id);
         
         setSubtitle(item.subtitle || "");
@@ -135,12 +137,33 @@ const Page = () => {
         if (!newYoutubeUrl) return;
         setYoutubeUrls(prev => prev ? `${prev},${newYoutubeUrl}` : newYoutubeUrl);
         setNewYoutubeUrl("");
+
+        const currentNames = extraData?.youtubeNames ? [...extraData.youtubeNames] : [];
+        const currentUrls = youtubeUrls ? youtubeUrls.split(',') : [];
+        while (currentNames.length < currentUrls.length) currentNames.push("");
+        currentNames.push(newYoutubeName || "");
+        setExtraData({...extraData, youtubeNames: currentNames});
+        setNewYoutubeName("");
     };
 
     const handleRemoveYoutubeUrl = (index) => {
         const urls = youtubeUrls.split(',');
         urls.splice(index, 1);
         setYoutubeUrls(urls.join(','));
+
+        const currentNames = extraData?.youtubeNames ? [...extraData.youtubeNames] : [];
+        if (currentNames.length > index) {
+            currentNames.splice(index, 1);
+            setExtraData({...extraData, youtubeNames: currentNames});
+        }
+    };
+
+    const handleYoutubeNameChange = (index, newName) => {
+        const currentNames = extraData?.youtubeNames ? [...extraData.youtubeNames] : [];
+        const urls = youtubeUrls ? youtubeUrls.split(',') : [];
+        while (currentNames.length < urls.length) currentNames.push("");
+        currentNames[index] = newName;
+        setExtraData({...extraData, youtubeNames: currentNames});
     };
 
     const handleImagesUploaded = (filenames) => {
@@ -175,6 +198,20 @@ const Page = () => {
         }
         
         currentNames[index] = newName;
+        setExtraData({...extraData, imageNames: currentNames});
+    };
+
+    const handleRemoveSingleImage = (indexToRemove) => {
+        const currentImages = image ? image.split(',') : [];
+        const currentUrls = imageUrls ? imageUrls.split(',') : [];
+        const currentNames = extraData?.imageNames ? [...extraData.imageNames] : [];
+
+        currentImages.splice(indexToRemove, 1);
+        if (currentUrls.length > indexToRemove) currentUrls.splice(indexToRemove, 1);
+        if (currentNames.length > indexToRemove) currentNames.splice(indexToRemove, 1);
+
+        setImage(currentImages.join(','));
+        setImageUrls(currentUrls.join(','));
         setExtraData({...extraData, imageNames: currentNames});
     };
 
@@ -269,6 +306,7 @@ const Page = () => {
                             )}
 
                             {/* Multi-Image Upload */}
+                            {!editName?.toLowerCase().includes("video") && (
                             <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
                                 <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                                     <span>🖼️</span> 
@@ -299,7 +337,15 @@ const Page = () => {
                                                 const currentNames = extraData?.imageNames || [];
                                                 const currentName = currentNames[idx] || "";
                                                 return (
-                                                    <div key={idx} className="flex gap-3 items-center bg-white p-2 rounded-lg border border-gray-200 shadow-sm">
+                                                    <div key={idx} className="flex gap-3 items-center bg-white p-2 rounded-lg border border-gray-200 shadow-sm relative">
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => handleRemoveSingleImage(idx)} 
+                                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold hover:bg-red-600 shadow-md z-10"
+                                                            title="Remove image"
+                                                        >
+                                                            ✕
+                                                        </button>
                                                         <img src={`${process.env.NEXT_PUBLIC_Files_URL}/${img}`} className="w-16 h-16 object-cover rounded shadow-sm border border-gray-100 flex-shrink-0" alt="saved" />
                                                         <div className="flex-1 space-y-2">
                                                             <div>
@@ -330,6 +376,7 @@ const Page = () => {
                                     </div>
                                 )}
                             </div>
+                            )}
 
                             {/* YouTube Videos Tool (Only visible for Video pages) */}
                             {editName?.toLowerCase().includes("video") && (
@@ -338,9 +385,16 @@ const Page = () => {
                                         <span>🎥</span> YouTube Video Gallery
                                     </h3>
                                     
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Add YouTube Link</label>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="block text-xs font-medium text-gray-600">Add YouTube Link & Name</label>
                                         <div className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                placeholder="Video Name (e.g. Closing Ceremony)"
+                                                value={newYoutubeName}
+                                                onChange={(e) => setNewYoutubeName(e.target.value)}
+                                                className="w-1/3 text-sm border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-red-400 outline-none"
+                                            />
                                             <input
                                                 type="text"
                                                 placeholder="https://www.youtube.com/watch?v=..."
@@ -362,18 +416,36 @@ const Page = () => {
                                         <div className="mt-3">
                                             <label className="block text-xs font-medium text-red-700 mb-2">Saved Videos:</label>
                                             <div className="flex flex-col gap-2">
-                                                {youtubeUrls.split(',').map((ytUrl, idx) => (
-                                                    <div key={idx} className="flex justify-between items-center bg-white p-2 rounded border border-red-100 shadow-sm">
-                                                        <span className="text-xs text-gray-700 truncate w-4/5" title={ytUrl}>{ytUrl}</span>
-                                                        <button 
-                                                            type="button" 
-                                                            onClick={() => handleRemoveYoutubeUrl(idx)}
-                                                            className="text-red-500 hover:text-red-700 font-bold text-xs"
-                                                        >
-                                                            &times;
-                                                        </button>
-                                                    </div>
-                                                ))}
+                                                {youtubeUrls.split(',').map((ytUrl, idx) => {
+                                                    const currentNames = extraData?.youtubeNames || [];
+                                                    const currentName = currentNames[idx] || "";
+                                                    return (
+                                                        <div key={idx} className="flex flex-col gap-2 bg-white p-3 rounded border border-red-100 shadow-sm relative">
+                                                            <button 
+                                                                type="button" 
+                                                                onClick={() => handleRemoveYoutubeUrl(idx)}
+                                                                className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow-md z-10"
+                                                                title="Remove video"
+                                                            >
+                                                                ✕
+                                                            </button>
+                                                            <div className="flex items-center gap-2">
+                                                                <label className="text-[10px] text-gray-500 w-20">Video URL:</label>
+                                                                <span className="text-xs text-gray-700 truncate flex-1" title={ytUrl}>{ytUrl}</span>
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <label className="text-[10px] text-gray-500 w-20">Video Name:</label>
+                                                                <input 
+                                                                    type="text"
+                                                                    value={currentName}
+                                                                    onChange={(e) => handleYoutubeNameChange(idx, e.target.value)}
+                                                                    placeholder="e.g. Event Highlights"
+                                                                    className="flex-1 text-xs border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-red-400 outline-none"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     )}

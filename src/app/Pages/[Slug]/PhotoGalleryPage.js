@@ -6,6 +6,18 @@ const AUTOPLAY_INTERVAL_MS = 4000;
 
 export default function PhotoGalleryPage({ data }) {
   const scrollRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  // Extract CMS Images if they exist
+  const cmsImages = data?.[0]?.image ? data[0].image.split(',') : [];
+  const currentUrls = data?.[0]?.image_urls ? data[0].image_urls.split(',') : [];
+  const pageUrl = data?.[0]?.url;
+
+  const hardcodedHighlights = [
+    { caption: "Winter Showcase 2023", sub: "EXHIBITIONS", img: "/images/gallery/highlight-1.jpg" },
+    { caption: "Art for All Generations", sub: "COMMUNITY OUTREACH", img: "/images/gallery/highlight-2.jpg" },
+    { caption: "The Ceramics Lab", sub: "WORKSHOP", img: "/images/gallery/highlight-3.jpg" },
+    { caption: "The Closing Ceremony", sub: "EVENT", img: "/images/gallery/highlight-4.jpg" },
   const [isPaused, setIsPaused] = useState(false);
 
   // `data` is expected to be the array returned by GET /gallery
@@ -215,6 +227,45 @@ export default function PhotoGalleryPage({ data }) {
         </div>
       </section>
 
+      {/* ===== GLOBAL PAGE ACTION BUTTON ===== */}
+      {pageUrl && (
+        <section className="px-8 md:px-16 pb-16 flex justify-center">
+          <a
+            href={pageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-pink-600 to-red-600 text-white rounded-full font-bold text-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+          >
+            <span>{data[0]?.url_label || "Go to Link"}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </section>
+      )}
+
+      {/* ===== FOOTER ===== */}
+
+
+      {/* Lightbox / Zoom Modal */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 z-[5000] flex items-center justify-center bg-black bg-opacity-95 p-4 backdrop-blur-sm"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-5xl w-full h-full flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 md:top-10 md:right-10 text-white/70 hover:text-white text-5xl transition-colors font-light"
+            >
+              &times;
+            </button>
+            <img
+              src={selectedImage}
+              alt="Gallery zoom"
+              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+            />
+          </div>
+        </div>
+      )}
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
