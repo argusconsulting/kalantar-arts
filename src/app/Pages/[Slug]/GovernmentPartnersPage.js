@@ -1,7 +1,42 @@
-import { Facebook, Instagram, Youtube, Phone } from "lucide-react";
+import { Facebook, Instagram, Youtube, Phone, Landmark } from "lucide-react";
 
-export default function GovernmentPartnersPage() {
-  const partners = [
+export default function GovernmentPartnersPage({ data }) {
+  const cmsImages = data?.[0]?.image ? data[0].image.split(',') : [];
+
+  const parsePartners = (htmlString) => {
+    if (!htmlString) return [];
+    const liRegex = /<li[^>]*>(.*?)<\/li>/gi;
+    const extracted = [];
+    let match;
+    while ((match = liRegex.exec(htmlString)) !== null) {
+      const rawContent = match[1];
+      
+      // Check if user inserted an image directly inside the bullet point
+      const imgRegex = /<img[^>]+src="([^">]+)"/i;
+      const imgMatch = rawContent.match(imgRegex);
+      const inlineImg = imgMatch ? imgMatch[1] : null;
+
+      const cleanText = rawContent
+        .replace(/<[^>]+>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .trim();
+        
+      // Look for a colon or dash to split Name and Description if provided
+      const parts = cleanText.split(/[:\-]/);
+      const name = parts[0].trim();
+      const desc = parts.length > 1 
+        ? parts.slice(1).join('-').trim() 
+        : "Collaborating to promote art, culture, education, social awareness, and community development.";
+        
+      if (name) extracted.push({ name, desc, inlineImg });
+    }
+    return extracted;
+  };
+
+  const cmsPartners = parsePartners(data?.[0]?.Richtext);
+
+  const hardcodedPartners = [
     {
       name: "Ministry of Culture",
       desc: "Supporting cultural preservation and art promotion across the nation.",
@@ -19,6 +54,8 @@ export default function GovernmentPartnersPage() {
       desc: "Collaborating on regional heritage preservation and major art festivals.",
     },
   ];
+
+  const partners = cmsPartners.length > 0 ? cmsPartners : hardcodedPartners;
 
   return (
     <main className="bg-white text-[#2b2b2b]">
@@ -59,7 +96,7 @@ export default function GovernmentPartnersPage() {
           Community &amp; Collaboration
         </p>
         <h1 className="text-3xl md:text-4xl font-bold text-[#3a1020] mb-4">
-          Government Partners
+          {data?.[0]?.name || "Government Partners"}
         </h1>
         <p className="text-sm md:text-base text-[#5a3a45] max-w-2xl mx-auto">
           Collaborating with Government Institutions to Promote Art,
@@ -79,15 +116,16 @@ export default function GovernmentPartnersPage() {
               key={i}
               className="bg-[#fbeef1] rounded-md p-6 text-center flex flex-col items-center"
             >
-              <div className="w-12 h-12 rounded-md bg-white flex items-center justify-center mb-4 shadow-sm">
-                {/* Replace with actual partner logo asset */}
-                <img
-                  src={`/images/partners/${p.name
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, "-")}.png`}
-                  alt={p.name}
-                  className="w-7 h-7 object-contain"
-                />
+              <div className="w-16 h-16 rounded-md bg-white flex items-center justify-center mb-4 shadow-sm p-2 overflow-hidden">
+                {p.inlineImg || cmsImages[i] ? (
+                  <img
+                    src={p.inlineImg ? p.inlineImg : `${process.env.NEXT_PUBLIC_Files_URL}/${cmsImages[i]}`}
+                    alt={p.name}
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <Landmark size={28} className="text-[#a91846]" />
+                )}
               </div>
               <h3 className="font-semibold text-sm text-[#3a1020] mb-2">
                 {p.name}

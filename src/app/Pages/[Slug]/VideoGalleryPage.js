@@ -1,56 +1,45 @@
 "use client";
 import { useRef, useState } from "react";
-import { Facebook, Instagram, Youtube, Phone, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import { Facebook, Instagram, Youtube, Phone, ChevronLeft, ChevronRight, Play } from "lucide-react";
 
-export default function PhotoGalleryPage({ data }) {
+export default function VideoGalleryPage({ data }) {
   const scrollRef = useRef(null);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
 
-  // Extract CMS Images if they exist
-  const cmsImages = data?.[0]?.image ? data[0].image.split(',') : [];
-  const currentUrls = data?.[0]?.image_urls ? data[0].image_urls.split(',') : [];
+  // Extract YouTube URLs if they exist
+  const ytUrls = data?.[0]?.youtube_urls ? data[0].youtube_urls.split(',') : [];
+
+  const extractYouTubeId = (urlStr) => {
+    if (!urlStr) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = urlStr.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
 
   const hardcodedHighlights = [
-    { caption: "Winter Showcase 2023", sub: "EXHIBITIONS", img: "/images/gallery/highlight-1.jpg" },
-    { caption: "Art for All Generations", sub: "COMMUNITY OUTREACH", img: "/images/gallery/highlight-2.jpg" },
-    { caption: "The Ceramics Lab", sub: "WORKSHOP", img: "/images/gallery/highlight-3.jpg" },
-    { caption: "The Closing Ceremony", sub: "EVENT", img: "/images/gallery/highlight-4.jpg" },
+    { caption: "Winter Showcase 2023", sub: "EXHIBITIONS", id: "t0wO9FhR37o" },
+    { caption: "Art for All Generations", sub: "COMMUNITY OUTREACH", id: "dQw4w9WgXcQ" },
+    { caption: "The Ceramics Lab", sub: "WORKSHOP", id: "jNQXAC9IVRw" },
+    { caption: "The Closing Ceremony", sub: "EVENT", id: "cVDjE5X1vL8" },
   ];
 
-  // If CMS has images, use them for highlights. Otherwise fallback.
-  const highlights = cmsImages.length > 0
-    ? cmsImages.map((imgName, idx) => ({
-        caption: `Gallery Image ${idx + 1}`,
+  // If CMS has videos, use them for highlights. Otherwise fallback.
+  const highlights = ytUrls.length > 0
+    ? ytUrls.map((url, idx) => ({
+        caption: `Video Highlight ${idx + 1}`,
         sub: "KALANTAR ARTS",
-        img: `${process.env.NEXT_PUBLIC_Files_URL}/${imgName}`
-      }))
+        id: extractYouTubeId(url)
+      })).filter(h => h.id)
     : hardcodedHighlights;
 
-  const hardcodedGalleryItems = [
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-1.jpg" },
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-2.jpg" },
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-3.jpg" },
-    { caption: "Urban Heritage Hand", sub: "Photo Art Project", img: "/images/gallery/photo-4.jpg" },
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-5.jpg" },
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-6.jpg" },
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-7.jpg" },
-  ];
-
-  // If CMS has images, format them to match the gallery structure. Otherwise, fallback to hardcoded.
-  const galleryItems = cmsImages.length > 0
-    ? cmsImages.map((imgName, idx) => {
-        const cleanUrl = currentUrls[idx]?.trim();
-        const specificUrl = cleanUrl && cleanUrl !== "null" && cleanUrl !== ""
-          ? (cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`)
-          : null;
-        return {
-          caption: data[0]?.name || "Kalantar Highlights",
-          sub: "Photo Gallery",
-          img: `${process.env.NEXT_PUBLIC_Files_URL}/${imgName}`,
-          url: specificUrl
-        };
-      })
-    : hardcodedGalleryItems;
+  // If CMS has videos, format them to match the gallery structure. Otherwise, fallback.
+  const galleryItems = ytUrls.length > 0
+    ? ytUrls.map((url) => ({
+        caption: data[0]?.name || "Kalantar Videos",
+        sub: "Video Gallery",
+        id: extractYouTubeId(url)
+      })).filter(h => h.id)
+    : hardcodedHighlights;
 
   const scroll = (dir) => {
     if (scrollRef.current) {
@@ -94,10 +83,10 @@ export default function PhotoGalleryPage({ data }) {
       {/* ===== HERO / INTRO ===== */}
       <section className="text-center px-8 py-12">
         <h1 className="text-3xl md:text-4xl font-bold text-[#a91846] mb-3">
-          Photo Gallery
+          Video Gallery
         </h1>
         <p className="text-sm text-gray-500 max-w-xl mx-auto">
-          Capturing the Soul of Art and Culture through the lens of heritage
+          Experience the Soul of Art and Culture in motion, capturing heritage
           and modern creativity.
         </p>
       </section>
@@ -107,7 +96,7 @@ export default function PhotoGalleryPage({ data }) {
         <div className="px-8 md:px-16 flex items-end justify-between mb-10">
           <div>
             <h2 className="text-2xl md:text-3xl font-serif text-[#3a1020] mb-2">
-              Highlights from Kalantar
+              Video Highlights from Kalantar
             </h2>
             <div className="w-16 h-1 bg-[#a91846]"></div>
           </div>
@@ -135,20 +124,25 @@ export default function PhotoGalleryPage({ data }) {
           {highlights.map((h, i) => (
             <div
               key={i}
-              className="relative flex-shrink-0 w-[80vw] sm:w-[45vw] lg:w-[26vw] xl:w-[24vw] h-[350px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg border border-[#a91846]/10"
+              className="relative flex-shrink-0 w-[85vw] sm:w-[60vw] lg:w-[40vw] xl:w-[35vw] aspect-video rounded-2xl overflow-hidden shadow-lg border border-[#a91846]/10 cursor-pointer group"
+              onClick={() => setSelectedVideoId(h.id)}
             >
               <img
-                src={h.img}
+                src={`https://img.youtube.com/vi/${h.id}/maxresdefault.jpg`}
                 alt={h.caption}
-                className="w-full h-full object-cover"
+                onError={(e) => { e.target.src = `https://img.youtube.com/vi/${h.id}/hqdefault.jpg`; }}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#2a0b17]/90 via-[#2a0b17]/30 to-transparent flex flex-col justify-end p-5">
+                 <div className="absolute inset-0 flex items-center justify-center">
+                    <Play fill="white" className="text-white opacity-80 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300 w-16 h-16 drop-shadow-xl" />
+                 </div>
                 {h.sub && (
-                  <p className="text-[10px] uppercase tracking-widest text-orange-200 font-bold mb-1">
+                  <p className="text-[10px] uppercase tracking-widest text-orange-200 font-bold mb-1 relative z-10">
                     {h.sub}
                   </p>
                 )}
-                <p className="text-white text-lg font-bold font-serif leading-tight">
+                <p className="text-white text-lg font-bold font-serif leading-tight relative z-10">
                   {h.caption}
                 </p>
               </div>
@@ -157,43 +151,24 @@ export default function PhotoGalleryPage({ data }) {
         </div>
       </section>
 
-      {/* ===== PHOTO GALLERY GRID ===== */}
+      {/* ===== VIDEO GALLERY GRID ===== */}
       <section className="px-8 md:px-16 py-16">
         <p className="text-center uppercase text-xs font-semibold tracking-widest text-[#a91846] mb-10">
-          Photo Gallery
+          Video Gallery
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {galleryItems.map((item, i) => (
-            <div key={i} className="group">
-              <div 
-                className={`rounded-md overflow-hidden aspect-square mb-2 relative ${item.url ? '' : 'cursor-pointer'}`}
-                onClick={() => !item.url && setSelectedImage(item.img)}
-              >
-                {item.url ? (
-                  <a href={item.url} target="_blank" rel="noopener noreferrer" className="block w-full h-full relative">
-                    <img
-                      src={item.img}
-                      alt={item.caption}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                      <div className="bg-white/90 text-pink-700 px-4 py-2 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
-                        Visit Link
-                      </div>
-                    </div>
-                  </a>
-                ) : (
-                  <div className="block w-full h-full relative">
-                    <img
-                      src={item.img}
-                      alt={item.caption}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                       <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-300 w-10 h-10 drop-shadow-lg" />
-                    </div>
-                  </div>
-                )}
+            <div key={i} className="group cursor-pointer" onClick={() => setSelectedVideoId(item.id)}>
+              <div className="rounded-md overflow-hidden aspect-video mb-3 relative bg-black">
+                <img
+                  src={`https://img.youtube.com/vi/${item.id}/maxresdefault.jpg`}
+                  alt={item.caption}
+                  onError={(e) => { e.target.src = `https://img.youtube.com/vi/${item.id}/hqdefault.jpg`; }}
+                  className="w-full h-full object-cover group-hover:scale-105 opacity-80 group-hover:opacity-100 transition-all duration-500"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                   <Play fill="white" className="text-white opacity-90 transform scale-75 group-hover:scale-100 transition-all duration-300 w-14 h-14 drop-shadow-lg" />
+                </div>
               </div>
               <p className="text-sm font-semibold text-[#3a1020]">
                 {item.caption}
@@ -242,24 +217,27 @@ export default function PhotoGalleryPage({ data }) {
         </div>
       </footer>
 
-      {/* Lightbox / Zoom Modal */}
-      {selectedImage && (
+      {/* Lightbox / Video Modal */}
+      {selectedVideoId && (
         <div
           className="fixed inset-0 z-[5000] flex items-center justify-center bg-black bg-opacity-95 p-4 backdrop-blur-sm"
-          onClick={() => setSelectedImage(null)}
+          onClick={() => setSelectedVideoId(null)}
         >
-          <div className="relative max-w-5xl w-full h-full flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
+          <div className="relative max-w-6xl w-full aspect-video flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
             <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 md:top-10 md:right-10 text-white/70 hover:text-white text-5xl transition-colors font-light"
+              onClick={() => setSelectedVideoId(null)}
+              className="absolute -top-12 right-0 md:-top-10 md:-right-10 text-white/70 hover:text-white text-5xl transition-colors font-light"
             >
               &times;
             </button>
-            <img
-              src={selectedImage}
-              alt="Gallery zoom"
-              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
-            />
+            <iframe
+              className="w-full h-full rounded-xl shadow-2xl bg-black"
+              src={`https://www.youtube.com/embed/${selectedVideoId}?autoplay=1`}
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>
           </div>
         </div>
       )}

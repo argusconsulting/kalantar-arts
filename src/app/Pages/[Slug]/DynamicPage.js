@@ -25,7 +25,8 @@ const DynamicPage = ({ data }) => {
     );
   }
 
-  const pageUrl = data[0].url ? (data[0].url.startsWith("http") ? data[0].url : `https://${data[0].url}`) : null;
+  const rawPageUrl = data[0]?.url?.trim();
+  const pageUrl = rawPageUrl ? (rawPageUrl.startsWith("http") ? rawPageUrl : `https://${rawPageUrl}`) : null;
 
   const extractYouTubeId = (urlStr) => {
     if (!urlStr) return null;
@@ -53,8 +54,9 @@ const DynamicPage = ({ data }) => {
           <div className="mb-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {data[0].image.split(',').map((img, idx) => {
               const currentUrls = data[0].image_urls ? data[0].image_urls.split(',') : [];
-              const specificUrl = currentUrls[idx] && currentUrls[idx] !== "null" && currentUrls[idx] !== ""
-                ? (currentUrls[idx].startsWith("http") ? currentUrls[idx] : `https://${currentUrls[idx]}`)
+              const cleanUrl = currentUrls[idx]?.trim();
+              const specificUrl = cleanUrl && cleanUrl !== "null" && cleanUrl !== ""
+                ? (cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`)
                 : null;
 
               return (
