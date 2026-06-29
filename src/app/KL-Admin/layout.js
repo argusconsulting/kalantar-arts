@@ -110,7 +110,7 @@ export default function AdminLayout({ children }) {
                         </li>
                         <li>
                             <Link href="/KL-Admin/CustomePage" className="block hover:text-blue-400">
-                            CustomePage
+                            People with us - Custom Page
                             </Link>
                         </li>
                         <li>

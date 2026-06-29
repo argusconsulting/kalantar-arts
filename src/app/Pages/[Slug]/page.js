@@ -69,7 +69,7 @@ export default async function Page({ params }) {
   if (slug === "Video-Gallery" || slug === "Video Gallery") {
     return <VideoGalleryPage data={data} />;
   }
-  if (slug === "Executive-Team" || slug === "Executive Team" || slug === "The-Founders" || slug === "The-Advisors") {
+  if (slug === "Executive-Team" || slug === "Executive Team" || slug === "The-Founders" || slug === "The-Advisors" || slug === "The-Mentors" || slug === "The Mentors" || slug === "The-Volunteers" || slug === "The Volunteers") {
     return <ExecutiveTeamPage data={data} />;
   }
 

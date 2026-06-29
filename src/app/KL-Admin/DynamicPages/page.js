@@ -455,8 +455,8 @@ const Page = () => {
                                 </div>
                             )}
 
-                            {/* Executive Team / Founder / Advisor Settings */}
-                            {(editName?.toLowerCase().includes("executive") || editName?.toLowerCase().includes("founder") || editName?.toLowerCase().includes("advisor")) && (
+                            {/* Executive Team / Founder / Advisor / Mentors / Volunteers Settings */}
+                            {(editName?.toLowerCase().includes("executive") || editName?.toLowerCase().includes("founder") || editName?.toLowerCase().includes("advisor") || editName?.toLowerCase().includes("the mentors") || editName?.toLowerCase().includes("volunteer") || editName?.toLowerCase() === "mentors") && (
                                 <div className="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm mt-4 space-y-3">
                                     <h3 className="text-sm font-semibold text-blue-700 mb-2 flex items-center gap-2">
                                         <span>👥</span> Team Members Builder
