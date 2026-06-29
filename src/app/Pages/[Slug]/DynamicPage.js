@@ -13,6 +13,7 @@ const DynamicPage = ({ data }) => {
     }
   } catch (e) { }
   const imageNames = extraData?.imageNames || [];
+  const youtubeNames = extraData?.youtubeNames || [];
 
   if (!data[0]?.Richtext && !data[0]?.image) {
     return (
@@ -142,17 +143,23 @@ const DynamicPage = ({ data }) => {
             <div className="flex flex-col max-w-4xl mx-auto gap-12">
               {data[0].youtube_urls.split(',').map((ytUrl, idx) => {
                 const videoId = extractYouTubeId(ytUrl);
+                const customName = youtubeNames[idx]?.trim();
                 if (!videoId) return null;
                 return (
-                  <div key={idx} className="relative rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden bg-black border border-gray-100 aspect-video">
-                    <iframe
-                      className="absolute top-0 left-0 w-full h-full"
-                      src={`https://www.youtube.com/embed/${videoId}`}
-                      title={`YouTube video ${idx + 1}`}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
+                  <div key={idx} className="flex flex-col gap-3">
+                    <div className="relative rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden bg-black border border-gray-100 aspect-video">
+                      <iframe
+                        className="absolute top-0 left-0 w-full h-full"
+                        src={`https://www.youtube.com/embed/${videoId}`}
+                        title={customName || `YouTube video ${idx + 1}`}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                    {customName && (
+                      <p className="text-center font-bold text-xl text-pink-800 tracking-wide">{customName}</p>
+                    )}
                   </div>
                 );
               })}

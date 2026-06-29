@@ -9,6 +9,7 @@ export default function PhotoGalleryPage({ data }) {
   // Extract CMS Images if they exist
   const cmsImages = data?.[0]?.image ? data[0].image.split(',') : [];
   const currentUrls = data?.[0]?.image_urls ? data[0].image_urls.split(',') : [];
+  const pageUrl = data?.[0]?.url;
 
   const hardcodedHighlights = [
     { caption: "Winter Showcase 2023", sub: "EXHIBITIONS", img: "/images/gallery/highlight-1.jpg" },
@@ -219,6 +220,21 @@ export default function PhotoGalleryPage({ data }) {
           ))}
         </div>
       </section>
+
+      {/* ===== GLOBAL PAGE ACTION BUTTON ===== */}
+      {pageUrl && (
+        <section className="px-8 md:px-16 pb-16 flex justify-center">
+          <a
+            href={pageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-pink-600 to-red-600 text-white rounded-full font-bold text-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+          >
+            <span>{data[0]?.url_label || "Go to Link"}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </section>
+      )}
 
       {/* ===== FOOTER ===== */}
 
