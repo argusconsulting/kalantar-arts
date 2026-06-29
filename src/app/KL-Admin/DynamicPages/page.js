@@ -178,6 +178,20 @@ const Page = () => {
         setExtraData({...extraData, imageNames: currentNames});
     };
 
+    const handleRemoveSingleImage = (indexToRemove) => {
+        const currentImages = image ? image.split(',') : [];
+        const currentUrls = imageUrls ? imageUrls.split(',') : [];
+        const currentNames = extraData?.imageNames ? [...extraData.imageNames] : [];
+
+        currentImages.splice(indexToRemove, 1);
+        if (currentUrls.length > indexToRemove) currentUrls.splice(indexToRemove, 1);
+        if (currentNames.length > indexToRemove) currentNames.splice(indexToRemove, 1);
+
+        setImage(currentImages.join(','));
+        setImageUrls(currentUrls.join(','));
+        setExtraData({...extraData, imageNames: currentNames});
+    };
+
     return (
         <div className="p-6">
             <h2 className="text-xl font-bold mb-4">Edit Dynamic Page Content</h2>
@@ -299,7 +313,15 @@ const Page = () => {
                                                 const currentNames = extraData?.imageNames || [];
                                                 const currentName = currentNames[idx] || "";
                                                 return (
-                                                    <div key={idx} className="flex gap-3 items-center bg-white p-2 rounded-lg border border-gray-200 shadow-sm">
+                                                    <div key={idx} className="flex gap-3 items-center bg-white p-2 rounded-lg border border-gray-200 shadow-sm relative">
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => handleRemoveSingleImage(idx)} 
+                                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold hover:bg-red-600 shadow-md z-10"
+                                                            title="Remove image"
+                                                        >
+                                                            ✕
+                                                        </button>
                                                         <img src={`${process.env.NEXT_PUBLIC_Files_URL}/${img}`} className="w-16 h-16 object-cover rounded shadow-sm border border-gray-100 flex-shrink-0" alt="saved" />
                                                         <div className="flex-1 space-y-2">
                                                             <div>
