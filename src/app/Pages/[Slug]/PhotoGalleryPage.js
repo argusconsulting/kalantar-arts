@@ -14,12 +14,13 @@ export default function PhotoGalleryPage({ data }) {
   const pageUrl = data?.[0]?.url;
 
   const hardcodedHighlights = [
-    { caption: "Winter Showcase 2023", sub: "EXHIBITIONS", img: "/images/gallery/highlight-1.jpg" },
-    { caption: "Art for All Generations", sub: "COMMUNITY OUTREACH", img: "/images/gallery/highlight-2.jpg" },
-    { caption: "The Ceramics Lab", sub: "WORKSHOP", img: "/images/gallery/highlight-3.jpg" },
-    { caption: "The Closing Ceremony", sub: "EVENT", img: "/images/gallery/highlight-4.jpg" },
-  const [isPaused, setIsPaused] = useState(false);
+  { caption: "Winter Showcase 2023", sub: "EXHIBITIONS", img: "/images/gallery/highlight-1.jpg" },
+  { caption: "Art for All Generations", sub: "COMMUNITY OUTREACH", img: "/images/gallery/highlight-2.jpg" },
+  { caption: "The Ceramics Lab", sub: "WORKSHOP", img: "/images/gallery/highlight-3.jpg" },
+  { caption: "The Closing Ceremony", sub: "EVENT", img: "/images/gallery/highlight-4.jpg" },
+];
 
+const [isPaused, setIsPaused] = useState(false);
   // `data` is expected to be the array returned by GET /gallery
   // (the same shape the admin table manages): one object per slide with
   // { id, image, caption, link, link_label, aspectRatio, order }.
