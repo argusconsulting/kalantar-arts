@@ -6,6 +6,14 @@ import { useState } from "react";
 const DynamicPage = ({ data }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
+  let extraData = {};
+  try {
+    if (data?.[0]?.extra_data) {
+      extraData = JSON.parse(data[0].extra_data);
+    }
+  } catch (e) { }
+  const imageNames = extraData?.imageNames || [];
+
   if (!data[0]?.Richtext && !data[0]?.image) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 to-pink-200 text-pink-900 px-6">
@@ -55,6 +63,7 @@ const DynamicPage = ({ data }) => {
             {data[0].image.split(',').map((img, idx) => {
               const currentUrls = data[0].image_urls ? data[0].image_urls.split(',') : [];
               const cleanUrl = currentUrls[idx]?.trim();
+              const customName = imageNames[idx]?.trim();
               const specificUrl = cleanUrl && cleanUrl !== "null" && cleanUrl !== ""
                 ? (cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`)
                 : null;
@@ -87,7 +96,7 @@ const DynamicPage = ({ data }) => {
                   ) : (
                     <div
                       className="relative cursor-pointer overflow-hidden bg-gray-100 aspect-square group"
-                      onClick={() => setSelectedImage(img)}
+                      onClick={() => setSelectedImage({ img, name: customName, url: specificUrl })}
                     >
                       <img
                         src={`${process.env.NEXT_PUBLIC_Files_URL}/${img}`}
@@ -104,6 +113,13 @@ const DynamicPage = ({ data }) => {
                           </span>
                         </div>
                       </div>
+                    </div>
+                  )}
+
+                  {/* Display Name Below Image */}
+                  {customName && (
+                    <div className="p-4 bg-white border-t border-gray-100">
+                      <p className="font-semibold text-center text-pink-900 text-sm">{customName}</p>
                     </div>
                   )}
 
@@ -181,14 +197,20 @@ const DynamicPage = ({ data }) => {
             </button>
 
             <img
-              src={`${process.env.NEXT_PUBLIC_Files_URL}/${selectedImage}`}
+              src={`${process.env.NEXT_PUBLIC_Files_URL}/${selectedImage.img}`}
               alt="Gallery zoom"
               className="w-auto max-h-[75vh] object-contain rounded-sm shadow-2xl border-4 border-white/10"
             />
 
+            {selectedImage.name && (
+              <p className="text-white text-xl font-bold mt-6 tracking-wide text-center">
+                {selectedImage.name}
+              </p>
+            )}
+
             {/* Clickable Link inside the Lightbox! */}
             {pageUrl && (
-              <div className="mt-8">
+              <div className="mt-6">
                 <a
                   href={pageUrl}
                   target="_blank"

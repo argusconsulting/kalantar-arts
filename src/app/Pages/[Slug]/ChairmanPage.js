@@ -127,7 +127,7 @@ export default function ChairmanPage({ data }) {
         <h1 className="text-3xl md:text-4xl font-bold text-[#3a1020] mb-8 leading-tight text-left">
           {pageTitle}
         </h1>
-        
+
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-10">
           {/* Dynamic Chairman Photo Asset 1 */}
           <img
