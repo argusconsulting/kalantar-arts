@@ -134,7 +134,7 @@ export default function ChairmanPage({ data }) {
       <section className="px-8 md:px-24 py-16 text-center">
         <span className="text-5xl text-[#7a1430] font-serif leading-none">&rdquo;</span>
         <div
-          className="text-[#3a1020] text-base md:text-lg leading-relaxed max-w-4xl mx-auto mt-2 text-justify"
+          className="text-[#3a1020] text-base md:text-lg leading-relaxed max-w-4xl mx-auto mt-2 text-justify tiptap-content prose max-w-none"
           dangerouslySetInnerHTML={{ __html: richTextContent }}
         ></div>
         <p className="mt-6 text-xs tracking-widest font-semibold text-gray-500 uppercase">

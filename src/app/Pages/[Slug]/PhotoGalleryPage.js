@@ -194,7 +194,7 @@ export default function PhotoGalleryPage({ data }) {
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
                       <div className="bg-white/90 text-pink-700 px-4 py-2 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
-                        Visit Link
+                        Click here
                       </div>
                     </div>
                   </a>

@@ -70,7 +70,7 @@ export default function TeamPage({ data, title, subtitle }) {
                     {/* Check if description has HTML tags (from tiptap) or is plain text */}
                     {member.description?.includes('<') && member.description?.includes('>') ? (
                       <div 
-                        className="prose prose-sm sm:prose-base max-w-none text-gray-600 leading-relaxed" 
+                        className="prose prose-sm sm:prose-base max-w-none text-gray-600 leading-relaxed tiptap-content" 
                         dangerouslySetInnerHTML={{ __html: member.description }} 
                       />
                     ) : (

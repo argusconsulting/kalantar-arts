@@ -74,7 +74,7 @@ const PopupComponent = () => {
                       
                         
                     ) : (
-                        <div className=" overflow-hidden" dangerouslySetInnerHTML={{ __html: popup.content }} />
+                        <div className="overflow-hidden tiptap-content prose max-w-none" dangerouslySetInnerHTML={{ __html: popup.content }} />
                     )}
 
                     {popup.link && (
