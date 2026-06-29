@@ -273,15 +273,18 @@ const Page = () => {
                                 <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                                     <span>🖼️</span> 
                                     {(editName?.toLowerCase().includes("chairman") || editName?.toLowerCase().includes("mentor")) 
-                                        ? "Upload Hero & Profile Picture" 
+                                        ? "Upload Profile Picture" 
                                         : "Upload Gallery Images (Top of Page)"}
                                 </h3>
                                 <p className="text-xs text-gray-500 mb-3">
                                     {(editName?.toLowerCase().includes("chairman") || editName?.toLowerCase().includes("mentor")) 
-                                        ? "Upload exactly 2 images: The first one will be the large top Hero banner, the second will be the Profile picture in the card below." 
+                                        ? "Upload exactly 1 image. This will be used as the profile picture." 
                                         : 'Use this ONLY for the automated gallery grid at the top of the page. If you want to insert images INSIDE the text below, use the "Image" button inside the text editor!'}
                                 </p>
-                                <ImageUpload multiple={true} onUpload={handleImagesUploaded} />
+                                <ImageUpload 
+                                    multiple={(editName?.toLowerCase().includes("chairman") || editName?.toLowerCase().includes("mentor")) ? false : true} 
+                                    onUpload={handleImagesUploaded} 
+                                />
                                 
                                 {image && (
                                     <div className="mt-4 border-t pt-3">
@@ -381,16 +384,8 @@ const Page = () => {
                             {(editName?.toLowerCase().includes("chairman") || editName?.toLowerCase().includes("mentor")) && (
                                 <div className="bg-purple-50 p-4 rounded-xl border border-purple-200 shadow-sm mt-4 space-y-3">
                                     <h3 className="text-sm font-semibold text-purple-700 mb-2 flex items-center gap-2">
-                                        <span>👑</span> Leadership Profile Settings
+                                        <span>✍️</span> Author Details
                                     </h3>
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Badge Text (e.g. &quot;15+&quot;)</label>
-                                        <input 
-                                            value={extraData?.badgeText || ''} 
-                                            onChange={(e) => setExtraData({...extraData, badgeText: e.target.value})}
-                                            className="w-full text-sm border border-gray-300 p-2 mb-2 rounded focus:ring-1 focus:ring-purple-400 outline-none" 
-                                        />
-                                    </div>
                                     <div>
                                         <label className="block text-xs font-medium text-gray-600 mb-1">Author Name (e.g. Vishal Srivastava)</label>
                                         <input 
@@ -406,51 +401,6 @@ const Page = () => {
                                             onChange={(e) => setExtraData({...extraData, authorDesignation: e.target.value})}
                                             className="w-full text-sm border border-gray-300 p-2 mb-2 rounded focus:ring-1 focus:ring-purple-400 outline-none" 
                                         />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Hero Description</label>
-                                        <textarea 
-                                            value={extraData?.heroDesc || ''} 
-                                            onChange={(e) => setExtraData({...extraData, heroDesc: e.target.value})}
-                                            className="w-full text-sm border border-gray-300 p-2 mb-2 rounded h-16 focus:ring-1 focus:ring-purple-400 outline-none" 
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Profile Bio</label>
-                                        <textarea 
-                                            value={extraData?.profileBio || ''} 
-                                            onChange={(e) => setExtraData({...extraData, profileBio: e.target.value})}
-                                            className="w-full text-sm border border-gray-300 p-2 mb-2 rounded h-20 focus:ring-1 focus:ring-purple-400 outline-none" 
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-2">Features (Up to 4)</label>
-                                        {[0,1,2,3].map(i => (
-                                            <div key={i} className="flex gap-2 mb-2">
-                                                <input 
-                                                    placeholder={`Title ${i+1}`}
-                                                    value={extraData?.features?.[i]?.title || ''}
-                                                    onChange={(e) => {
-                                                        const newFeatures = [...(extraData?.features || [])];
-                                                        if(!newFeatures[i]) newFeatures[i] = { title: '', desc: '' };
-                                                        newFeatures[i].title = e.target.value;
-                                                        setExtraData({...extraData, features: newFeatures});
-                                                    }}
-                                                    className="w-1/3 text-xs border border-gray-300 p-1.5 rounded focus:ring-1 focus:ring-purple-400 outline-none" 
-                                                />
-                                                <input 
-                                                    placeholder={`Description ${i+1}`}
-                                                    value={extraData?.features?.[i]?.desc || ''}
-                                                    onChange={(e) => {
-                                                        const newFeatures = [...(extraData?.features || [])];
-                                                        if(!newFeatures[i]) newFeatures[i] = { title: '', desc: '' };
-                                                        newFeatures[i].desc = e.target.value;
-                                                        setExtraData({...extraData, features: newFeatures});
-                                                    }}
-                                                    className="w-2/3 text-xs border border-gray-300 p-1.5 rounded focus:ring-1 focus:ring-purple-400 outline-none" 
-                                                />
-                                            </div>
-                                        ))}
                                     </div>
                                 </div>
                             )}

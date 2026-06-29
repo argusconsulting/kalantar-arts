@@ -1,7 +1,5 @@
 import DynamicPage from "./DynamicPage";
 import ChairmanPage from "./ChairmanPage";
-import GovernmentPartnersPage from "./GovernmentPartnersPage";
-import SocialPartnersPage from "./SocialPartnersPage";
 import PhotoGalleryPage from "./PhotoGalleryPage";
 import VideoGalleryPage from "./VideoGalleryPage";
 import ActivitiesPage from "../../Activities/[Slug]/ActivitiesPage";
@@ -57,12 +55,7 @@ export default async function Page({ params }) {
   if (slug === "Chairman" || slug === "Heartfelts-Chairman" || slug === "From-desk-mentor-chief") {
     return <ChairmanPage data={data} />;
   }
-  if (slug === "Government-Partners" || slug === "Government Partners") {
-    return <GovernmentPartnersPage data={data} />;
-  }
-  if (slug === "Social-Partners" || slug === "Social Partners") {
-    return <SocialPartnersPage data={data} />;
-  }
+  // Removed static partner routing to allow fallback to DynamicPage.js
   if (slug === "Photo-Gallery" || slug === "Photo Gallery") {
     return <PhotoGalleryPage data={data} />;
   }

@@ -34,6 +34,20 @@ const ActivitiesPage = ({ data }) => {
   const subtitle = data?.subtitle || "";
   const description = data?.description || data?.Richtext || "";
 
+  let imageNames = [];
+  let isLegacyImages = false;
+  try {
+    if (data?.extra_data) {
+      const extraData = JSON.parse(data.extra_data);
+      imageNames = extraData?.imageNames || [];
+    }
+    if (!data?.images || data.images === "[]") {
+      isLegacyImages = true;
+    }
+  } catch (error) {
+    console.error("Error parsing extra_data:", error);
+  }
+
   if (!description && !heroImage && Images.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 to-pink-200 text-pink-900 px-6">
@@ -120,13 +134,22 @@ const ActivitiesPage = ({ data }) => {
 
           <div className="relative z-40">
             <Slider {...sliderSettings}>
-              {Images.map((src, index) => (
-                <div key={index}>
-                  <h3 className="text-center py-10 px-2 rounded-lg shadow-lg min-h-54 min-w-96">
-                    <Image className="rounded-lg shadow-lg object-fill" src={`${process.env.NEXT_PUBLIC_Files_URL}/${src}`} width={500} height={500} alt={`Image ${index + 1}`} />
-                  </h3>
-                </div>
-              ))}
+              {Images.map((src, index) => {
+                const nameIndex = isLegacyImages ? index + 1 : index;
+                const customName = imageNames[nameIndex]?.trim();
+                return (
+                  <div key={index}>
+                    <div className="flex flex-col items-center py-10 px-2 rounded-lg shadow-lg min-h-54 min-w-96">
+                      <Image className="rounded-lg shadow-lg object-fill" src={`${process.env.NEXT_PUBLIC_Files_URL}/${src}`} width={500} height={500} alt={customName || `Image ${index + 1}`} />
+                      {customName && (
+                        <p className="mt-4 font-semibold text-[#a91846] text-center bg-white/90 px-4 py-2 rounded-full shadow-sm">
+                          {customName}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </Slider>
           </div>
         </section>
