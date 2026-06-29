@@ -1,6 +1,8 @@
 "use client";
-import { useRef, useState } from "react";
-import { Facebook, Instagram, Youtube, Phone, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import { useRef, useState, useEffect, useCallback } from "react";
+import { Facebook, Instagram, Youtube, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+
+const AUTOPLAY_INTERVAL_MS = 4000;
 
 export default function PhotoGalleryPage({ data }) {
   const scrollRef = useRef(null);
@@ -16,64 +18,87 @@ export default function PhotoGalleryPage({ data }) {
     { caption: "Art for All Generations", sub: "COMMUNITY OUTREACH", img: "/images/gallery/highlight-2.jpg" },
     { caption: "The Ceramics Lab", sub: "WORKSHOP", img: "/images/gallery/highlight-3.jpg" },
     { caption: "The Closing Ceremony", sub: "EVENT", img: "/images/gallery/highlight-4.jpg" },
+  const [isPaused, setIsPaused] = useState(false);
+
+  // `data` is expected to be the array returned by GET /gallery
+  // (the same shape the admin table manages): one object per slide with
+  // { id, image, caption, link, link_label, aspectRatio, order }.
+  const slides = Array.isArray(data)
+    ? [...data].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    : [];
+
+  const hardcodedSlides = [
+    { id: "h1", caption: "Winter Showcase 2023", link: null, link_label: null, img: "/images/gallery/highlight-1.jpg" },
+    { id: "h2", caption: "Art for All Generations", link: null, link_label: null, img: "/images/gallery/highlight-2.jpg" },
+    { id: "h3", caption: "The Ceramics Lab", link: null, link_label: null, img: "/images/gallery/highlight-3.jpg" },
+    { id: "h4", caption: "The Closing Ceremony", link: null, link_label: null, img: "/images/gallery/highlight-4.jpg" },
   ];
 
-  // Extract extra_data for custom image names
-  let extraData = {};
-  try {
-    if (data?.[0]?.extra_data) {
-      extraData = JSON.parse(data[0].extra_data);
-    }
-  } catch (e) { }
-  const imageNames = extraData?.imageNames || [];
+  const resolvedSlides = slides.length > 0
+    ? slides.map((item) => ({
+        id: item.id,
+        caption: item.caption || "",
+        link: item.link && item.link !== "#" ? item.link : null,
+        link_label: item.link_label || "Open Link",
+        img: `${process.env.NEXT_PUBLIC_Files_URL}/${item.image}`,
+      }))
+    : hardcodedSlides;
 
-  // If CMS has images, use them for highlights. Otherwise fallback.
-  const highlights = cmsImages.length > 0
-    ? cmsImages.map((imgName, idx) => {
-      const customName = imageNames[idx]?.trim();
-      return {
-        caption: customName ? customName : `Gallery Image ${idx + 1}`,
-        sub: "KALANTAR ARTS",
-        img: `${process.env.NEXT_PUBLIC_Files_URL}/${imgName}`
-      };
-    })
-    : hardcodedHighlights;
+  // Duplicate the list so the strip can loop seamlessly, both for
+  // autoplay and for manual scroll-back-to-start.
+  const loopedSlides = resolvedSlides.length > 0
+    ? [...resolvedSlides, ...resolvedSlides]
+    : [];
 
-  const hardcodedGalleryItems = [
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-1.jpg" },
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-2.jpg" },
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-3.jpg" },
-    { caption: "Urban Heritage Hand", sub: "Photo Art Project", img: "/images/gallery/photo-4.jpg" },
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-5.jpg" },
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-6.jpg" },
-    { caption: "Young Talent Spotlight", sub: "Art Development", img: "/images/gallery/photo-7.jpg" },
-  ];
+  const cardWidth = useCallback(() => {
+    if (!scrollRef.current) return 280;
+    const firstCard = scrollRef.current.querySelector("[data-slide-card]");
+    if (!firstCard) return 280;
+    const gap = 24; // matches gap-6
+    return firstCard.getBoundingClientRect().width + gap;
+  }, []);
 
-  // If CMS has images, format them to match the gallery structure. Otherwise, fallback to hardcoded.
-  const galleryItems = cmsImages.length > 0
-    ? cmsImages.map((imgName, idx) => {
-      const cleanUrl = currentUrls[idx]?.trim();
-      const specificUrl = cleanUrl && cleanUrl !== "null" && cleanUrl !== ""
-        ? (cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`)
-        : null;
+  const scrollByDir = useCallback((dir) => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollBy({ left: dir * cardWidth(), behavior: "smooth" });
+  }, [cardWidth]);
 
-      const customName = imageNames[idx]?.trim();
-      const displayName = customName ? customName : (data[0]?.name || "Kalantar Highlights");
-
-      return {
-        caption: displayName,
-        sub: "Photo Gallery",
-        img: `${process.env.NEXT_PUBLIC_Files_URL}/${imgName}`,
-        url: specificUrl
-      };
-    })
-    : hardcodedGalleryItems;
-
-  const scroll = (dir) => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: dir * 280, behavior: "smooth" });
-    }
+  // Manual arrow click: nudge the track and pause autoplay briefly so the
+  // click doesn't get immediately overridden by the timer.
+  const handleArrowClick = (dir) => {
+    setIsPaused(true);
+    scrollByDir(dir);
+    window.clearTimeout(handleArrowClick._resumeTimer);
+    handleArrowClick._resumeTimer = window.setTimeout(() => setIsPaused(false), 4000);
   };
+
+  // Autoplay: advance one slide at a time on an interval. When we reach
+  // (or pass) the midpoint of the doubled track, snap back to the start
+  // without animating, so the loop is invisible.
+  useEffect(() => {
+    if (resolvedSlides.length <= 1) return;
+    if (isPaused) return;
+
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const timer = window.setInterval(() => {
+      if (!el) return;
+      const width = cardWidth();
+      const halfwayPoint = width * resolvedSlides.length;
+
+      if (el.scrollLeft + width >= halfwayPoint) {
+        el.scrollBy({ left: width, behavior: "smooth" });
+        window.setTimeout(() => {
+          el.scrollTo({ left: 0, behavior: "auto" });
+        }, 400);
+      } else {
+        el.scrollBy({ left: width, behavior: "smooth" });
+      }
+    }, AUTOPLAY_INTERVAL_MS);
+
+    return () => window.clearInterval(timer);
+  }, [isPaused, resolvedSlides.length, cardWidth]);
 
   return (
     <main className="bg-white text-[#2b2b2b]">
@@ -119,8 +144,8 @@ export default function PhotoGalleryPage({ data }) {
         </p>
       </section>
 
-      {/* ===== HIGHLIGHTS CAROUSEL ===== */}
-      <section className="bg-[#fceef3] py-16">
+      {/* ===== IMAGE SLIDER (auto-playing) ===== */}
+      <section className="bg-[#fceef3] py-16 overflow-hidden">
         <div className="px-8 md:px-16 flex items-end justify-between mb-10">
           <div>
             <h2 className="text-2xl md:text-3xl font-serif text-[#3a1020] mb-2">
@@ -130,13 +155,15 @@ export default function PhotoGalleryPage({ data }) {
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => scroll(-1)}
+              onClick={() => handleArrowClick(-1)}
+              aria-label="Previous slide"
               className="w-10 h-10 rounded-md border border-[#a91846]/30 bg-transparent flex items-center justify-center hover:bg-white transition-colors"
             >
               <ChevronLeft size={18} className="text-[#3a1020]" />
             </button>
             <button
-              onClick={() => scroll(1)}
+              onClick={() => handleArrowClick(1)}
+              aria-label="Next slide"
               className="w-10 h-10 rounded-md border border-[#a91846]/30 bg-transparent flex items-center justify-center hover:bg-white transition-colors"
             >
               <ChevronRight size={18} className="text-[#3a1020]" />
@@ -146,78 +173,57 @@ export default function PhotoGalleryPage({ data }) {
 
         <div
           ref={scrollRef}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
           className="flex gap-6 overflow-x-auto px-8 md:px-16 scroll-smooth pb-4 scrollbar-hide"
           style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
         >
-          {highlights.map((h, i) => (
-            <div
-              key={i}
-              className="relative flex-shrink-0 w-[80vw] sm:w-[45vw] lg:w-[26vw] xl:w-[24vw] h-[350px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg border border-[#a91846]/10"
-            >
-              <img
-                src={h.img}
-                alt={h.caption}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#2a0b17]/90 via-[#2a0b17]/30 to-transparent flex flex-col justify-end p-5">
-                {h.sub && (
-                  <p className="text-[10px] uppercase tracking-widest text-orange-200 font-bold mb-1">
-                    {h.sub}
-                  </p>
-                )}
-                <p className="text-white text-lg font-bold font-serif leading-tight">
-                  {h.caption}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ===== PHOTO GALLERY GRID ===== */}
-      <section className="px-8 md:px-16 py-16">
-        <p className="text-center uppercase text-xs font-semibold tracking-widest text-[#a91846] mb-10">
-          Photo Gallery
-        </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-          {galleryItems.map((item, i) => (
-            <div key={i} className="group">
-              <div
-                className={`rounded-md overflow-hidden aspect-square mb-2 relative ${item.url ? '' : 'cursor-pointer'}`}
-                onClick={() => !item.url && setSelectedImage(item.img)}
-              >
-                {item.url ? (
-                  <a href={item.url} target="_blank" rel="noopener noreferrer" className="block w-full h-full relative">
-                    <img
-                      src={item.img}
-                      alt={item.caption}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                      <div className="bg-white/90 text-pink-700 px-4 py-2 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
-                        Click here
-                      </div>
-                    </div>
-                  </a>
-                ) : (
-                  <div className="block w-full h-full relative">
-                    <img
-                      src={item.img}
-                      alt={item.caption}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                      <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-300 w-10 h-10 drop-shadow-lg" />
-                    </div>
+          {loopedSlides.map((s, i) => {
+            const CardInner = (
+              <>
+                <img
+                  src={s.img}
+                  alt={s.caption || "Gallery image"}
+                  className="w-full h-full object-cover"
+                  draggable={false}
+                />
+                {(s.caption || s.link) && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#2a0b17]/90 via-[#2a0b17]/30 to-transparent flex flex-col justify-end p-5">
+                    {s.caption && (
+                      <p className="text-white text-lg font-bold font-serif leading-tight mb-1">
+                        {s.caption}
+                      </p>
+                    )}
+                    {s.link && (
+                      <span className="inline-block text-xs font-semibold text-white bg-[#a91846] px-3 py-1 rounded-full w-fit">
+                        {s.link_label || "Open Link"}
+                      </span>
+                    )}
                   </div>
                 )}
+              </>
+            );
+
+            const cardClasses =
+              "relative flex-shrink-0 w-[80vw] sm:w-[45vw] lg:w-[26vw] xl:w-[24vw] h-[350px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg border border-[#a91846]/10";
+
+            return s.link ? (
+              <a
+                key={`${s.id}-${i}`}
+                data-slide-card
+                href={s.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cardClasses}
+              >
+                {CardInner}
+              </a>
+            ) : (
+              <div key={`${s.id}-${i}`} data-slide-card className={cardClasses}>
+                {CardInner}
               </div>
-              <p className="text-sm font-semibold text-[#3a1020]">
-                {item.caption}
-              </p>
-              <p className="text-xs text-gray-500">{item.sub}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -260,6 +266,11 @@ export default function PhotoGalleryPage({ data }) {
           </div>
         </div>
       )}
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </main>
   );
 }

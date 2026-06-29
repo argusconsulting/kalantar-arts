@@ -166,7 +166,7 @@ export default function VideoGalleryPage({ data }) {
         </div>
       </section>
 
-      {/* ===== VIDEO GALLERY GRID ===== */}
+      {/* ===== VIDEO GALLERY GRID =====
       <section className="px-8 md:px-16 py-16">
         <p className="text-center uppercase text-xs font-semibold tracking-widest text-[#a91846] mb-10">
           Video Gallery
@@ -192,7 +192,7 @@ export default function VideoGalleryPage({ data }) {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* ===== GLOBAL PAGE ACTION BUTTON ===== */}
       {pageUrl && (

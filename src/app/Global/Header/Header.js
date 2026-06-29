@@ -1,6 +1,7 @@
 import Navbaar from "./Component/Navbaar";
 
 const fetchData = async () => {
+  console.log("jwt-----------", process.env.JWT_SECRET);
   try {
     console.log("Next.js is trying to send this secret:", process.env.JWT_SECRET);
 
