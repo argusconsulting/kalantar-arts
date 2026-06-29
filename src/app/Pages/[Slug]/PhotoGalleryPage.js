@@ -17,13 +17,25 @@ export default function PhotoGalleryPage({ data }) {
     { caption: "The Closing Ceremony", sub: "EVENT", img: "/images/gallery/highlight-4.jpg" },
   ];
 
+  // Extract extra_data for custom image names
+  let extraData = {};
+  try {
+    if (data?.[0]?.extra_data) {
+      extraData = JSON.parse(data[0].extra_data);
+    }
+  } catch (e) { }
+  const imageNames = extraData?.imageNames || [];
+
   // If CMS has images, use them for highlights. Otherwise fallback.
   const highlights = cmsImages.length > 0
-    ? cmsImages.map((imgName, idx) => ({
-        caption: `Gallery Image ${idx + 1}`,
+    ? cmsImages.map((imgName, idx) => {
+      const customName = imageNames[idx]?.trim();
+      return {
+        caption: customName ? customName : `Gallery Image ${idx + 1}`,
         sub: "KALANTAR ARTS",
         img: `${process.env.NEXT_PUBLIC_Files_URL}/${imgName}`
-      }))
+      };
+    })
     : hardcodedHighlights;
 
   const hardcodedGalleryItems = [
@@ -39,16 +51,21 @@ export default function PhotoGalleryPage({ data }) {
   // If CMS has images, format them to match the gallery structure. Otherwise, fallback to hardcoded.
   const galleryItems = cmsImages.length > 0
     ? cmsImages.map((imgName, idx) => {
-        const specificUrl = currentUrls[idx] && currentUrls[idx] !== "null" && currentUrls[idx] !== ""
-          ? (currentUrls[idx].startsWith("http") ? currentUrls[idx] : `https://${currentUrls[idx]}`)
-          : null;
-        return {
-          caption: data[0]?.name || "Kalantar Highlights",
-          sub: "Photo Gallery",
-          img: `${process.env.NEXT_PUBLIC_Files_URL}/${imgName}`,
-          url: specificUrl
-        };
-      })
+      const cleanUrl = currentUrls[idx]?.trim();
+      const specificUrl = cleanUrl && cleanUrl !== "null" && cleanUrl !== ""
+        ? (cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`)
+        : null;
+
+      const customName = imageNames[idx]?.trim();
+      const displayName = customName ? customName : (data[0]?.name || "Kalantar Highlights");
+
+      return {
+        caption: displayName,
+        sub: "Photo Gallery",
+        img: `${process.env.NEXT_PUBLIC_Files_URL}/${imgName}`,
+        url: specificUrl
+      };
+    })
     : hardcodedGalleryItems;
 
   const scroll = (dir) => {
@@ -164,7 +181,7 @@ export default function PhotoGalleryPage({ data }) {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
           {galleryItems.map((item, i) => (
             <div key={i} className="group">
-              <div 
+              <div
                 className={`rounded-md overflow-hidden aspect-square mb-2 relative ${item.url ? '' : 'cursor-pointer'}`}
                 onClick={() => !item.url && setSelectedImage(item.img)}
               >
@@ -177,7 +194,7 @@ export default function PhotoGalleryPage({ data }) {
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
                       <div className="bg-white/90 text-pink-700 px-4 py-2 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
-                        Visit Link
+                        Click here
                       </div>
                     </div>
                   </a>
@@ -189,7 +206,7 @@ export default function PhotoGalleryPage({ data }) {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                       <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-300 w-10 h-10 drop-shadow-lg" />
+                      <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-300 w-10 h-10 drop-shadow-lg" />
                     </div>
                   </div>
                 )}
@@ -204,42 +221,7 @@ export default function PhotoGalleryPage({ data }) {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="bg-[#fafafa] border-t border-gray-100 px-8 md:px-16 py-10">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <img src="/images/kalantar-logo.png" alt="Kalantar" className="h-8 w-auto" />
-              <p className="font-semibold text-[#7a1430]">कलांतर</p>
-            </div>
-            <p className="text-xs text-gray-500 max-w-xs">
-              To bring a phenomenal impact on the society by way of
-              practicing all the 64 sects of art for betterment of mankind.
-            </p>
-          </div>
 
-          <div>
-            <p className="font-semibold text-sm mb-3">Quick Links</p>
-            <ul className="text-xs text-gray-500 space-y-2">
-              <li>Home</li>
-              <li>Contact Us</li>
-            </ul>
-          </div>
-
-          <div>
-            <p className="font-semibold text-sm mb-3">Related Sites</p>
-            <ul className="text-xs text-gray-500 space-y-2">
-              <li>NHDC</li>
-              <li>GDIA</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="flex justify-center gap-4 mt-8">
-          <Facebook size={16} />
-          <Instagram size={16} />
-          <Youtube size={16} />
-        </div>
-      </footer>
 
       {/* Lightbox / Zoom Modal */}
       {selectedImage && (

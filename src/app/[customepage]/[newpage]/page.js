@@ -5,7 +5,7 @@ import SocialPartnersPage from "./SocialPartnersPage";
 // ✅ Fetch page data using slug param
 const fetchData = async (slug) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/dynamic_pages/?slug=${slug}`, {
+    let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/dynamic_pages/?slug=${slug}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.JWT_SECRET}`,
@@ -15,8 +15,26 @@ const fetchData = async (slug) => {
 
     if (!response.ok) throw new Error("Failed to fetch data");
 
-    const result = await response.json();
-    return result.length > 0 ? result[0] : null;
+    let result = await response.json();
+    if (result.length > 0) return result[0];
+
+    // Fallback: Try with spaces instead of dashes if the slug has dashes
+    if (slug.includes("-")) {
+      const slugWithSpaces = slug.replace(/-/g, " ");
+      response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/dynamic_pages/?slug=${slugWithSpaces}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.JWT_SECRET}`,
+        },
+        cache: "no-store",
+      });
+      if (response.ok) {
+        result = await response.json();
+        if (result.length > 0) return result[0];
+      }
+    }
+
+    return null;
   } catch (error) {
     console.error("Error fetching data:", error);
     return null;

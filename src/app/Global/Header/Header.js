@@ -3,6 +3,8 @@ import Navbaar from "./Component/Navbaar";
 const fetchData = async () => {
   console.log("jwt-----------", process.env.JWT_SECRET);
   try {
+    console.log("Next.js is trying to send this secret:", process.env.JWT_SECRET);
+
     const [mainMenuRes, subMenuRes, linkMenuRes, SITE_DATA] = await Promise.all([
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/MainMenu`, {
         headers: {

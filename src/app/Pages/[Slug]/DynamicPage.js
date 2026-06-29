@@ -25,7 +25,8 @@ const DynamicPage = ({ data }) => {
     );
   }
 
-  const pageUrl = data[0].url ? (data[0].url.startsWith("http") ? data[0].url : `https://${data[0].url}`) : null;
+  const rawPageUrl = data[0]?.url?.trim();
+  const pageUrl = rawPageUrl ? (rawPageUrl.startsWith("http") ? rawPageUrl : `https://${rawPageUrl}`) : null;
 
   const extractYouTubeId = (urlStr) => {
     if (!urlStr) return null;
@@ -53,8 +54,9 @@ const DynamicPage = ({ data }) => {
           <div className="mb-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {data[0].image.split(',').map((img, idx) => {
               const currentUrls = data[0].image_urls ? data[0].image_urls.split(',') : [];
-              const specificUrl = currentUrls[idx] && currentUrls[idx] !== "null" && currentUrls[idx] !== ""
-                ? (currentUrls[idx].startsWith("http") ? currentUrls[idx] : `https://${currentUrls[idx]}`)
+              const cleanUrl = currentUrls[idx]?.trim();
+              const specificUrl = cleanUrl && cleanUrl !== "null" && cleanUrl !== ""
+                ? (cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`)
                 : null;
 
               return (
@@ -77,7 +79,7 @@ const DynamicPage = ({ data }) => {
                         <div className="transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 flex flex-col gap-3">
                           <span className="bg-white/95 text-pink-600 px-4 py-2 rounded-full font-bold shadow-xl flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                            Visit Partner
+                            Click here
                           </span>
                         </div>
                       </div>

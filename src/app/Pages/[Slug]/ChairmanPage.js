@@ -30,7 +30,10 @@ export default function ChairmanPage({ data }) {
   }
 
   const profileBio = extraData?.profileBio || "As an advocate for the democratization of art, Vishal has dedicated over a decade to building a platform where talent meets opportunity, regardless of background or geography.";
-  const badgeText = extraData?.badgeText || "15+";
+  const badgeText = extraData?.badgeText;
+  const authorName = extraData?.authorName || "VISHAL SRIVASTAVA";
+  const authorDesignation = extraData?.authorDesignation || "CHAIRMAN – KALANTAR ART FOUNDATION";
+  const heroDesc = extraData?.heroDesc || "Art has the power to inspire, connect communities, and create lasting impact. We believe in the transformative energy of creativity to bridge social divides.";
   const features = extraData?.features?.length > 0 ? extraData.features : [
     { title: "Art Foundation", desc: "Spotlighting emerging artists on global stages." },
     { title: "Cultural Preservation", desc: "Safeguarding heritage through digital archives." },
@@ -80,7 +83,7 @@ export default function ChairmanPage({ data }) {
       </nav>
 
       {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#f6cfd9] via-[#d5497a] to-[#7a1430]">
+      {/* <section className="relative overflow-hidden bg-gradient-to-r from-[#f6cfd9] via-[#d5497a] to-[#7a1430]">
         <div className="grid md:grid-cols-2 items-center gap-8 px-8 md:px-16 py-16 relative z-10">
           <div>
             <p className="uppercase text-xs font-semibold tracking-widest text-[#7a1430] mb-3">
@@ -90,26 +93,23 @@ export default function ChairmanPage({ data }) {
               {pageTitle}
             </h1>
             <p className="text-sm md:text-base text-[#4a2030] max-w-md mb-6">
-              Art has the power to inspire, connect communities, and create
-              lasting impact. We believe in the transformative energy of
-              creativity to bridge social divides.
+              {heroDesc}
             </p>
-            <button className="bg-[#7a1430] text-white text-sm font-semibold px-6 py-3 rounded-md hover:bg-[#5e0f24] transition">
-              Discover Our Vision ↓
-            </button>
+            {data?.[0]?.url && (
+              <a href={data[0].url} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#7a1430] text-white text-sm font-semibold px-6 py-3 rounded-md hover:bg-[#5e0f24] transition">
+                {data[0]?.url_label || "Discover Our Vision ↓"}
+              </a>
+            )}
+            {!data?.[0]?.url && (
+              <button className="bg-[#7a1430] text-white text-sm font-semibold px-6 py-3 rounded-md hover:bg-[#5e0f24] transition">
+                {data?.[0]?.url_label || "Discover Our Vision ↓"}
+              </button>
+            )}
           </div>
 
-          <div className="flex justify-center md:justify-end">
-            {/* Dynamic Chairman Photo Asset 1 */}
-            <img
-              src={heroImage}
-              alt={pageTitle}
-              className="w-72 h-80 object-cover rounded-md shadow-xl"
-            />
-          </div>
+
         </div>
 
-        {/* bottom wave */}
         <svg
           className="absolute bottom-0 left-0 w-full"
           viewBox="0 0 1440 80"
@@ -120,84 +120,40 @@ export default function ChairmanPage({ data }) {
             fill="#ffffff"
           />
         </svg>
-      </section>
+      </section> */}
 
       {/* ===== QUOTE SECTION ===== */}
-      <section className="px-8 md:px-24 py-16 text-center">
-        <span className="text-5xl text-[#7a1430] font-serif leading-none">&rdquo;</span>
-        <div
-          className="text-[#3a1020] text-base md:text-lg leading-relaxed max-w-4xl mx-auto mt-2 text-justify"
-          dangerouslySetInnerHTML={{ __html: richTextContent }}
-        ></div>
-        <p className="mt-6 text-xs tracking-widest font-semibold text-gray-500">
-          VISHAL SRIVASTAVA,
-          <br />
-          CHAIRMAN &ndash; KALANTAR ART FOUNDATION
-        </p>
-      </section>
-
-      {/* ===== PROFILE SECTION ===== */}
-      <section className="px-8 md:px-24 py-12 grid md:grid-cols-2 gap-12 items-start">
-        <div className="relative w-full max-w-sm">
-          {/* Dynamic Chairman Photo Asset 2 */}
+      <section className="px-8 md:px-24 py-16">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#3a1020] mb-8 leading-tight text-left">
+          {pageTitle}
+        </h1>
+        
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-10">
+          {/* Dynamic Chairman Photo Asset 1 */}
           <img
-            src={profileImage}
-            alt="Vishal Srivastava Profile"
-            className="w-full h-96 object-cover rounded-md shadow-lg"
+            src={heroImage}
+            alt={pageTitle}
+            className="w-72 h-80 object-cover rounded-md shadow-xl shrink-0"
           />
-          <div className="absolute bottom-4 right-[-1rem] bg-[#a91846] text-white rounded-md px-4 py-3 shadow-lg text-center">
-            <p className="text-2xl font-bold leading-none">{badgeText}</p>
-            <p className="text-[10px] leading-tight mt-1">
-              Years of
-              <br />
-              Visionary Leadership
+
+          <div className="flex flex-col justify-center pt-4 md:pt-10">
+            <h2 className="text-2xl font-bold text-[#7a1430] mb-2 uppercase">
+              {authorName}
+            </h2>
+            <p className="text-sm font-semibold tracking-widest text-gray-600 uppercase">
+              {authorDesignation}
             </p>
           </div>
         </div>
 
-        <div>
-          <h2 className="text-2xl font-bold text-[#7a1430] mb-3">
-            {pageTitle === "Heartfelts-Chairman" ? "Vishal Srivastava" : pageTitle}
-          </h2>
-          <p className="text-sm text-gray-600 mb-8 max-w-md">
-            {profileBio}
-          </p>
+        <div
+          className="text-[#3a1020] text-base md:text-lg leading-relaxed w-full mt-2 text-justify tiptap-content prose max-w-none"
+          dangerouslySetInnerHTML={{ __html: richTextContent }}
+        ></div>
 
-          <div className="grid grid-cols-2 gap-x-10 gap-y-8">
-            {features.slice(0, 4).map((feat, idx) => (
-              feat.title ? (
-                <Feature
-                  key={idx}
-                  icon={defaultIcons[idx] || <Sparkles size={20} />}
-                  title={feat.title}
-                  desc={feat.desc}
-                />
-              ) : null
-            ))}
-          </div>
-        </div>
       </section>
 
-      {/* ===== CTA SECTION ===== */}
-      <section className="text-center px-8 py-16">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#3a1020] mb-3">
-          Be Part of the Journey
-        </h2>
-        <p className="text-sm text-gray-600 max-w-xl mx-auto mb-6">
-          Join our mission to empower artists and preserve the rich tapestry
-          of our cultural heritage for future generations.
-        </p>
-        <div className="flex justify-center gap-4">
-          <button className="bg-[#7a1430] text-white text-sm font-semibold px-6 py-3 rounded-md hover:bg-[#5e0f24] transition">
-            Become Member
-          </button>
-          <button className="border border-[#7a1430] text-[#7a1430] text-sm font-semibold px-6 py-3 rounded-md hover:bg-[#7a1430] hover:text-white transition">
-            Connect With Us
-          </button>
-        </div>
-      </section>
 
-      {/* ===== FOOTER ===== */}
 
     </main>
   );
