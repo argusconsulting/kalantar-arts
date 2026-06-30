@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useId } from "react";
 
 const ImageUpload = ({ multiple = false, onUpload }) => {
+    const inputId = useId();
     const [files, setFiles] = useState([]);
     const [previews, setPreviews] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -63,8 +64,8 @@ const ImageUpload = ({ multiple = false, onUpload }) => {
 
     return (
         <div className="flex flex-col gap-2">
-            <input type="file" multiple={multiple} onChange={handleFileChange} className="hidden" id="fileInput" />
-            <label htmlFor="fileInput" className={`cursor-pointer text-white px-4 py-2 rounded text-center transition-colors ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}>
+            <input type="file" multiple={multiple} onChange={handleFileChange} className="hidden" id={inputId} />
+            <label htmlFor={inputId} className={`cursor-pointer text-white px-4 py-2 rounded text-center transition-colors ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}>
                 {loading ? "Uploading automatically..." : "Select Image"}
             </label>
             {previews.length > 0 && (

@@ -4,17 +4,29 @@ import { Facebook, Instagram, Youtube, Phone, ChevronLeft, ChevronRight, Play } 
 
 export default function VideoGalleryPage({ data }) {
   const scrollRef = useRef(null);
-  const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
-  // Extract YouTube URLs if they exist
+  // Extract URLs if they exist
   const ytUrls = data?.[0]?.youtube_urls ? data[0].youtube_urls.split(',') : [];
   const pageUrl = data?.[0]?.url;
 
-  const extractYouTubeId = (urlStr) => {
+  const parseVideoUrl = (urlStr) => {
     if (!urlStr) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = urlStr.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
+    
+    // Check for Google Drive
+    const driveMatch = urlStr.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || urlStr.match(/id=([a-zA-Z0-9_-]+)/);
+    if (driveMatch && driveMatch[1]) {
+      return { type: 'gdrive', id: driveMatch[1] };
+    }
+
+    // Check for YouTube
+    const ytRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const ytMatch = urlStr.match(ytRegExp);
+    if (ytMatch && ytMatch[2].length === 11) {
+      return { type: 'youtube', id: ytMatch[2] };
+    }
+
+    return null;
   };
 
   let extraData = {};
@@ -24,36 +36,41 @@ export default function VideoGalleryPage({ data }) {
     }
   } catch (e) { }
   const youtubeNames = extraData?.youtubeNames || [];
+  const youtubeThumbnails = extraData?.youtubeThumbnails || [];
 
   const hardcodedHighlights = [
-    { caption: "Winter Showcase 2023", sub: "EXHIBITIONS", id: "t0wO9FhR37o" },
-    { caption: "Art for All Generations", sub: "COMMUNITY OUTREACH", id: "dQw4w9WgXcQ" },
-    { caption: "The Ceramics Lab", sub: "WORKSHOP", id: "jNQXAC9IVRw" },
-    { caption: "The Closing Ceremony", sub: "EVENT", id: "cVDjE5X1vL8" },
+    { caption: "Winter Showcase 2023", sub: "EXHIBITIONS", video: { type: 'youtube', id: "t0wO9FhR37o" } },
+    { caption: "Art for All Generations", sub: "COMMUNITY OUTREACH", video: { type: 'youtube', id: "dQw4w9WgXcQ" } },
+    { caption: "The Ceramics Lab", sub: "WORKSHOP", video: { type: 'youtube', id: "jNQXAC9IVRw" } },
+    { caption: "The Closing Ceremony", sub: "EVENT", video: { type: 'youtube', id: "cVDjE5X1vL8" } },
   ];
 
   // If CMS has videos, use them for highlights. Otherwise fallback.
   const highlights = ytUrls.length > 0
     ? ytUrls.map((url, idx) => {
         const customName = youtubeNames[idx]?.trim();
+        const customThumb = youtubeThumbnails[idx]?.trim();
         return {
           caption: customName ? customName : `Video Highlight ${idx + 1}`,
           sub: "KALANTAR ARTS",
-          id: extractYouTubeId(url)
+          video: parseVideoUrl(url),
+          thumb: customThumb ? `${process.env.NEXT_PUBLIC_Files_URL}/${customThumb}` : null
         };
-      }).filter(h => h.id)
+      }).filter(h => h.video)
     : hardcodedHighlights;
 
   // If CMS has videos, format them to match the gallery structure. Otherwise, fallback.
   const galleryItems = ytUrls.length > 0
     ? ytUrls.map((url, idx) => {
         const customName = youtubeNames[idx]?.trim();
+        const customThumb = youtubeThumbnails[idx]?.trim();
         return {
           caption: customName ? customName : (data[0]?.name || "Kalantar Videos"),
           sub: "Video Gallery",
-          id: extractYouTubeId(url)
+          video: parseVideoUrl(url),
+          thumb: customThumb ? `${process.env.NEXT_PUBLIC_Files_URL}/${customThumb}` : null
         };
-      }).filter(h => h.id)
+      }).filter(h => h.video)
     : hardcodedHighlights;
 
   const scroll = (dir) => {
@@ -140,14 +157,24 @@ export default function VideoGalleryPage({ data }) {
             <div
               key={i}
               className="relative flex-shrink-0 w-[85vw] sm:w-[60vw] lg:w-[40vw] xl:w-[35vw] aspect-video rounded-2xl overflow-hidden shadow-lg border border-[#a91846]/10 cursor-pointer group"
-              onClick={() => setSelectedVideoId(h.id)}
+              onClick={() => setSelectedVideo({ type: h.video.type, id: h.video.id })}
             >
-              <img
-                src={`https://img.youtube.com/vi/${h.id}/maxresdefault.jpg`}
-                alt={h.caption}
-                onError={(e) => { e.target.src = `https://img.youtube.com/vi/${h.id}/hqdefault.jpg`; }}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
+              {h.thumb ? (
+                <img
+                  src={h.thumb}
+                  alt={h.caption}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              ) : h.video.type === 'youtube' ? (
+                <img
+                  src={`https://img.youtube.com/vi/${h.video.id}/maxresdefault.jpg`}
+                  alt={h.caption}
+                  onError={(e) => { e.target.src = `https://img.youtube.com/vi/${h.video.id}/hqdefault.jpg`; }}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-[#3a1020] to-[#1c080f] group-hover:scale-105 transition-transform duration-500"></div>
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-[#2a0b17]/90 via-[#2a0b17]/30 to-transparent flex flex-col justify-end p-5">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Play fill="white" className="text-white opacity-80 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300 w-16 h-16 drop-shadow-xl" />
@@ -210,22 +237,22 @@ export default function VideoGalleryPage({ data }) {
       )}
 
       {/* Lightbox / Video Modal */}
-      {selectedVideoId && (
+      {selectedVideo && (
         <div
           className="fixed inset-0 z-[5000] flex items-center justify-center bg-black bg-opacity-95 p-4 backdrop-blur-sm"
-          onClick={() => setSelectedVideoId(null)}
+          onClick={() => setSelectedVideo(null)}
         >
           <div className="relative max-w-6xl w-full aspect-video flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
             <button
-              onClick={() => setSelectedVideoId(null)}
+              onClick={() => setSelectedVideo(null)}
               className="absolute -top-12 right-0 md:-top-10 md:-right-10 text-white/70 hover:text-white text-5xl transition-colors font-light"
             >
               &times;
             </button>
             <iframe
               className="w-full h-full rounded-xl shadow-2xl bg-black"
-              src={`https://www.youtube.com/embed/${selectedVideoId}?autoplay=1`}
-              title="YouTube video player"
+              src={selectedVideo.type === 'youtube' ? `https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1` : `https://drive.google.com/file/d/${selectedVideo.id}/preview`}
+              title="Video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen

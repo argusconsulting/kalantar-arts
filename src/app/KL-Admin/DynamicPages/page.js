@@ -166,6 +166,14 @@ const Page = () => {
         setExtraData({...extraData, youtubeNames: currentNames});
     };
 
+    const handleYoutubeThumbnailUpload = (index, filename) => {
+        const currentThumbs = extraData?.youtubeThumbnails ? [...extraData.youtubeThumbnails] : [];
+        const urls = youtubeUrls ? youtubeUrls.split(',') : [];
+        while (currentThumbs.length < urls.length) currentThumbs.push("");
+        currentThumbs[index] = Array.isArray(filename) ? filename[0] : filename;
+        setExtraData({...extraData, youtubeThumbnails: currentThumbs});
+    };
+
     const handleImagesUploaded = (filenames) => {
         const names = Array.isArray(filenames) ? filenames : [filenames];
         setImage(prev => prev ? `${prev},${names.join(',')}` : names.join(','));
@@ -397,7 +405,7 @@ const Page = () => {
                                             />
                                             <input
                                                 type="text"
-                                                placeholder="https://www.youtube.com/watch?v=..."
+                                                placeholder="YouTube or Google Drive URL"
                                                 value={newYoutubeUrl}
                                                 onChange={(e) => setNewYoutubeUrl(e.target.value)}
                                                 className="flex-1 text-sm border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-red-400 outline-none"
@@ -442,6 +450,19 @@ const Page = () => {
                                                                     placeholder="e.g. Event Highlights"
                                                                     className="flex-1 text-xs border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-red-400 outline-none"
                                                                 />
+                                                            </div>
+                                                            <div className="mt-2 border-t border-red-100 pt-2">
+                                                                <label className="text-[10px] text-gray-500 block mb-1">Custom Thumbnail (Optional):</label>
+                                                                {extraData?.youtubeThumbnails?.[idx] ? (
+                                                                    <div className="flex items-center gap-2">
+                                                                        <img src={`${process.env.NEXT_PUBLIC_Files_URL}/${extraData.youtubeThumbnails[idx]}`} className="w-10 h-10 object-cover rounded" alt="thumb" />
+                                                                        <button type="button" onClick={() => handleYoutubeThumbnailUpload(idx, "")} className="text-[10px] text-red-500 hover:underline">Remove Thumbnail</button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className="transform scale-90 origin-left">
+                                                                        <ImageUpload multiple={false} onUpload={(f) => handleYoutubeThumbnailUpload(idx, f)} />
+                                                                    </div>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     );
