@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState, useEffect, useCallback } from "react";
-import { Facebook, Instagram, Youtube, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { Facebook, Instagram, Youtube, Phone, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 
 const AUTOPLAY_INTERVAL_MS = 4000;
 
@@ -13,20 +13,7 @@ export default function PhotoGalleryPage({ data }) {
   const currentUrls = data?.[0]?.image_urls ? data[0].image_urls.split(',') : [];
   const pageUrl = data?.[0]?.url;
 
-  const hardcodedHighlights = [
-  { caption: "Winter Showcase 2023", sub: "EXHIBITIONS", img: "/images/gallery/highlight-1.jpg" },
-  { caption: "Art for All Generations", sub: "COMMUNITY OUTREACH", img: "/images/gallery/highlight-2.jpg" },
-  { caption: "The Ceramics Lab", sub: "WORKSHOP", img: "/images/gallery/highlight-3.jpg" },
-  { caption: "The Closing Ceremony", sub: "EVENT", img: "/images/gallery/highlight-4.jpg" },
-];
-
-const [isPaused, setIsPaused] = useState(false);
-  // `data` is expected to be the array returned by GET /gallery
-  // (the same shape the admin table manages): one object per slide with
-  // { id, image, caption, link, link_label, aspectRatio, order }.
-  const slides = Array.isArray(data)
-    ? [...data].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-    : [];
+  const [isPaused, setIsPaused] = useState(false);
 
   const hardcodedSlides = [
     { id: "h1", caption: "Winter Showcase 2023", link: null, link_label: null, img: "/images/gallery/highlight-1.jpg" },
@@ -35,14 +22,26 @@ const [isPaused, setIsPaused] = useState(false);
     { id: "h4", caption: "The Closing Ceremony", link: null, link_label: null, img: "/images/gallery/highlight-4.jpg" },
   ];
 
-  const resolvedSlides = slides.length > 0
-    ? slides.map((item) => ({
-        id: item.id,
-        caption: item.caption || "",
-        link: item.link && item.link !== "#" ? item.link : null,
-        link_label: item.link_label || "Open Link",
-        img: `${process.env.NEXT_PUBLIC_Files_URL}/${item.image}`,
-      }))
+  let extraData = {};
+  try {
+    if (data?.[0]?.extra_data) {
+      extraData = JSON.parse(data[0].extra_data);
+    }
+  } catch (e) { }
+  const imageNames = extraData?.imageNames || [];
+
+  const resolvedSlides = cmsImages.length > 0
+    ? cmsImages.map((imgName, idx) => {
+      const customName = imageNames[idx]?.trim();
+      const customUrl = currentUrls[idx]?.trim();
+      return {
+        id: `slide-${idx}`,
+        caption: customName || "",
+        link: customUrl && customUrl !== "#" ? customUrl : null,
+        link_label: data[0]?.url_label || "Open Link", // Fallback label
+        img: `${process.env.NEXT_PUBLIC_Files_URL}/${imgName}`,
+      };
+    })
     : hardcodedSlides;
 
   // Duplicate the list so the strip can loop seamlessly, both for
@@ -185,28 +184,32 @@ const [isPaused, setIsPaused] = useState(false);
                 <img
                   src={s.img}
                   alt={s.caption || "Gallery image"}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   draggable={false}
                 />
-                {(s.caption || s.link) && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2a0b17]/90 via-[#2a0b17]/30 to-transparent flex flex-col justify-end p-5">
-                    {s.caption && (
-                      <p className="text-white text-lg font-bold font-serif leading-tight mb-1">
-                        {s.caption}
-                      </p>
-                    )}
-                    {s.link && (
-                      <span className="inline-block text-xs font-semibold text-white bg-[#a91846] px-3 py-1 rounded-full w-fit">
-                        {s.link_label || "Open Link"}
-                      </span>
-                    )}
+
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center pointer-events-none">
+                  {s.link ? (
+                    <div className="bg-white/90 text-pink-700 px-4 py-2 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
+                      Click here
+                    </div>
+                  ) : (
+                    <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-300 w-12 h-12 drop-shadow-lg" />
+                  )}
+                </div>
+
+                {(s.caption) && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#2a0b17]/90 via-[#2a0b17]/30 to-transparent flex flex-col justify-end p-5 pointer-events-none">
+                    <p className="text-white text-lg font-bold font-serif leading-tight mb-1">
+                      {s.caption}
+                    </p>
                   </div>
                 )}
               </>
             );
 
             const cardClasses =
-              "relative flex-shrink-0 w-[80vw] sm:w-[45vw] lg:w-[26vw] xl:w-[24vw] h-[350px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg border border-[#a91846]/10";
+              "relative flex-shrink-0 w-[80vw] sm:w-[45vw] lg:w-[26vw] xl:w-[24vw] h-[350px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg border border-[#a91846]/10 group";
 
             return s.link ? (
               <a
@@ -220,7 +223,12 @@ const [isPaused, setIsPaused] = useState(false);
                 {CardInner}
               </a>
             ) : (
-              <div key={`${s.id}-${i}`} data-slide-card className={cardClasses}>
+              <div
+                key={`${s.id}-${i}`}
+                data-slide-card
+                className={`${cardClasses} cursor-pointer`}
+                onClick={() => setSelectedImage(s.img)}
+              >
                 {CardInner}
               </div>
             );
@@ -230,7 +238,7 @@ const [isPaused, setIsPaused] = useState(false);
 
       {/* ===== GLOBAL PAGE ACTION BUTTON ===== */}
       {pageUrl && (
-        <section className="px-8 md:px-16 pb-16 flex justify-center">
+        <section className="px-8 md:px-16 py-12 flex justify-center mt-8">
           <a
             href={pageUrl}
             target="_blank"

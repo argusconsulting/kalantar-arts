@@ -3,6 +3,14 @@ import Link from 'next/link';
 // import { ArrowRight, Link } from "lucide-react"
 
 const Gallary = ({ data }) => {
+  const formatLink = (link) => {
+    if (!link || link === '#') return '#';
+    if (!link.startsWith('http://') && !link.startsWith('https://') && !link.startsWith('/')) {
+      return `https://${link}`;
+    }
+    return link;
+  };
+
   return (
     <div className="p-5 mt-14 bg-gray-50">
       {/* Grid Container */}
@@ -41,7 +49,9 @@ const Gallary = ({ data }) => {
               className="object-cover hover:scale-105 transition-transform duration-300"
             />
             <Link
-              href={data.find(item => item.id === id)?.link || '#'} 
+              href={formatLink(data.find(item => item.id === id)?.link)} 
+              target={formatLink(data.find(item => item.id === id)?.link).startsWith('http') ? "_blank" : undefined}
+              rel={formatLink(data.find(item => item.id === id)?.link).startsWith('http') ? "noopener noreferrer" : undefined}
               className="absolute cursor-pointer justify-between items-center bottom-0 left-0 right-0 bg-[#E84691D9] flex w-full opacity-85 text-white px-3 py-2 text-sm min-h-[36px]"
             >
               <span>{data.find(item => item.id === id)?.caption || "\u00A0"}</span>
