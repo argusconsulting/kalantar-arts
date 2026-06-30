@@ -12,7 +12,7 @@ export default function VideoGalleryPage({ data }) {
 
   const parseVideoUrl = (urlStr) => {
     if (!urlStr) return null;
-    
+
     // Check for Google Drive
     const driveMatch = urlStr.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || urlStr.match(/id=([a-zA-Z0-9_-]+)/);
     if (driveMatch && driveMatch[1]) {
@@ -48,29 +48,29 @@ export default function VideoGalleryPage({ data }) {
   // If CMS has videos, use them for highlights. Otherwise fallback.
   const highlights = ytUrls.length > 0
     ? ytUrls.map((url, idx) => {
-        const customName = youtubeNames[idx]?.trim();
-        const customThumb = youtubeThumbnails[idx]?.trim();
-        return {
-          caption: customName ? customName : `Video Highlight ${idx + 1}`,
-          sub: "KALANTAR ARTS",
-          video: parseVideoUrl(url),
-          thumb: customThumb ? `${process.env.NEXT_PUBLIC_Files_URL}/${customThumb}` : null
-        };
-      }).filter(h => h.video)
+      const customName = youtubeNames[idx]?.trim();
+      const customThumb = youtubeThumbnails[idx]?.trim();
+      return {
+        caption: customName ? customName : `Video Highlight ${idx + 1}`,
+        sub: "KALANTAR ARTS",
+        video: parseVideoUrl(url),
+        thumb: customThumb ? `${process.env.NEXT_PUBLIC_Files_URL}/${customThumb}` : null
+      };
+    }).filter(h => h.video)
     : hardcodedHighlights;
 
   // If CMS has videos, format them to match the gallery structure. Otherwise, fallback.
   const galleryItems = ytUrls.length > 0
     ? ytUrls.map((url, idx) => {
-        const customName = youtubeNames[idx]?.trim();
-        const customThumb = youtubeThumbnails[idx]?.trim();
-        return {
-          caption: customName ? customName : (data[0]?.name || "Kalantar Videos"),
-          sub: "Video Gallery",
-          video: parseVideoUrl(url),
-          thumb: customThumb ? `${process.env.NEXT_PUBLIC_Files_URL}/${customThumb}` : null
-        };
-      }).filter(h => h.video)
+      const customName = youtubeNames[idx]?.trim();
+      const customThumb = youtubeThumbnails[idx]?.trim();
+      return {
+        caption: customName ? customName : (data[0]?.name || "Kalantar Videos"),
+        sub: "Video Gallery",
+        video: parseVideoUrl(url),
+        thumb: customThumb ? `${process.env.NEXT_PUBLIC_Files_URL}/${customThumb}` : null
+      };
+    }).filter(h => h.video)
     : hardcodedHighlights;
 
   const scroll = (dir) => {
@@ -81,36 +81,7 @@ export default function VideoGalleryPage({ data }) {
 
   return (
     <main className="bg-white text-[#2b2b2b]">
-      {/* ===== TOP UTILITY BAR ===== */}
-      <div className="hidden md:flex items-center justify-between px-8 py-2 text-xs text-white bg-[#7a1430]">
-        <span className="flex items-center gap-2">
-          <Phone size={14} /> Reach Out to Us: (0120) 1234568
-        </span>
-        <div className="flex items-center gap-3">
-          <Facebook size={14} />
-          <Instagram size={14} />
-          <Youtube size={14} />
-        </div>
-      </div>
 
-      {/* ===== NAVBAR ===== */}
-      <nav className="flex items-center justify-between px-8 py-4 border-b border-gray-100">
-        <div className="flex items-center gap-2">
-          <img src="/images/kalantar-logo.png" alt="Kalantar" className="h-10 w-auto" />
-          <div className="leading-tight">
-            <p className="font-semibold text-[#7a1430] text-lg">कलांतर</p>
-            <p className="text-[10px] tracking-wide text-gray-500">ART FOUNDATION</p>
-          </div>
-        </div>
-        <ul className="hidden lg:flex items-center gap-8 text-sm font-medium text-[#3a3a3a]">
-          <li className="hover:text-[#a91846] cursor-pointer">Know Us</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Our Activities</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Clicks &amp; Shoots</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Help Us</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Get Involved</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Contact Us</li>
-        </ul>
-      </nav>
 
       {/* ===== HERO / INTRO ===== */}
       <section className="text-center px-8 py-12">

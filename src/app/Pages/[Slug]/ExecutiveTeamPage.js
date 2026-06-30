@@ -69,36 +69,7 @@ export default function ExecutiveTeamPage({ data }) {
 
   return (
     <main className="bg-white text-[#2b2b2b]">
-      {/* ===== TOP UTILITY BAR ===== */}
-      <div className="hidden md:flex items-center justify-between px-8 py-2 text-xs text-white bg-[#7a1430]">
-        <span className="flex items-center gap-2">
-          <Phone size={14} /> Reach Out to Us: (0120) 1234568
-        </span>
-        <div className="flex items-center gap-3">
-          <Facebook size={14} />
-          <Instagram size={14} />
-          <Youtube size={14} />
-        </div>
-      </div>
 
-      {/* ===== NAVBAR ===== */}
-      <nav className="flex items-center justify-between px-8 py-4 border-b border-gray-100">
-        <div className="flex items-center gap-2">
-          <img src="/images/kalantar-logo.png" alt="Kalantar" className="h-10 w-auto" />
-          <div className="leading-tight">
-            <p className="font-semibold text-[#7a1430] text-lg">कलांतर</p>
-            <p className="text-[10px] tracking-wide text-gray-500">ART FOUNDATION</p>
-          </div>
-        </div>
-        <ul className="hidden lg:flex items-center gap-8 text-sm font-medium text-[#3a3a3a]">
-          <li className="hover:text-[#a91846] cursor-pointer">Know Us</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Our Activities</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Clicks &amp; Shoots</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Help Us</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Get Involved</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Contact Us</li>
-        </ul>
-      </nav>
 
       {/* ===== HERO / INTRO ===== */}
       <section className="bg-gradient-to-b from-[#f6dde2] to-white text-center px-8 py-16">

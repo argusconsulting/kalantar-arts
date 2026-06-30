@@ -50,77 +50,9 @@ export default function ChairmanPage({ data }) {
 
   return (
     <main className="bg-white text-[#2b2b2b]">
-      {/* ===== TOP UTILITY BAR ===== */}
-      <div className="hidden md:flex items-center justify-between px-8 py-2 text-xs text-white bg-[#7a1430]">
-        <span className="flex items-center gap-2">
-          <Phone size={14} /> Reach Out to Us: (0120) 1234568
-        </span>
-        <div className="flex items-center gap-3">
-          <Facebook size={14} />
-          <Instagram size={14} />
-          <Youtube size={14} />
-        </div>
-      </div>
-
-      {/* ===== NAVBAR ===== */}
-      <nav className="flex items-center justify-between px-8 py-4 border-b border-gray-100">
-        <div className="flex items-center gap-2">
-          {/* Replace with actual logo asset */}
-          <img src="/images/kalantar-logo.png" alt="Kalantar" className="h-10 w-auto" />
-          <div className="leading-tight">
-            <p className="font-semibold text-[#7a1430] text-lg">कलांतर</p>
-            <p className="text-[10px] tracking-wide text-gray-500">ART FOUNDATION</p>
-          </div>
-        </div>
-        <ul className="hidden lg:flex items-center gap-8 text-sm font-medium text-[#3a3a3a]">
-          <li className="hover:text-[#a91846] cursor-pointer">Know Us</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Our Activities</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Clicks &amp; Stories</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Help Us</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Get Involved</li>
-          <li className="hover:text-[#a91846] cursor-pointer">Contact Us</li>
-        </ul>
-      </nav>
-
-      {/* ===== HERO ===== */}
-      {/* <section className="relative overflow-hidden bg-gradient-to-r from-[#f6cfd9] via-[#d5497a] to-[#7a1430]">
-        <div className="grid md:grid-cols-2 items-center gap-8 px-8 md:px-16 py-16 relative z-10">
-          <div>
-            <p className="uppercase text-xs font-semibold tracking-widest text-[#7a1430] mb-3">
-              Leadership&rsquo;s Vision
-            </p>
-            <h1 className="text-3xl md:text-4xl font-bold text-[#3a1020] mb-4 leading-tight">
-              {pageTitle}
-            </h1>
-            <p className="text-sm md:text-base text-[#4a2030] max-w-md mb-6">
-              {heroDesc}
-            </p>
-            {data?.[0]?.url && (
-              <a href={data[0].url} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#7a1430] text-white text-sm font-semibold px-6 py-3 rounded-md hover:bg-[#5e0f24] transition">
-                {data[0]?.url_label || "Discover Our Vision ↓"}
-              </a>
-            )}
-            {!data?.[0]?.url && (
-              <button className="bg-[#7a1430] text-white text-sm font-semibold px-6 py-3 rounded-md hover:bg-[#5e0f24] transition">
-                {data?.[0]?.url_label || "Discover Our Vision ↓"}
-              </button>
-            )}
-          </div>
 
 
-        </div>
 
-        <svg
-          className="absolute bottom-0 left-0 w-full"
-          viewBox="0 0 1440 80"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0,40 C360,90 1080,0 1440,40 L1440,80 L0,80 Z"
-            fill="#ffffff"
-          />
-        </svg>
-      </section> */}
 
       {/* ===== QUOTE SECTION ===== */}
       <section className="px-8 md:px-24 py-16">

@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "./Global/Header/Header";
+import SubPageHero from "./Global/Components/SubPageHero";
 import Footer from "./Global/Footer/Footer";
 import Donate from "./Global/Components/Donate";
 import SocialMediaSidebar from "./Global/Sidebaar/sidebaar";
@@ -67,6 +68,7 @@ export default function RootLayout({ children }) {
         className={` ${roboto.className}  ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
+        <SubPageHero />
         {children}
         {/* <SocialMediaSidebar/> */}
         <Donate />

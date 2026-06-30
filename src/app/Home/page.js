@@ -23,7 +23,7 @@ const fetchData = async () => {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-       next: { revalidate: 60 } // refresh data every 60s
+        next: { revalidate: 60 } // refresh data every 60s
 
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/Petals`, {
@@ -31,7 +31,7 @@ const fetchData = async () => {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-       next: { revalidate: 60 } // refresh data every 60s
+        next: { revalidate: 60 } // refresh data every 60s
 
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/highlight/1`, {
@@ -39,7 +39,7 @@ const fetchData = async () => {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-       next: { revalidate: 60 } // refresh data every 60s
+        next: { revalidate: 60 } // refresh data every 60s
 
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/Slider`, {
@@ -47,7 +47,7 @@ const fetchData = async () => {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-       next: { revalidate: 60 } // refresh data every 60s
+        next: { revalidate: 60 } // refresh data every 60s
 
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/Initiatives`, {
@@ -55,7 +55,7 @@ const fetchData = async () => {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-       next: { revalidate: 60 } // refresh data every 60s
+        next: { revalidate: 60 } // refresh data every 60s
 
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/ArtPurpose/1`, {
@@ -63,7 +63,7 @@ const fetchData = async () => {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-       next: { revalidate: 60 } // refresh data every 60s
+        next: { revalidate: 60 } // refresh data every 60s
 
       }),
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/gallery`, {
@@ -71,7 +71,7 @@ const fetchData = async () => {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-       next: { revalidate: 60 } // refresh data every 60s
+        next: { revalidate: 60 } // refresh data every 60s
 
       }),
 
@@ -80,7 +80,7 @@ const fetchData = async () => {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${process.env.JWT_SECRET}`,
         },
-       next: { revalidate: 60 } // refresh data every 60s
+        next: { revalidate: 60 } // refresh data every 60s
 
       }),
     ]);
@@ -142,7 +142,7 @@ const HomePage = async () => {
       <ArtInitiatives data={data.Initiativesdata} />
       <Gallary data={data.gallerydata} />
       <Headlight highlight1={data.highlight1} />
-      <PopupComponent/>
+      <PopupComponent />
     </>
   );
 };
